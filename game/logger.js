@@ -2,7 +2,7 @@ const { createLogger, transports, format } = require("winston");
 const path = require("path");
 
 function formatTimestamp(timestamp) {
-  return (`${timestamp}`).replace("T", " ").replace("Z", "");
+  return `${timestamp}`.replace("T", " ").replace("Z", "");
 }
 
 const customFormat = format.combine(

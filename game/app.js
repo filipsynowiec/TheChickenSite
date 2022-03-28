@@ -54,5 +54,5 @@ class Server {
 }
 
 let serv = new Server(8080);
-logger.info("server is starting")
+logger.info("server is starting");
 serv.run();

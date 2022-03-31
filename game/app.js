@@ -37,11 +37,11 @@ class Server {
       Server.clientConnect(socket, this)
     );
   }
-  /*Cuts roomId from given url of room page*/
+  /* Cuts roomId from given url of room page */
   getSubpageIdFromURL(url) {
     return url.substring(this._URL.length, this._URL.lastIndex);
   }
-  /*Connects client socket to both socket.room and room*/
+  /* Connects client socket to both socket.room and room */
   handleConnection(roomId, client) {
     this._SOCKET_CLIENTS[client].join(roomId);
 
@@ -51,7 +51,7 @@ class Server {
         new RoomRequest(client, RoomRequestType.Join, {})
       );
   }
-  /*Emits a message to given room*/
+  /* Emits a message to given room */
   sendToRoom(name, data, roomId) {
     let ret = this._io.to(roomId).emit(name, data);
     if (ret === false) {
@@ -63,7 +63,7 @@ class Server {
         )}`
       );
   }
-  /*Function invoked when client connects to page*/
+  /* Function invoked when client connects to page */
   static clientConnect(socket, instance) {
     let socketId = socket.id;
     instance._numberOfClients++;
@@ -74,16 +74,21 @@ class Server {
     socket.on("updateStatus", (data) =>
       Server.updateStatus(data, instance, socketId)
     );
+    socket.on("joinRoom", (data) =>
+      Server.joinRoom(data.roomId, instance, socketId)
+    );
     let roomId = instance.getSubpageIdFromURL(socket.handshake.headers.referer);
     logger.info(
       `Client ${socketId} connected to ${roomId != "" ? roomId : "/"}`
     );
-    /*if client connected to certain room -> handle the connection*/
+    /* if client connected to certain room -> handle the connection */
     if (roomId != "") {
       instance.handleConnection(roomId, socketId);
     }
+
+    Server.sendRoomList(instance, socketId)
   }
-  /*Function invoked when client udpates the status of the game */
+  /* Function invoked when client udpates the status of the game */
   static updateStatus(data, instance, socketId) {
     let roomId = instance.getSubpageIdFromURL(
       instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
@@ -93,11 +98,19 @@ class Server {
       new RoomRequest(socketId, RoomRequestType.Update, data)
     );
   }
-  /*Emits message to certain socket client*/
+  /* Emits message to certain socket client */
   static sendClient(name, data, socketId, instance) {
+    logger.info(`${socketId} wants to join`)
     instance._SOCKET_CLIENTS[socketId].emit(name, data);
   }
-  /*Creates room and redirects client to its page */
+  /* Emits message to all socket clients */
+  static sendToAllClients(name, data, instance) {
+    instance._io.emit(name, data)
+  }
+  static sendRoomList(instance, socketId) {
+    Server.sendClient("getRoomList", {roomList: instance._ROOMS}, socketId, instance)
+  }
+  /* Creates room and redirects client to its page */
   static createRoom(socket, instance, socketId) {
     let roomId = randomstring.generate(8);
     let childProcess = child_process.fork("./room.js", {
@@ -108,16 +121,22 @@ class Server {
     );
     instance._ROOMS[roomId] = childProcess;
     logger.info(`Room ${roomId} created`);
-    instance._app.get("/" + roomId, function (req, res) {
-      res.sendFile(path.join(__dirname, "client", "room.html"));
-    });
     Server.sendChild(
       childProcess,
       new RoomRequest(null, RoomRequestType.SetGame, {})
     );
+    Server.joinRoom(roomId, instance, socketId)
+    logger.info("sending to all clients")
+    Server.sendToAllClients("newRoomCreated", {roomId: roomId}, instance);
+    logger.info("sent to all clients")
+  }
+  static joinRoom(roomId, instance, socketId) {
+    instance._app.get("/" + roomId, function (req, res) {
+      res.sendFile(path.join(__dirname, "client", "room.html"));
+    });
     Server.sendClient("roomId", { roomId: roomId }, socketId, instance);
   }
-  /*Receives message from room and propagates it to all clients connected to that room*/
+  /* Receives message from room and propagates it to all clients connected to that room */
   static receiveMessageFromChild(msg, roomId, instance) {
     let message = new RoomMessage(null, null, msg);
     switch (message.getType()) {
@@ -125,7 +144,7 @@ class Server {
         instance.sendToRoom("updateStatus", message.getData(), roomId);
     }
   }
-  /*Sends a request to certain room*/
+  /* Sends a request to certain room */
   static sendChild(childProcess, request) {
     let ret = childProcess.send(request);
     if (ret === false) {

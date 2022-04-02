@@ -4,6 +4,7 @@ const express = require("express");
 const http = require("http");
 const path = require("path");
 const { logger } = require("./logger");
+const fs = require("fs");
 const randomstring = require("randomstring");
 const child_process = require("child_process");
 const {
@@ -45,23 +46,25 @@ class Server {
   handleConnection(roomId, client) {
     this._SOCKET_CLIENTS[client].join(roomId);
 
-    if (this._ROOMS[roomId] != null)
+    if (this._ROOMS[roomId] != null) {
       Server.sendChild(
         this._ROOMS[roomId],
         new RoomRequest(client, RoomRequestType.Join, {})
       );
+    }
   }
   /* Emits a message to given room */
   sendToRoom(name, data, roomId) {
     let ret = this._io.to(roomId).emit(name, data);
     if (ret === false) {
       logger.info(`Message failed`);
-    } else
+    } else {
       logger.info(
         `Message sent to room ${roomId} with name ${name} and data ${Object.entries(
           data
         )}`
       );
+    }
   }
   /* Function invoked when client connects to page */
   static clientConnect(socket, instance) {
@@ -77,6 +80,9 @@ class Server {
     socket.on("joinRoom", (data) =>
       Server.joinRoom(data.roomId, instance, socketId)
     );
+    socket.on("sendChatMessage", (data) =>
+      Server.sendChatMessage(data, instance, socketId)
+    );
     let roomId = instance.getSubpageIdFromURL(socket.handshake.headers.referer);
     logger.info(
       `Client ${socketId} connected to ${roomId != "" ? roomId : "/"}`
@@ -86,7 +92,7 @@ class Server {
       instance.handleConnection(roomId, socketId);
     }
 
-    Server.sendRoomList(instance, socketId)
+    Server.sendRoomList(instance, socketId);
   }
   /* Function invoked when client udpates the status of the game */
   static updateStatus(data, instance, socketId) {
@@ -98,17 +104,31 @@ class Server {
       new RoomRequest(socketId, RoomRequestType.Update, data)
     );
   }
+  static sendChatMessage(data, instance, socketId) {
+    let roomId = instance.getSubpageIdFromURL(
+      instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
+    );
+    Server.sendChild(
+      instance._ROOMS[roomId],
+      new RoomRequest(socketId, RoomRequestType.SendChatMessage, data)
+    );
+  }
   /* Emits message to certain socket client */
   static sendClient(name, data, socketId, instance) {
-    logger.info(`${socketId} wants to join`)
+    logger.info(`${socketId} wants to join`);
     instance._SOCKET_CLIENTS[socketId].emit(name, data);
   }
   /* Emits message to all socket clients */
   static sendToAllClients(name, data, instance) {
-    instance._io.emit(name, data)
+    instance._io.emit(name, data);
   }
   static sendRoomList(instance, socketId) {
-    Server.sendClient("getRoomList", {roomList: instance._ROOMS}, socketId, instance)
+    Server.sendClient(
+      "getRoomList",
+      { roomList: instance._ROOMS },
+      socketId,
+      instance
+    );
   }
   /* Creates room and redirects client to its page */
   static createRoom(socket, instance, socketId) {
@@ -125,10 +145,10 @@ class Server {
       childProcess,
       new RoomRequest(null, RoomRequestType.SetGame, {})
     );
-    Server.joinRoom(roomId, instance, socketId)
-    logger.info("sending to all clients")
-    Server.sendToAllClients("newRoomCreated", {roomId: roomId}, instance);
-    logger.info("sent to all clients")
+    Server.joinRoom(roomId, instance, socketId);
+    logger.info("sending to all clients");
+    Server.sendToAllClients("newRoomCreated", { roomId: roomId }, instance);
+    logger.info("sent to all clients");
   }
   static joinRoom(roomId, instance, socketId) {
     instance._app.get("/" + roomId, function (req, res) {
@@ -142,6 +162,16 @@ class Server {
     switch (message.getType()) {
       case RoomMessageType.Send:
         instance.sendToRoom("updateStatus", message.getData(), roomId);
+        break;
+      case RoomMessageType.SendHTML:
+        instance.sendToRoom(
+          "gameHTML",
+          { gameHTML: message.getData().gameHTML },
+          message.getData().client
+        );
+        break;
+      case RoomMessageType.ChatHistory:
+        instance.sendToRoom("updateChat", message.getData(), roomId);
     }
   }
   /* Sends a request to certain room */

@@ -42,7 +42,6 @@ class EggGameClient {
     return this._value;
   }
   static updateStatus(data, instance) {
-    console.log(`Update egg with ${data}`)
     instance._value = data;
     document.getElementById("value_par").innerHTML = instance._value;
     console.log("Status updated");

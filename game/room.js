@@ -91,6 +91,23 @@ class Room {
       });
     });
   }
+  sendChat() {
+    this.sendMessage(RoomMessageType.ChatHistory, {
+      chatHistory: this._chat.history,
+    });
+  }
+  sendHTML(client) {
+    fs.readFile("eggGame.html", "utf8", (err, data) => {
+      if (err) {
+        logger.error(err);
+        return;
+      }
+      this.sendMessage(RoomMessageType.SendHTML, {
+        gameHTML: data,
+        client: client,
+      });
+    });
+  }
 }
 
 let room = new Room();

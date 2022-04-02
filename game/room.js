@@ -37,7 +37,15 @@ class Room {
       case RoomRequestType.SendChatMessage:
         instance.updateChat(request.getData());
         break;
+      case RoomRequestType.ClientReady:
+        instance.prepareClient(request.getClient());
+        break;
     }
+  }
+  prepareClient(client) {
+    this.sendChat();
+    this.sendStatus();
+    logger.info(`Client ${client} ready`);
   }
   updateStatus(data) {
     this._game.changeEggValue(data.eggValue);
@@ -49,23 +57,22 @@ class Room {
     this._CLIENTS[this._numberOfClients] = client;
     this._numberOfClients++;
     this.sendHTML(client);
-    this.sendChat();
-    this.sendStatus();
     logger.info(`Client ${client} added as ${this._numberOfClients - 1}`);
   }
   sendMessage(type, data) {
     process.send(new RoomMessage(type, data));
-    logger.info(`Message sent to server ${data.eggValue}`);
   }
   setGame(data) {
     this._game = new EggGame();
-    this._game.registerObserver(this);
     this._game.start();
+    this._game.registerObserver(this);
+    logger.info(`Game set`);
   }
   sendStatus() {
     this.sendMessage(RoomMessageType.Send, {
       eggValue: this._game.getEggValue(),
     });
+    logger.info(`Message sent to server with eggValue: ${this._game.getEggValue()}`);
   }
   sendChat() {
     this.sendMessage(RoomMessageType.ChatHistory, {

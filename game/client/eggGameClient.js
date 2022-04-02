@@ -3,18 +3,18 @@ class EggGameClient {
     this._value = 0;
     this._socket = socket;
     this._rooms = [];
-    this._initializedGame = false;
     console.log(this._socket);
     this._socket.on("updateStatus", (data) =>
-      EggGameClient.updateStatus(data.value, this)
+      EggGameClient.updateStatus(data.eggValue, this)
     );
     this._socket.on("updateChat", (data) => {
       EggGameClient.updateHTML("chat_history", data.chatHistory);
       console.log("Received chat history");
     });
-    this._socket.on("game_html", (data) => {
+    this._socket.on("gameHTML", (data) => {
       EggGameClient.updateHTML("game_area", data.gameHTML);
-      EggGameClient.startGame(instance);
+      EggGameClient.sendClientReady(instance);
+      instance.startGame(instance);
       console.log("Received game html");
     });
     let instance = this;
@@ -42,7 +42,7 @@ class EggGameClient {
     return this._value;
   }
   static updateStatus(data, instance) {
-    if (!instance._initializedGame) return;
+    console.log(`Update egg with ${data}`)
     instance._value = data;
     document.getElementById("value_par").innerHTML = instance._value;
     console.log("Status updated");
@@ -57,8 +57,7 @@ class EggGameClient {
     option.innerHTML = data.roomId;
     select.appendChild(option);
   }
-  startGame(instance) {
-    instance._initializedGame = true;
+  startGame() {
     document.getElementById("incrementButton").onclick = () =>
       EggGameClient.incrementValue(this);
   }
@@ -70,6 +69,10 @@ class EggGameClient {
       value: mes,
     });
     console.log(`Sending message ${mes} with name ${name}`);
+  }
+  static sendClientReady(instance) {
+    instance._socket.emit("clientReady", {});
+    console.log(`Sending client ready`);
   }
 }
 

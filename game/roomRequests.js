@@ -5,6 +5,7 @@ class RoomRequestType {
   static Update = new RoomRequestType("Update");
   static SetGame = new RoomRequestType("SetGame");
   static SendChatMessage = new RoomRequestType("SendChatMessage");
+  static ClientReady = new RoomRequestType("ClientReady");
   constructor(name) {
     this._name = name;
   }

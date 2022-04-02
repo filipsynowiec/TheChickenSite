@@ -83,6 +83,7 @@ class Server {
     socket.on("sendChatMessage", (data) =>
       Server.sendChatMessage(data, instance, socketId)
     );
+    socket.on("clientReady", (data) => Server.sendClientReady(data, instance, socketId));
     let roomId = instance.getSubpageIdFromURL(socket.handshake.headers.referer);
     logger.info(
       `Client ${socketId} connected to ${roomId != "" ? roomId : "/"}`
@@ -102,6 +103,15 @@ class Server {
     Server.sendChild(
       instance._ROOMS[roomId],
       new RoomRequest(socketId, RoomRequestType.Update, data)
+    );
+  }
+  static sendClientReady(data, instance, socketId) {
+    let roomId = instance.getSubpageIdFromURL(
+      instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
+    );
+    Server.sendChild(
+      instance._ROOMS[roomId],
+      new RoomRequest(socketId, RoomRequestType.ClientReady, data)
     );
   }
   static sendChatMessage(data, instance, socketId) {

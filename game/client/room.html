@@ -1,12 +1,26 @@
 <html>
   <head> </head>
+
+  <style>
+    #game_area {
+      height: 50%;
+      width:  50%;
+      background-color: powderblue;
+      margin-bottom: 20px;
+    }
+  </style>
+
   <body>
-    <h2 id="main-header"></h2>
-    <p id="clients-paragraph"></p>
-    <p id="value_par"></p>
-    <button type="button" id="incrementButton">+1</button>
+    <div id="game_area">
+
+    </div>
+    <div>
+      <textarea id="chat_history" readonly style="resize:none"
+        cols=40 rows=10></textarea><br>
+      <input type="text" id="message"><br>
+    </div>
+    <button type="button" id="send_message">send</button>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="client/game.js"></script>
-    <script src="client/client.js"></script>
+    <script src="client/eggGameClient.js"></script>
   </body>
 </html>

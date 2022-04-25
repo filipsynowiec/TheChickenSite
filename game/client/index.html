@@ -1,10 +1,14 @@
 <html>
   <head> </head>
   <body>
-      <p id="value_par"></p>
-    <button type="button" id="incrementButton">+1</button>
+    <button type="button" id="createRoomButton">create</button>
+    Available rooms: 
+    <select name="Rooms" id="roomList" style="width: 50px;">
+      
+    </select>
+    <button type="button" id="joinRoomButton">join</button>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="client/game.js"></script>
+    <script src="client/main.js"></script>
     <script src="client/client.js"></script>
   </body>
 </html>

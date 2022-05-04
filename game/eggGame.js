@@ -1,22 +1,32 @@
 const { logger } = require("./logger");
 
+const {
+  RoomMessage,
+  RoomMessageType,
+} = require("./roomRequests");
+
+const fs = require("fs");
+
 class EggGame {
-  constructor(eggValue) {
-    // this._eggValue = eggValue;
+  constructor() {
+    this._eggValue = 0;
     this._observers = [];
-  }
-  getEggValue() {
-    return this._eggValue;
   }
   registerObserver(observer) {
     this._observers.push(observer);
   }
-  changeEggValue(value) {
-    this._eggValue = value;
+  updateGame(data) {
+    this._eggValue = data.eggValue;
     this._observers.forEach((observer) => observer.sendStatus());
   }
+  getStatus() {
+    return {eggValue: this._eggValue,}
+  }
+  getHTMLLocation() {
+    return "eggGame.html";
+  }
   start() {
-    this.changeEggValue(0);
+    this._eggValue = 0;
   }
 }
 

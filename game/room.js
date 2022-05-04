@@ -29,7 +29,7 @@ class Room {
         instance.addClient(request.getClient());
         break;
       case RoomRequestType.Update:
-        instance.updateStatus(request.getData());
+        instance.updateGame(request.getData());
         break;
       case RoomRequestType.SetGame:
         instance.setGame(request.getData());
@@ -47,8 +47,8 @@ class Room {
     this.sendStatus();
     logger.info(`Client ${client} ready`);
   }
-  updateStatus(data) {
-    this._game.changeEggValue(data.eggValue);
+  updateGame(data) {
+    this._game.updateGame(data);
   }
   updateChat(data) {
     this._chat.registerMessage(data, this._chat); // TODO: refactor
@@ -69,10 +69,9 @@ class Room {
     logger.info(`Game set`);
   }
   sendStatus() {
-    this.sendMessage(RoomMessageType.Send, {
-      eggValue: this._game.getEggValue(),
-    });
-    logger.info(`Message sent to server with eggValue: ${this._game.getEggValue()}`);
+    let status = this._game.getStatus();
+    this.sendMessage(RoomMessageType.Send, status);
+    logger.info(`Message sent to server with status: ${status}`);
   }
   sendChat() {
     this.sendMessage(RoomMessageType.ChatHistory, {
@@ -80,24 +79,7 @@ class Room {
     });
   }
   sendHTML(client) {
-    fs.readFile("eggGame.html", "utf8", (err, data) => {
-      if (err) {
-        logger.error(err);
-        return;
-      }
-      this.sendMessage(RoomMessageType.SendHTML, {
-        gameHTML: data,
-        client: client,
-      });
-    });
-  }
-  sendChat() {
-    this.sendMessage(RoomMessageType.ChatHistory, {
-      chatHistory: this._chat.history,
-    });
-  }
-  sendHTML(client) {
-    fs.readFile("eggGame.html", "utf8", (err, data) => {
+    fs.readFile(this._game.getHTMLLocation(), "utf8", (err, data) => {
       if (err) {
         logger.error(err);
         return;

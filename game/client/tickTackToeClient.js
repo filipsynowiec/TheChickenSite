@@ -1,3 +1,8 @@
+const EMPTY = 0
+const CROSS = 1
+const CIRCLE = 2
+const FULL = 3
+
 class TickTackToeClient {
     constructor(socket) {
         this._socket = socket;
@@ -19,18 +24,69 @@ class TickTackToeClient {
         instance._socket.emit("requestAction", { field: index });
     }
     updateStatus(data) {
-        for(var i=0; i<9; ++i) {
-            this._buttons[i].innerHTML = data.fields[i];
+        if(data.turn == CROSS) {
+            document.getElementById("turn").innerHTML = "Turn: X";
+        } else {
+            document.getElementById("turn").innerHTML = "Turn: O";
+        }
+            
+        for(let i=0; i<9; ++i) {
+            switch(data.fields[i]) {
+                case EMPTY: 
+                    this._buttons[i].innerHTML = "";
+                    break;
+                case CROSS: 
+                    this._buttons[i].innerHTML = "X";
+                    break;
+                case CIRCLE:
+                    this._buttons[i].innerHTML = "O";
+                    break;
+            }
+            if(data.fields[i] != EMPTY) {
+                this._buttons[i].disabled = true;
+            }
+        }
+        if(data.won != EMPTY) {
+            let winner = "";
+            switch(data.won) {
+                case CROSS: 
+                winner = "X";
+                    break;
+                case CIRCLE:
+                    winner = "O";
+                    break;
+                case FULL: 
+                    winner = "NONE";
+                    break;
+            }
+            document.getElementById("winner").innerHTML = "Winner: " + winner;
+            for(let i=0; i<9; ++i) {
+                this._buttons[i].disabled = true;
+            }
         }
     }
     startGame(instance) {
-        for(var i=0; i<9; ++i) {
+        for(let i=0; i<9; ++i) {
             this._buttons[i] = document.createElement("button");
-            this._buttons[i].innerHTML = "XD";
+
+            this._buttons[i].style.width = '100px';
+            this._buttons[i].style.height = '100px';
+            this._buttons[i].style.background = 'teal'; 
+            this._buttons[i].style.color = 'white';
+            this._buttons[i].style.fontSize = '50px';
+            this._buttons[i].style.margin = '5px';
+            this._buttons[i].style.verticalAlign = 'top';
+
             this._buttons[i].onclick = () => {
                 instance.clickField(instance, i);
             };
-            document.body.appendChild(btn);
+        }
+        for(let i=0; i<3; ++i) {
+            let div = document.createElement("div");
+            document.getElementById("tick_tack_buttons").appendChild(div);
+            for(let j=0; j<3; ++j) {
+                div.appendChild(this._buttons[i*3+j]);
+            }
         }
     }
     sendClientReady(instance) {

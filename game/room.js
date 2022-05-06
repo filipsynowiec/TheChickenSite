@@ -8,8 +8,13 @@ const {
   RoomMessageType,
 } = require("./roomRequests");
 const { EggGame } = require("./eggGame");
+const { TickTackToe } = require("./tickTackToe");
 const { Chat } = require("./chat");
 const fs = require("fs");
+
+const EGG_GAME = 0;
+const TICK_TACK_TOE = 1;
+
 class Room {
   constructor() {
     this._CLIENTS = {};
@@ -63,7 +68,18 @@ class Room {
     process.send(new RoomMessage(type, data));
   }
   setGame(data) {
-    this._game = new EggGame();
+    switch(data.game) {
+      case EGG_GAME:
+        this._game = new EggGame();
+        break;
+      case TICK_TACK_TOE:
+        this._game = new TickTackToe();
+        break;
+      default:
+          logger.error("No such game!");
+          return;
+    }
+      
     this._game.registerObserver(this);
     logger.info(`Game set`);
   }

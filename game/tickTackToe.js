@@ -11,19 +11,15 @@ class TickTackToe {
     this._won = EMPTY
     this._fields = []
     for (var i = 0; i < 9; i++) {
-      fields[i] = EMPTY;
+      this._fields[i] = EMPTY;
     }
   }
   registerObserver(observer) {
     this._observers.push(observer);
   }
-  updateGame(data) { 
-    changeField(data.field)
-    this._observers.forEach((observer) => observer.sendStatus());
-  }
   cheackIfWon() {
     //cheak if row
-    for(var row=0; row<3; ++row) {
+    for(let row=0; row<3; ++row) {
       if(this._fields[row*3]==this._fields[row*3+1] && this._fields[row*3]==this._fields[row*3+2]) {
         if(this._fields[row*3] == CROSS) {
           return CROSS;
@@ -33,7 +29,7 @@ class TickTackToe {
       }
     }
     //cheak if column
-    for(var column=0; column<3; ++column) {
+    for(let column=0; column<3; ++column) {
       if(this._fields[column]==this._fields[column+3] && this._fields[column]==this._fields[column+6]) {
         if(this._fields[column] == CROSS) {
           return CROSS;
@@ -44,30 +40,36 @@ class TickTackToe {
     }
     //cheak if diagonal
     if( (this._fields[0]==this._fields[4] && this._fields[0]==this._fields[8]) ||
-        (this._fields[2]==this._fields[4] && this._fields[0]==this._fields[6]) ) {
+        (this._fields[2]==this._fields[4] && this._fields[2]==this._fields[6]) ) {
       if(this._fields[4] == CROSS) {
         return CROSS;
       } else if(this._fields[4] == CIRCLE) {
         return CIRCLE;
       }
     }
-    this._fields.forEach(field => {
-      if(field == EMPTY) {
+    for(let i=0; i<9; ++i) {
+      if(this._fields[i] == EMPTY) {
         return EMPTY;
       }
-    });
+    }
     return FULL;
   }
   changeField(x) {
-    if(this._fields(x) != EMPTY) {
-      throw new Error("Alredy filled")
+    if(this._fields[x] != EMPTY) {
+      logger.error(`Alredy filled ${x}`);
+      return;
     }
     if(this._won != EMPTY) {
-      throw new Error("Alredy won")
+      logger.error("Alredy won");
+      return;
     }
     this._fields[x] = this._turn;
     this._turn = (this._turn==CROSS)? CIRCLE: CROSS;
-    this._won = cheackIfWon();
+    this._won = this.cheackIfWon();
+    this._observers.forEach((observer) => observer.sendStatus());
+  }
+  updateGame(data) { 
+    this.changeField(data.field)
     this._observers.forEach((observer) => observer.sendStatus());
   }
   getStatus() {

@@ -14,6 +14,12 @@ const {
   RoomMessageType,
 } = require("./roomRequests");
 const { isObject } = require("util");
+
+const EGG_GAME = 0;
+const TICK_TACK_TOE = 1;
+
+let curretGame = EGG_GAME;
+
 class Server {
   constructor(port) {
     this._port = port;
@@ -153,7 +159,7 @@ class Server {
     logger.info(`Room ${roomId} created`);
     Server.sendChild(
       childProcess,
-      new RoomRequest(null, RoomRequestType.SetGame, {})
+      new RoomRequest(null, RoomRequestType.SetGame, {game: curretGame})
     );
     Server.joinRoom(roomId, instance, socketId);
     logger.info("sending to all clients");
@@ -166,6 +172,17 @@ class Server {
         if (err) {
           logger.error(err);
           return;
+        }
+        switch(curretGame) {
+          case EGG_GAME:
+            data = data.replace('<!--__GAME_SCRIPT__-->', '<script src="client/eggGameClient.js"></script>');
+            break;
+          case TICK_TACK_TOE:
+            data = data.replace('<!--__GAME_SCRIPT__-->', '<script src="client/tickTackToeClient.js"></script>');
+            break;
+          default:
+            logger.error("No such game!");
+            return;
         }
         res.send(data);
       });

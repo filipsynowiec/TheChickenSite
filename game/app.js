@@ -74,7 +74,7 @@ class Server {
     socket.on("createRoom", (socket) =>
       Server.createRoom(socket, instance, socketId)
     );
-    socket.on("updateStatus", (data) =>
+    socket.on("requestAction", (data) =>
       Server.updateStatus(data, instance, socketId)
     );
     socket.on("joinRoom", (data) =>
@@ -162,7 +162,14 @@ class Server {
   }
   static joinRoom(roomId, instance, socketId) {
     instance._app.get("/" + roomId, function (req, res) {
-      res.sendFile(path.join(__dirname, "client", "room.html"));
+      fs.readFile("client/room.html", "utf8", (err, data) => {
+        if (err) {
+          logger.error(err);
+          return;
+        }
+        res.send(data);
+      });
+      //res.sendFile(path.join(__dirname, "client", "room.html"));
     });
     Server.sendClient("roomId", { roomId: roomId }, socketId, instance);
   }

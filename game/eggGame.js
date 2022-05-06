@@ -12,21 +12,22 @@ class EggGame {
     this._eggValue = 0;
     this._observers = [];
   }
-  registerObserver(observer) {
+  registerObserver(observer) {  // required
     this._observers.push(observer);
   }
-  updateGame(data) {
-    this._eggValue = data.eggValue;
+  updateGame(data) {  // required
+    if(data.increment != true) {
+      logger.error("Incorrect request");
+      return;
+    }
+    this._eggValue += 1;
     this._observers.forEach((observer) => observer.sendStatus());
   }
-  getStatus() {
+  getStatus() { // required
     return {eggValue: this._eggValue,}
   }
-  getHTMLLocation() {
+  getHTMLLocation() { // required
     return "eggGame.html";
-  }
-  start() {
-    this._eggValue = 0;
   }
 }
 

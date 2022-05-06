@@ -64,7 +64,6 @@ class Room {
   }
   setGame(data) {
     this._game = new EggGame();
-    this._game.start();
     this._game.registerObserver(this);
     logger.info(`Game set`);
   }

@@ -30,13 +30,18 @@ class Server {
     this._io = require("socket.io")(this._server, {});
     this._numberOfClients = 0;
     this._URL = "http://127.0.0.1:" + port + "/";
+    this._ROOM_URL_LENGTH = 8;
   }
   run() {
     this._app.get("/", function (req, res) {
       res.sendFile(path.join(__dirname, "client", "index.html"));
     });
+    this._app.get("/rooms", function (req, res) {
+      res.sendFile(path.join(__dirname, "client", "chooseRoom.html"));
+    });
 
     this._app.use("/client", express.static(path.join(__dirname, "client")));
+    this._app.use("/public", express.static(path.join(__dirname, "public")));
 
     this._server.listen(this._port);
 
@@ -44,20 +49,23 @@ class Server {
       Server.clientConnect(socket, this)
     );
   }
-  /* Cuts roomId from given url of room page */
-  getSubpageIdFromURL(url) {
+  /* Cuts relative adress from given url */
+  getRelativeURL(url) {
     return url.substring(this._URL.length, this._URL.lastIndex);
+  }
+  /* Cuts room id from relativer adress*/ 
+  getRoomIdFromRelative(url) {
+    return url.substring(url.length - this._ROOM_URL_LENGTH);
   }
   /* Connects client socket to both socket.room and room */
   handleConnection(roomId, client) {
     this._SOCKET_CLIENTS[client].join(roomId);
-
-    if (this._ROOMS[roomId] != null) {
-      Server.sendChild(
-        this._ROOMS[roomId],
-        new RoomRequest(client, RoomRequestType.Join, {})
-      );
-    }
+    logger.info(this._ROOMS[roomId]);
+    Server.sendChild(
+      this._ROOMS[roomId],
+      new RoomRequest(client, RoomRequestType.Join, {})
+    );
+    logger.info(`Told room ${roomId} to add ${client}`);
   }
   /* Emits a message to given room */
   sendToRoom(name, data, roomId) {
@@ -90,12 +98,13 @@ class Server {
       Server.sendChatMessage(data, instance, socketId)
     );
     socket.on("clientReady", (data) => Server.sendClientReady(data, instance, socketId));
-    let roomId = instance.getSubpageIdFromURL(socket.handshake.headers.referer);
+    let relative_url = instance.getRelativeURL(socket.handshake.headers.referer).substring();
+    let roomId = instance.getRoomIdFromRelative(relative_url);
     logger.info(
-      `Client ${socketId} connected to ${roomId != "" ? roomId : "/"}`
+      `Client ${socketId} connected to ${relative_url}`
     );
     /* if client connected to certain room -> handle the connection */
-    if (roomId != "") {
+    if (instance._ROOMS[roomId] != null) {
       instance.handleConnection(roomId, socketId);
     }
 
@@ -103,8 +112,10 @@ class Server {
   }
   /* Function invoked when client udpates the status of the game */
   static updateStatus(data, instance, socketId) {
-    let roomId = instance.getSubpageIdFromURL(
-      instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
+    let roomId = instance.getRoomIdFromRelative(
+      instance.getRelativeURL(
+        instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
+      )
     );
     Server.sendChild(
       instance._ROOMS[roomId],
@@ -112,17 +123,19 @@ class Server {
     );
   }
   static sendClientReady(data, instance, socketId) {
-    let roomId = instance.getSubpageIdFromURL(
+    let roomId = instance.getRoomIdFromRelative(instance.getRelativeURL(
       instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
-    );
+    ));
     Server.sendChild(
       instance._ROOMS[roomId],
       new RoomRequest(socketId, RoomRequestType.ClientReady, data)
     );
   }
   static sendChatMessage(data, instance, socketId) {
-    let roomId = instance.getSubpageIdFromURL(
-      instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
+    let roomId = instance.getRoomIdFromRelative(
+      instance.getRelativeURL(
+        instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
+      )
     );
     Server.sendChild(
       instance._ROOMS[roomId],
@@ -148,7 +161,7 @@ class Server {
   }
   /* Creates room and redirects client to its page */
   static createRoom(socket, instance, socketId) {
-    let roomId = randomstring.generate(8);
+    let roomId = randomstring.generate(instance._ROOM_URL_LENGTH);
     let childProcess = child_process.fork("./room.js", {
       detached: false,
     });
@@ -156,15 +169,15 @@ class Server {
       Server.receiveMessageFromChild(msg, roomId, instance)
     );
     instance._ROOMS[roomId] = childProcess;
-    logger.info(`Room ${roomId} created`);
+    logger.info(`Room ${roomId} created with process ${childProcess.pid}`);
     Server.sendChild(
       childProcess,
       new RoomRequest(null, RoomRequestType.SetGame, {game: curretGame})
     );
     Server.joinRoom(roomId, instance, socketId);
-    logger.info("sending to all clients");
+    // logger.info("sending to all clients");
     Server.sendToAllClients("newRoomCreated", { roomId: roomId }, instance);
-    logger.info("sent to all clients");
+    // logger.info("sent to all clients");
   }
   static joinRoom(roomId, instance, socketId) {
     instance._app.get("/" + roomId, function (req, res) {
@@ -173,7 +186,7 @@ class Server {
           logger.error(err);
           return;
         }
-        switch(curretGame) {
+        switch (curretGame) {
           case EGG_GAME:
             data = data.replace('<!--__GAME_SCRIPT__-->', '<script src="client/eggGameClient.js"></script>');
             break;
@@ -186,7 +199,10 @@ class Server {
         }
         res.send(data);
       });
+    });
       //res.sendFile(path.join(__dirname, "client", "room.html"));
+    instance._app.get("/room/" + roomId, function (req, res) {
+      res.sendFile(path.join(__dirname, "client", "room.html"));
     });
     Server.sendClient("roomId", { roomId: roomId }, socketId, instance);
   }

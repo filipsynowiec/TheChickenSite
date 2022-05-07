@@ -5,25 +5,29 @@
     <link rel="stylesheet" href="/public/css/style.css" />
     <meta charset="UTF-8" />
   </head>
+
   <body>
     <div id="page-wrapper">
       <main class="main horizontal-center">
         <div id="swup" class="scene transition-fade">
-          <!-- Greeting chicken -->
+          <!-- Choose room box -->
           <div class="box center">
-            <div id="greeter" class="container">
-              <h1>Welcome to The Chicken Site</h1>
+            <div class="rooms-list-box">
+                <div class="head">
+                    <h2>Available rooms</h2>
+                </div>
+                <div class="list-wrapper">
+                    <div id="available-rooms-list">
+                    </div>
+                </div>
             </div>
-            <div class="index-panel horizontal-center">
-              <div id="login-button" class="button horizontal-center">
-                Log In
-              </div>
-              <div id="play-guest-button" class="button horizontal-center">
-                Play as guest
-              </div>
+            <div class="rooms-list-buttons">
+              <div class="button" id="create-room-button">Create new room</div>
+              <div class="button" id="join-room-button">Join</div>
             </div>
           </div>
         </div>
+
       </main>
 
       <footer>
@@ -34,7 +38,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="client/main.js"></script>
     <script src="client/client.js"></script>
-    <script src="client/local.js"></script>
     <script src="client/transition.js"></script>
+    <script src="client/room.js"></script>
   </body>
 </html>

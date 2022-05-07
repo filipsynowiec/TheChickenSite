@@ -1,6 +1,21 @@
 class EggGameClient {
   constructor(socket) {
     this._socket = socket;
+    this._rooms = [];
+    console.log(this._socket);
+    this._socket.on("updateStatus", (data) =>
+      EggGameClient.updateStatus(data.eggValue, this)
+    );
+    this._socket.on("updateChat", (data) => {
+      EggGameClient.updateHTML("chat_history", data.chatHistory);
+      console.log("Received chat history");
+    });
+    this._socket.on("gameHTML", (data) => {
+      EggGameClient.updateHTML("game-area", data.gameHTML);
+      EggGameClient.sendClientReady(instance);
+      instance.startGame(instance);
+      console.log("Received game html");
+    });
     let instance = this;
     this._socket.on("updateStatus", (data) =>
       instance.updateStatus(data.eggValue)

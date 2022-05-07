@@ -1,31 +1,37 @@
 class Main {
-  constructor(socket) {
-    this._socket = socket;
-    this._rooms = [];
-    console.log(this._socket);
-    if (document.getElementById("createRoomButton") != null)
-      document.getElementById("createRoomButton").onclick = () => {
-        this._socket.emit("createRoom", {});
-      };
-    if (document.getElementById("createRoomButton") != null) {
-      document.getElementById("joinRoomButton").onclick = () =>
-        Main.joinRoom(this);
+    constructor(socket) {
+        this._socket = socket;
+        this._rooms = [];
+        this._selectedRoom = null;
+        console.log(this._socket);
+        if (document.getElementById("create-room-button") != null)
+            document.getElementById("create-room-button").onclick = () => {
+                this._socket.emit("createRoom", {});
+            };
+        if (document.getElementById("join-room-button") != null) {
+            document.getElementById("join-room-button").onclick = () =>
+                Main.joinRoom(this);
+        }
     }
-  }
-  static joinRoom(instance) {
-    var roomId = document.getElementById("roomList").value;
-    if (roomId == null) return;
-    console.log(`Room id: ${roomId}`);
-    instance._socket.emit("joinRoom", { roomId: roomId });
-  }
-  addRoom(data) {
-    console.log("adding new room");
-    this._rooms.push(data.roomId);
-    var select = document.getElementById("roomList");
-    if (select == null) return;
-    var option = document.createElement("option");
-    option.value = data.roomId;
-    option.innerHTML = data.roomId;
-    select.appendChild(option);
-  }
+    static joinRoom(instance) {
+        let roomId = instance._selectedRoom.roomId;
+        if (roomId == undefined) console.log(`${roomId}`);
+        console.log(`Room id: ${roomId}`);
+        instance._socket.emit("joinRoom", { roomId: roomId });
+    }
+    static selectRoom(instance, room) {
+        instance._selectedRoom = room;
+        for (let r of instance._rooms) {
+            r.deselect();
+        }
+        room.select();
+    }
+    addRoom(data) {
+        let list = document.getElementById("available-rooms-list");
+        if (list == null) return;
+        let room = new Room(data.roomId);
+        room.htmlElement.onclick = () => Main.selectRoom(this, room);
+        this._rooms.push(room);
+        list.appendChild(room._htmlElement);
+    }
 }

@@ -18,8 +18,7 @@ class GameChoiceClient {
   }
   playGame() {
     let game = this._selectedGame;
-    if (game == undefined) {
-      cslogger.info(`Error - game undefined`);
+    if (game == null) {
       return;
     }
     cslogger.info(`Game ${game.name} selected to play.`);

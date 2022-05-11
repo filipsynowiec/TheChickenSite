@@ -1,9 +1,9 @@
-const { logger } = require("./logger");
+const { logger } = require("../../logger");
 
 const {
   RoomMessage,
   RoomMessageType,
-} = require("./roomRequests");
+} = require("../../roomRequests");
 
 const fs = require("fs");
 
@@ -27,7 +27,7 @@ class EggGame {
     return {eggValue: this._eggValue,}
   }
   getHTMLLocation() { // required
-    return "eggGame.html";
+    return "server/games/eggGame/eggGame.html";
   }
 }
 

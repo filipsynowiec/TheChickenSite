@@ -1,4 +1,4 @@
-const { logger } = require("./logger");
+const { logger } = require("../../logger");
 const EMPTY = 0
 const CROSS = 1
 const CIRCLE = 2
@@ -80,7 +80,7 @@ class TickTackToe {
     }
   }
   getHTMLLocation() {
-    return "tickTackToe.html";
+    return "server/games/tickTackToe/tickTackToe.html";
   }
 }
 

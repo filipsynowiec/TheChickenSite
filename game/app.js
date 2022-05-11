@@ -3,7 +3,7 @@
 const express = require("express");
 const http = require("http");
 const path = require("path");
-const { logger } = require("./logger");
+const { logger } = require("./server/logger");
 const fs = require("fs");
 const randomstring = require("randomstring");
 const child_process = require("child_process");
@@ -12,9 +12,9 @@ const {
   RoomRequestType,
   RoomMessage,
   RoomMessageType,
-} = require("./roomRequests");
-const { GameChoiceManager } = require("./gameChoiceManager");
-const { RoomChoiceManager } = require("./roomChoiceManager");
+} = require("./server/roomRequests");
+const { GameChoiceManager } = require("./server/gameChoiceManager");
+const { RoomChoiceManager } = require("./server/roomChoiceManager");
 
 
 class Server {
@@ -172,7 +172,7 @@ class Server {
     let game = RoomChoiceManager.getGameFromSocket(
       instance._SOCKET_CLIENTS[socketId]
     );
-    let childProcess = child_process.fork("./room.js", {
+    let childProcess = child_process.fork("./server/room.js", {
       detached: false,
     });
     childProcess.on("message", (msg) =>

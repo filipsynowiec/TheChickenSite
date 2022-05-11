@@ -7,8 +7,8 @@ const {
   RoomMessage,
   RoomMessageType,
 } = require("./roomRequests");
-const { EggGame } = require("./eggGame");
-const { TickTackToe } = require("./tickTackToe");
+const { EggGame } = require("./games/eggGame/eggGame");
+const { TickTackToe } = require("./games/tickTackToe/tickTackToe");
 const { Chat } = require("./chat");
 const fs = require("fs");
 

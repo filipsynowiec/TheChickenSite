@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <div id="page-wrapper">
+      <main class="main horizontal-center">
+        <!-- Choose game box -->
+        <div class="box center">
+          <div class="games-list-box">
+            <div class="head">
+              <h2>Games</h2>
+            </div>
+            <div class="list-wrapper">
+              <div id="games-list"></div>
+            </div>
+          </div>
+          <div class="enter-game-buttons">
+            <div class="button" id="enter-game-button">Play</div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/client/js/cslogger.js"></script>
+    <script src="/client/js/game.js"></script>
+    <script src="/client/js/gameChoice.js"></script>
+  </body>
+</html>

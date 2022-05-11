@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <div id="page-wrapper">
+      <main class="main horizontal-center">
+        <div id="swup" class="scene transition-fade">
+          <!-- Greeting chicken -->
+          <div class="box box-room">
+            <div class="area area-left" id="game-area">
+
+            </div>
+            <div class="area area-right" id="chat-area">
+              <textarea id="chat_history" readonly style="resize:none"
+                cols=40 rows=10></textarea><br>
+              <input type="text" id="message"><br>
+                <button type="button" id="send_message">send</button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <!-- Disclaimer-->
+      </footer>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/client/js/chatClient.js"></script>
+    <!--__GAME_SCRIPT__-->
+    <!-- <script src="client/tickTackToeClient.js"></script> -->
+    <!-- <script src="/client/js/eggGameClient.js"></script> -->
+  </body>
+</html>

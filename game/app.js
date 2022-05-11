@@ -13,12 +13,9 @@ const {
   RoomMessage,
   RoomMessageType,
 } = require("./roomRequests");
-const { isObject } = require("util");
+const { GameChoiceManager } = require("./gameChoiceManager");
+const { RoomChoiceManager } = require("./roomChoiceManager");
 
-const EGG_GAME = 0;
-const TICK_TACK_TOE = 1;
-
-let curretGame = EGG_GAME;
 
 class Server {
   constructor(port) {
@@ -31,15 +28,21 @@ class Server {
     this._numberOfClients = 0;
     this._URL = "http://127.0.0.1:" + port + "/";
     this._ROOM_URL_LENGTH = 8;
+    this._gameChoiceManager = new GameChoiceManager();
+    this._roomChoiceManager = new RoomChoiceManager();
   }
   run() {
+    this._gameChoiceManager.loadGamesJSON();
+    this._roomChoiceManager.setGames(this._gameChoiceManager.games);
     this._app.get("/", function (req, res) {
-      res.sendFile(path.join(__dirname, "client", "index.html"));
+      res.sendFile(path.join(__dirname, "client/html", "index.html"));
+    });
+    this._app.get("/games", function (req, res) {
+      res.sendFile(path.join(__dirname, "client/html", "gameChoice.html"));
     });
     this._app.get("/rooms", function (req, res) {
-      res.sendFile(path.join(__dirname, "client", "chooseRoom.html"));
+      res.sendFile(path.join(__dirname, "client/html", "chooseRoom.html"));
     });
-
     this._app.use("/client", express.static(path.join(__dirname, "client")));
     this._app.use("/public", express.static(path.join(__dirname, "public")));
 
@@ -53,7 +56,7 @@ class Server {
   getRelativeURL(url) {
     return url.substring(this._URL.length, this._URL.lastIndex);
   }
-  /* Cuts room id from relativer adress*/ 
+  /* Cuts room id from relativer adress*/
   getRoomIdFromRelative(url) {
     return url.substring(url.length - this._ROOM_URL_LENGTH);
   }
@@ -82,9 +85,17 @@ class Server {
   }
   /* Function invoked when client connects to page */
   static clientConnect(socket, instance) {
+    if (socket.handshake.headers.source == "GAME_CHOICE") {
+      instance._gameChoiceManager.manage(socket);
+      return;
+    }
+    if (socket.handshake.headers.source == "ROOM_CHOICE") {
+      instance._roomChoiceManager.manage(socket);
+    }
     let socketId = socket.id;
     instance._numberOfClients++;
     instance._SOCKET_CLIENTS[socketId] = socket;
+    logger.info(`Params ---->>> ${socket.handshake.query.param}`);
     socket.on("createRoom", (socket) =>
       Server.createRoom(socket, instance, socketId)
     );
@@ -97,18 +108,18 @@ class Server {
     socket.on("sendChatMessage", (data) =>
       Server.sendChatMessage(data, instance, socketId)
     );
-    socket.on("clientReady", (data) => Server.sendClientReady(data, instance, socketId));
-    let relative_url = instance.getRelativeURL(socket.handshake.headers.referer).substring();
-    let roomId = instance.getRoomIdFromRelative(relative_url);
-    logger.info(
-      `Client ${socketId} connected to ${relative_url}`
+    socket.on("clientReady", (data) =>
+      Server.sendClientReady(data, instance, socketId)
     );
+    let relative_url = instance
+      .getRelativeURL(socket.handshake.headers.referer)
+      .substring();
+    let roomId = instance.getRoomIdFromRelative(relative_url);
+    logger.info(`Client ${socketId} connected to ${relative_url}`);
     /* if client connected to certain room -> handle the connection */
     if (instance._ROOMS[roomId] != null) {
       instance.handleConnection(roomId, socketId);
     }
-
-    Server.sendRoomList(instance, socketId);
   }
   /* Function invoked when client udpates the status of the game */
   static updateStatus(data, instance, socketId) {
@@ -117,15 +128,18 @@ class Server {
         instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
       )
     );
+    9;
     Server.sendChild(
       instance._ROOMS[roomId],
       new RoomRequest(socketId, RoomRequestType.Update, data)
     );
   }
   static sendClientReady(data, instance, socketId) {
-    let roomId = instance.getRoomIdFromRelative(instance.getRelativeURL(
-      instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
-    ));
+    let roomId = instance.getRoomIdFromRelative(
+      instance.getRelativeURL(
+        instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
+      )
+    );
     Server.sendChild(
       instance._ROOMS[roomId],
       new RoomRequest(socketId, RoomRequestType.ClientReady, data)
@@ -151,17 +165,13 @@ class Server {
   static sendToAllClients(name, data, instance) {
     instance._io.emit(name, data);
   }
-  static sendRoomList(instance, socketId) {
-    Server.sendClient(
-      "getRoomList",
-      { roomList: instance._ROOMS },
-      socketId,
-      instance
-    );
-  }
+
   /* Creates room and redirects client to its page */
   static createRoom(socket, instance, socketId) {
     let roomId = randomstring.generate(instance._ROOM_URL_LENGTH);
+    let game = RoomChoiceManager.getGameFromSocket(
+      instance._SOCKET_CLIENTS[socketId]
+    );
     let childProcess = child_process.fork("./room.js", {
       detached: false,
     });
@@ -169,41 +179,46 @@ class Server {
       Server.receiveMessageFromChild(msg, roomId, instance)
     );
     instance._ROOMS[roomId] = childProcess;
+    instance._roomChoiceManager.addRoom(roomId, game);
     logger.info(`Room ${roomId} created with process ${childProcess.pid}`);
     Server.sendChild(
       childProcess,
-      new RoomRequest(null, RoomRequestType.SetGame, {game: curretGame})
+      new RoomRequest(null, RoomRequestType.SetGame, { game: game })
     );
     Server.joinRoom(roomId, instance, socketId);
-    // logger.info("sending to all clients");
     Server.sendToAllClients("newRoomCreated", { roomId: roomId }, instance);
-    // logger.info("sent to all clients");
   }
   static joinRoom(roomId, instance, socketId) {
-    instance._app.get("/" + roomId, function (req, res) {
-      fs.readFile("client/room.html", "utf8", (err, data) => {
+    let game = RoomChoiceManager.getGameFromSocket(
+      instance._SOCKET_CLIENTS[socketId]
+    );
+    instance._app.get("/room/" + roomId, function (req, res) {
+      fs.readFile("client/html/room.html", "utf8", (err, data) => {
         if (err) {
           logger.error(err);
           return;
         }
-        switch (curretGame) {
-          case EGG_GAME:
-            data = data.replace('<!--__GAME_SCRIPT__-->', '<script src="client/eggGameClient.js"></script>');
+        switch (game) {
+          case "EGG_GAME":
+            data = data.replace(
+              "<!--__GAME_SCRIPT__-->",
+              '<script src="/client/js/eggGameClient.js"></script>'
+            );
             break;
-          case TICK_TACK_TOE:
-            data = data.replace('<!--__GAME_SCRIPT__-->', '<script src="client/tickTackToeClient.js"></script>');
+          case "TICK_TACK_TOE":
+            data = data.replace(
+              "<!--__GAME_SCRIPT__-->",
+              '<script src="/client/js/tickTackToeClient.js"></script>'
+            );
             break;
           default:
-            logger.error("No such game!");
+            logger.error(`No such game! - ${game}`);
             return;
         }
         res.send(data);
       });
     });
-      //res.sendFile(path.join(__dirname, "client", "room.html"));
-    instance._app.get("/room/" + roomId, function (req, res) {
-      res.sendFile(path.join(__dirname, "client", "room.html"));
-    });
+
     Server.sendClient("roomId", { roomId: roomId }, socketId, instance);
   }
   /* Receives message from room and propagates it to all clients connected to that room */

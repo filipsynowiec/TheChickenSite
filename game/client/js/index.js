@@ -1,6 +1,6 @@
 if (document.getElementById("play-guest-button") != null) {
     document.getElementById("play-guest-button").onclick = () => {
-        window.location.href = "/rooms";
+        window.location.href = "/games";
     }
 }
 if (document.getElementById("login-button") != null) {

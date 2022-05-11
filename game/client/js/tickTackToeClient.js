@@ -11,7 +11,7 @@ class TickTackToeClient {
             instance.updateStatus(data)
         );
         this._socket.on("gameHTML", (data) => {
-            instance.updateHTML("game_area", data.gameHTML);
+            instance.updateHTML("game-area", data.gameHTML);
             instance.sendClientReady(instance);
             instance.startGame(instance);
         });

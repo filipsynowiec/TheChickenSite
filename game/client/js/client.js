@@ -9,13 +9,13 @@ class Client {
     this._socket.on("getRoomList", (data) => Client.addRoomList(data, this));
   }
   static goToRoom(data, instance) {
-    console.log(`Redirecting to 127.0.0.1:8080/${data.roomId}`);
-    window.location.replace(`${data.roomId}`);
+    console.log(`Redirecting to 127.0.0.1:8080/room/${data.roomId}`);
+    window.location.href = `room/${data.roomId}`;
   }
   static addRoomList(data, instance) {
     console.log(Object.entries(data));
-    for (const [key, value] of Object.entries(data.roomList)) {
-      Client.addSingleRoom({ roomId: key }, instance);
+    for (let room of data.roomList) {
+      Client.addSingleRoom({ roomId: room }, instance);
     }
   }
   static addSingleRoom(data, instance) {
@@ -24,5 +24,9 @@ class Client {
   }
 }
 
-let socket = io();
+let socket = io({
+  extraHeaders: {
+    source: "ROOM_CHOICE",
+  },
+});
 let client = new Client(socket);

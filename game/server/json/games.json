@@ -1,0 +1,12 @@
+{
+  "EGG_GAME": {
+    "name": "EGG_GAME",
+    "title": "Game of Egg",
+    "room_url": "rooms?game=EGG_GAME"
+  },
+  "TICK_TACK_TOE": {
+    "name": "TICK_TACK_TOE",
+    "title": "Tick Tack Toe",
+    "room_url": "rooms?game=TICK_TACK_TOE"
+  }
+}

@@ -15,7 +15,12 @@ const {
 } = require("./server/roomRequests");
 const { GameChoiceManager } = require("./server/gameChoiceManager");
 const { RoomChoiceManager } = require("./server/roomChoiceManager");
-
+const bodyParser = require("body-parser");
+const cors = require("cors");
+let corsOptions = {
+  origin: "http://localhost:8081",
+};
+const PORT = process.env.PORT || 8080;
 
 class Server {
   constructor(port) {
@@ -25,6 +30,7 @@ class Server {
     this._SOCKET_CLIENTS = {};
     this._ROOMS = {};
     this._io = require("socket.io")(this._server, {});
+    this._db = require("./models");
     this._numberOfClients = 0;
     this._URL = "http://127.0.0.1:" + port + "/";
     this._ROOM_URL_LENGTH = 8;
@@ -34,6 +40,10 @@ class Server {
   run() {
     this._gameChoiceManager.loadGamesJSON();
     this._roomChoiceManager.setGames(this._gameChoiceManager.games);
+    // routes
+    require("./routes/auth.routes")(this._app);
+    require("./routes/user.routes")(this._app);
+
     this._app.get("/", function (req, res) {
       res.sendFile(path.join(__dirname, "client/html", "index.html"));
     });
@@ -45,13 +55,40 @@ class Server {
     });
     this._app.use("/client", express.static(path.join(__dirname, "client")));
     this._app.use("/public", express.static(path.join(__dirname, "public")));
+    this._app.use(cors(corsOptions));
+    this._app.use(bodyParser.json());
+    this._app.use(bodyParser.urlencoded({ extended: true }));
 
     this._server.listen(this._port);
+
+    this._db.sequelize.sync({ force: true }).then(() => {
+      logger.info("Drop and resync database");
+      initial();
+    });
 
     this._io.sockets.on("connect", (socket) =>
       Server.clientConnect(socket, this)
     );
   }
+  /* for database */
+  initial() {
+    let Role = this._db.role;
+    Role.create({
+      id: 1,
+      name: "user",
+    });
+
+    Role.create({
+      id: 2,
+      name: "moderator",
+    });
+
+    Role.create({
+      id: 3,
+      name: "admin",
+    });
+  }
+
   /* Cuts relative adress from given url */
   getRelativeURL(url) {
     return url.substring(this._URL.length, this._URL.lastIndex);

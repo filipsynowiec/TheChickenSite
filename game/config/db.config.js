@@ -11,4 +11,4 @@ module.exports = {
     idle: 10000,
   },
 };
-// sudo docker run --name pg -e POSTGRES_USER=dude -e POSTGRES_PASSWORD=duderino -p 5432:5432 -d postgres
+// sudo docker run --name psql -e POSTGRES_USER=dude -e POSTGRES_PASSWORD=duderino -e POSTGRES_DB=TCSDB -p 5432:5432 -d postgres

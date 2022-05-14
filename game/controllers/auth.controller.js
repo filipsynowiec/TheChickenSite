@@ -65,6 +65,7 @@ exports.signin = (req, res) => {
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
+        res.cookie("auth", token);
         res.status(200).send({
           id: user.id,
           username: user.username,

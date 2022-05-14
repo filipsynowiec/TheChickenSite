@@ -20,7 +20,6 @@ const cors = require("cors");
 let corsOptions = {
   origin: "http://localhost:8081",
 };
-const PORT = process.env.PORT || 8080;
 
 class Server {
   constructor(port) {
@@ -41,6 +40,11 @@ class Server {
     this._gameChoiceManager.loadGamesJSON();
     this._roomChoiceManager.setGames(this._gameChoiceManager.games);
     // routes
+
+    this._app.use(cors(corsOptions));
+    this._app.use(bodyParser.json());
+    this._app.use(bodyParser.urlencoded({ extended: true }));
+
     require("./routes/auth.routes")(this._app);
     require("./routes/user.routes")(this._app);
 
@@ -55,15 +59,22 @@ class Server {
     });
     this._app.use("/client", express.static(path.join(__dirname, "client")));
     this._app.use("/public", express.static(path.join(__dirname, "public")));
-    this._app.use(cors(corsOptions));
-    this._app.use(bodyParser.json());
-    this._app.use(bodyParser.urlencoded({ extended: true }));
+    this._app.get("/api/auth/signup", function (req, res) {
+      res.sendFile(path.join(__dirname, "client/html", "registerForm.html"));
+    });
+    this._app.get("/api/auth/signin", function (req, res) {
+      res.sendFile(path.join(__dirname, "client/html", "loginForm.html"));
+    });
+    this._app.get("/api/test", function (req, res) {
+      res.sendFile(path.join(__dirname, "client/html", "roleTest.html"));
+    });
 
     this._server.listen(this._port);
 
+    const instance = this;
     this._db.sequelize.sync({ force: true }).then(() => {
       logger.info("Drop and resync database");
-      initial();
+      this.initial();
     });
 
     this._io.sockets.on("connect", (socket) =>
@@ -75,7 +86,7 @@ class Server {
     let Role = this._db.role;
     Role.create({
       id: 1,
-      name: "user",
+      name: "admin",
     });
 
     Role.create({
@@ -85,7 +96,7 @@ class Server {
 
     Role.create({
       id: 3,
-      name: "admin",
+      name: "user",
     });
   }
 

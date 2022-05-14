@@ -6,12 +6,12 @@ button.onclick = function () {
   let params = {
     username: document.getElementById("login").value,
     password: document.getElementById("password").value,
-    role: [document.getElementById("roles").value],
+    roles: [document.getElementById("roles").value],
   };
-  post2(address, params);
+  post(address, params);
 };
 
-function post2(url, params) {
+function post(url, params) {
   let xhr = new XMLHttpRequest();
   console.log(url);
   console.log(params);

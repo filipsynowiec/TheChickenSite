@@ -1,21 +1,33 @@
 document.getElementById("allButton").onclick = function () {
-  changeUrl(window.location.href + "/all");
+  getUrl(window.location.href + "/all");
 };
 document.getElementById("userButton").onclick = function () {
-  changeUrl(window.location.href + "/user");
+  getUrl(window.location.href + "/user");
 };
 document.getElementById("moderatorButton").onclick = function () {
-  changeUrl(window.location.href + "/mod");
+  getUrl(window.location.href + "/mod");
 };
 document.getElementById("adminButton").onclick = function () {
-  changeUrl(window.location.href + "/admin");
+  getUrl(window.location.href + "/admin");
 };
 
-const changeUrl = function (url) {
+document.getElementById("nameButton").onclick = function () {
+  getName((name) => {
+    console.log(name);
+  });
+};
+
+const getUrl = function (url) {
   let xhr = new XMLHttpRequest();
   let token = localStorage.getItem("token");
   console.log(url, token);
   xhr.open("GET", url, true);
-  xhr.setRequestHeader("Authorization", "Bearer " + token);
+  xhr.setRequestHeader("x-access-token", "Bearer " + token);
+  xhr.onreadystatechange = function () {
+    if (this.readyState === XMLHttpRequest.DONE) {
+      console.log("received answer");
+      console.log(xhr.responseText);
+    }
+  };
   xhr.send();
 };

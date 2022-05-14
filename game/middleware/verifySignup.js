@@ -6,9 +6,6 @@ const User = db.user;
 checkDuplicateUsername = (req, res, next) => {
   // Username
   logger.info("Checking for duplicate username");
-  logger.info(req);
-  logger.info(Object.keys(req));
-
   User.findOne({
     where: {
       username: req.body.username,

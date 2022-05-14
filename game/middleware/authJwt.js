@@ -10,13 +10,14 @@ verifyToken = (req, res, next) => {
       message: "No token provided!",
     });
   }
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token.split(" ")[1], config.secret, (err, decoded) => {
     if (err) {
       return res.status(401).send({
-        message: "Unauthorized!",
+        message: "Unauthorized access!",
       });
     }
     req.userId = decoded.id;
+    req.userName = decoded.username;
     next();
   });
 };

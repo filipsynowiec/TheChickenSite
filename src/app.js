@@ -17,6 +17,7 @@ const { GameChoiceManager } = require("./server/gameChoiceManager");
 const { RoomChoiceManager } = require("./server/roomChoiceManager");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+
 let corsOptions = {
   origin: "http://localhost:8081",
 };
@@ -146,7 +147,7 @@ class Server {
     instance._SOCKET_CLIENTS[socketId] = socket;
     logger.info(`Params ---->>> ${socket.handshake.query.param}`);
     socket.on("createRoom", (socket) =>
-      Server.createRoom(socket, instance, socketId)
+      Server.createRoom(instance, socketId)
     );
     socket.on("requestAction", (data) =>
       Server.updateStatus(data, instance, socketId)
@@ -232,7 +233,7 @@ class Server {
   }
 
   /* Creates room and redirects client to its page */
-  static createRoom(socket, instance, socketId) {
+  static createRoom(instance, socketId) {
     let roomId = randomstring.generate(instance._ROOM_URL_LENGTH);
     let game = RoomChoiceManager.getGameFromSocket(
       instance._SOCKET_CLIENTS[socketId]
@@ -253,6 +254,8 @@ class Server {
     Server.joinRoom(roomId, instance, socketId);
     Server.sendToAllClients("newRoomCreated", { roomId: roomId }, instance);
   }
+
+
   static joinRoom(roomId, instance, socketId) {
     let game = RoomChoiceManager.getGameFromSocket(
       instance._SOCKET_CLIENTS[socketId]
@@ -286,6 +289,8 @@ class Server {
 
     Server.sendClient("roomId", { roomId: roomId }, socketId, instance);
   }
+
+
   /* Receives message from room and propagates it to all clients connected to that room */
   static receiveMessageFromChild(msg, roomId, instance) {
     let message = new RoomMessage(null, null, msg);
@@ -311,6 +316,8 @@ class Server {
           return;
     }
   }
+
+  
   /* Sends a request to certain room */
   static sendChild(childProcess, request) {
     let ret = childProcess.send(request);

@@ -10,7 +10,7 @@
 
 ## Run
 
-- `./game/app.js` in project main directory
+- `./src/app.js` in project main directory
 
 ## Setup docker
 

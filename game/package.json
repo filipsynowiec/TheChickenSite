@@ -11,10 +11,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
     "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
     "list.js": "^2.3.1",
     "node-sass": "^7.0.1",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
     "randomstring": "^1.2.2",
+    "sequelize": "^6.19.0",
     "socket.io": "^4.4.1",
     "swup": "^2.0.14",
     "winston": "^3.6.0"

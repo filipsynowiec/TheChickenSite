@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<Html>
+    <head>
+        <title>
+            Registration Page
+        </title>
+    </head>
+
+    <body>
+        <label> User registration </label>
+        <br>
+        <br>
+        <form>
+            <label> Login </label>
+            <input type="text" name="login" size="15" id="login" /> <br> <br>
+            <label> Password: </label>
+            <input type="text" name="password" size="15" id="password"/> <br> <br>
+            <label for="roles">Choose a role:</label>
+            <select name="roles" id="roles">
+                <option value="user">user</option>
+                <option value="moderator">moderator</option>
+                <option value="admin">admin</option>
+            </select>
+            <br>
+            <br>
+
+            <input type="button" value="Submit" id="registerButton" />
+        </form>
+    </body>
+    <script src="/client/js/registerUser.js"></script>
+
+</html>

@@ -9,4 +9,13 @@
 ## Run
   - `./game/app.js` in project main directory
 
+## Setup docker
+  - `sudo docker run --name psql -e POSTGRES_USER=dude -e POSTGRES_PASSWORD=duderino -e POSTGRES_DB=TCSDB -p 5432:5432 -d postgres`
+  
+## Connect to container
+  - `sudo docker exec -it psql /bin/bash`
 
+## Log in to database
+  - `psql --dbname TCSDB --username dude`
+
+You should probably change config files to include your actual database login info and replace the secret key for AWT tokens. 

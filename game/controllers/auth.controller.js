@@ -58,10 +58,10 @@ exports.signin = (req, res) => {
         });
       }
       var token = jwt.sign(
-        { id: user.id, username: req.body.username },
+        { id: user.id },
         config.secret,
         {
-          expiresIn: 86400, // 24 hours
+          expiresIn: 86400*365*100, // 24 hours * 365 * 100
         }
       );
       var authorities = [];

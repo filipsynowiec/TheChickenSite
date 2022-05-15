@@ -76,6 +76,7 @@ class Server {
       logger.info("Drop and resync database");
       this.initial();
     });
+    // this._db.sequelize.sync({ force: false });
 
     this._io.sockets.on("connect", (socket) =>
       Server.clientConnect(socket, this)

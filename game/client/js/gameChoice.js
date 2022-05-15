@@ -39,7 +39,7 @@ class GameChoiceClient {
       let game = new Game(name, title, room_url);
       cslogger.info(`new game added ${game.name}, ${game.title}, ${game.url}`);
 
-      game.htmlElement.onclick = () => instance.selectGame(game);
+      game.setOnClick(() => instance.selectGame(game));
       list.appendChild(game.htmlElement);
       this._games.push(game);
     }

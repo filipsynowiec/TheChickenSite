@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile:sass": "node-sass frontend/index.scss public/css/style.css",
-    "watch:sass": "npm run compile:sass && node-sass frontend/index.scss -w public/css/style.css"
+    "compile:sass": "sass frontend/index.scss public/css/style.css",
+    "watch:sass": "npm run compile:sass && sass frontend/index.scss -w public/css/style.css"
   },
   "author": "",
   "license": "ISC",
@@ -17,10 +17,10 @@
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "list.js": "^2.3.1",
-    "node-sass": "^7.0.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "randomstring": "^1.2.2",
+    "sass": "^1.51.0",
     "sequelize": "^6.19.0",
     "socket.io": "^4.4.1",
     "swup": "^2.0.14",

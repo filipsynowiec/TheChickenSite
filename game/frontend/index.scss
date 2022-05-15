@@ -20,6 +20,7 @@ body {
   border-color: black;
   h1 {
     text-align: center;
+    font-size: xx-large;
   }
 }
 
@@ -39,8 +40,8 @@ body {
   height: 700px;
   &-room {
     // justify-content: space-around;
-    display: flex;
-    justify-content: space-around;
+    // display: flex;
+    // justify-content: space-around;
   }
 }
 //Scene
@@ -56,20 +57,23 @@ body {
 //Area
 .area {
   // display: inline-block;
-  flex: 1;
+  display: inline-block;
   border-radius: 1px;
   border-style: dotted;
   border-color: black;
   background-color: white;
   padding: 1em;
+  height: 85%;
   &-left {
-    max-width: 60%;
+    float: left;
+    // max-width: 65%;
     min-width: 60%;
   }
   &-right {
     text-align: right;
     max-width: 30%;
     min-width: 30%;
+    float:right;
   }
   input {
     display: inline-block;
@@ -164,4 +168,32 @@ html.is-leaving .transition-fade {
     color: purple;
     cursor: pointer;
   } 
+}
+//Account info top bar
+.account-info-bar {
+  border-radius: 1px;
+  border-style: dotted;
+  border-color: black;
+  height:8%;
+  font-size: small;
+  text-align: right;
+  display: block;
+}
+//Lists
+.list-element{
+  margin: 0 auto;
+  margin-top: 0.5em;
+  padding: 0.5em;
+  height: 2em;
+  width:50%;
+  border-radius: 1px;
+  border-style: dotted;
+  border-color: black;
+  &-selected {
+    background: green;
+  }
+}
+
+.list-box{
+  margin-bottom: 2em;
 }

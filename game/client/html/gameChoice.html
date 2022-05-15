@@ -7,6 +7,11 @@
   </head>
 
   <body>
+    <template id="list-element-template">
+      <div class="list-element">
+        <div class="list-element-text"></div>
+      </div>
+    </template>
     <div id="page-wrapper">
       <main class="main horizontal-center">
         <div id="swup" class="scene transition-fade">
@@ -15,9 +20,9 @@
             <div class="account-info-bar">
               <h2 id="user-info">Logged in as</h2>
             </div>
-            <div class="games-list-box">
+            <div class="games-list-box list-box">
               <div class="head">
-                <h2>Games</h2>
+                <h1>Games</h1>
               </div>
               <div class="list-wrapper">
                 <div id="games-list"></div>
@@ -34,5 +39,7 @@
     <script src="/client/js/cslogger.js"></script>
     <script src="/client/js/game.js"></script>
     <script src="/client/js/gameChoice.js"></script>
+    <script src="/client/js/getName.js"></script>
+    <script src="/client/js/accountInfo.js"></script>
   </body>
 </html>

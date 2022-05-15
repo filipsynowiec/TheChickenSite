@@ -5,7 +5,8 @@ const CIRCLE = 2
 const FULL = 3
 
 class TickTackToe {
-  constructor() {
+  constructor(seats) {
+    this._seats = seats;
     this._observers = [];
     this._turn = CROSS;
     this._won = EMPTY
@@ -77,6 +78,7 @@ class TickTackToe {
       turn: this._turn,
       won: this._won,
       fields: this._fields,
+      active: this._seats.seats[(this._turn == CROSS)? 0: 1],
     }
   }
   getHTMLLocation() {

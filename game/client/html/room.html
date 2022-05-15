@@ -15,7 +15,8 @@
             <div class="area area-left" id="game-area">
 
             </div>
-            <div class="area area-right" id="chat-area">
+            <div class="area area-right" id="chat_area">
+              <div id="seats_area"></div>
               <textarea id="chat_history" readonly style="resize:none"
                 cols=40 rows=10></textarea><br>
               <input type="text" id="message"><br>
@@ -32,6 +33,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/client/js/getName.js"></script>
     <script src="/client/js/chatClient.js"></script>
+    <script src="/client/js/seatsClient.js"></script>
     <!--__GAME_SCRIPT__-->
     <!-- <script src="client/tickTackToeClient.js"></script> -->
     <!-- <script src="/client/js/eggGameClient.js"></script> -->

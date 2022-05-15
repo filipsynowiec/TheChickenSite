@@ -16,6 +16,9 @@ class TickTackToeClient {
             instance.startGame(instance);
         });
         this._buttons = [];
+        getName((name) => {
+            instance._name = name;
+          });
     }
     updateHTML(element, data) {
         document.getElementById(element).innerHTML = data;
@@ -24,6 +27,11 @@ class TickTackToeClient {
         instance._socket.emit("requestAction", { field: index });
     }
     updateStatus(data) {
+        if(data.active == this._name) {
+            for(let i=0; i<9; ++i) {
+                this._buttons[i].disabled = false;
+            }
+        }
         if(data.turn == CROSS) {
             document.getElementById("turn").innerHTML = "Turn: X";
         } else {
@@ -60,6 +68,11 @@ class TickTackToeClient {
                     break;
             }
             document.getElementById("winner").innerHTML = "Winner: " + winner;
+            for(let i=0; i<9; ++i) {
+                this._buttons[i].disabled = true;
+            }
+        }
+        if(data.active != this._name) {
             for(let i=0; i<9; ++i) {
                 this._buttons[i].disabled = true;
             }

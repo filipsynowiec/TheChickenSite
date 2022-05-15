@@ -1,4 +1,5 @@
 let button = document.getElementById("loginButton");
+let signupLink = document.getElementById("signup-link");
 
 button.onclick = function () {
   let address = window.location.href;
@@ -19,8 +20,13 @@ function post2(url, params) {
       console.log(xhr.responseText);
       let JSONanswer = JSON.parse(xhr.responseText);
       localStorage.setItem("token", JSONanswer.accessToken);
+      window.location.href = "/";
     }
   };
   let data = JSON.stringify(params);
   xhr.send(data);
 }
+
+signupLink.onclick = function () {
+  window.location.href = "/signup";
+};

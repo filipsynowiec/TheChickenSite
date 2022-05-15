@@ -1,4 +1,5 @@
 let button = document.getElementById("registerButton");
+let signinLink = document.getElementById("signin-link");
 
 button.onclick = function () {
   let address = window.location.href;
@@ -10,6 +11,8 @@ button.onclick = function () {
   post(address, params);
 };
 
+let signupSuccess = false;
+
 function post(url, params) {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", url, true);
@@ -18,7 +21,13 @@ function post(url, params) {
     if (this.readyState === XMLHttpRequest.DONE) {
       console.log(xhr.responseText);
     }
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      window.location.href = "/signin";
+    }
   };
   let data = JSON.stringify(params);
   xhr.send(data);
 }
+signinLink.onclick = function () {
+  window.location.href = "/signin";
+};

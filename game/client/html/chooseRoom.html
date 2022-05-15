@@ -12,14 +12,16 @@
         <div id="swup" class="scene transition-fade">
           <!-- Choose room box -->
           <div class="box center">
+            <div class="account-info-bar">
+              <h2 id="user-info">Logged in as</h2>
+            </div>
             <div class="rooms-list-box">
-                <div class="head">
-                    <h2>Available rooms</h2>
-                </div>
-                <div class="list-wrapper">
-                    <div id="available-rooms-list">
-                    </div>
-                </div>
+              <div class="head">
+                <h2>Available rooms</h2>
+              </div>
+              <div class="list-wrapper">
+                <div id="available-rooms-list"></div>
+              </div>
             </div>
             <div class="rooms-list-buttons">
               <div class="button" id="create-room-button">Create new room</div>
@@ -27,14 +29,13 @@
             </div>
           </div>
         </div>
-
       </main>
 
       <footer>
         <!-- Disclaimer-->
       </footer>
     </div>
-    <script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script>
+    <!-- <script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script> -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/client/js/main.js"></script>
     <script src="/client/js/client.js"></script>

@@ -5,6 +5,6 @@ if (document.getElementById("play-guest-button") != null) {
 }
 if (document.getElementById("login-button") != null) {
   document.getElementById("login-button").onclick = () => {
-    window.location.href = "#";
+    window.location.href = "/signin";
   };
 }

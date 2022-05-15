@@ -1,32 +1,62 @@
 <!DOCTYPE html>
-<Html>
-    <head>
-        <title>
-            Registration Page
-        </title>
-    </head>
-
-    <body>
-        <label> User registration </label>
-        <br>
-        <br>
-        <form>
-            <label> Login </label>
-            <input type="text" name="login" size="15" id="login" /> <br> <br>
-            <label> Password: </label>
-            <input type="text" name="password" size="15" id="password"/> <br> <br>
-            <label for="roles">Choose a role:</label>
-            <select name="roles" id="roles">
-                <option value="user">user</option>
-                <option value="moderator">moderator</option>
-                <option value="admin">admin</option>
-            </select>
-            <br>
-            <br>
-
-            <input type="button" value="Submit" id="registerButton" />
-        </form>
-    </body>
+<html>
+  <head>
+    <title>Sign up</title>
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div id="page-wrapper">
+      <main class="main horizontal-center">
+        <div id="swup" class="scene transition-fade">
+          <!-- Greeting chicken -->
+          <div class="box center">
+            <div class="account-info-bar">
+              <h2 id="user-info">Logged in as</h2>
+            </div>
+            <h1>Sign up</h1>
+            <br />
+            <br />
+            <form class="form-vertical">
+              <div class="form-single-line">
+                <label for="username"> Username </label>
+                <input type="text" name="login" size="15" id="login" /> <br />
+              </div>
+              <div class="form-single-line">
+                <label for="password"> Password </label>
+                <input
+                  type="password"
+                  name="password"
+                  size="15"
+                  id="password"
+                />
+              </div>
+              <div class="form-single-line">
+                <label for="roles">Choose a role</label>
+                <select name="roles" id="roles">
+                  <option value="user">user</option>
+                  <option value="moderator">moderator</option>
+                  <option value="admin">admin</option>
+                </select>
+              </div>
+              <div class="form-single-line">
+                <input
+                  class="button-submit"
+                  type="button"
+                  value="Submit"
+                  id="registerButton"
+                />
+              </div>
+              <div class="form-single-line text-only">
+                <a class="signin-link" id="signin-link"
+                  >Already have an account? Sign in now.</a
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
     <script src="/client/js/registerUser.js"></script>
-
+  </body>
 </html>

@@ -1,4 +1,4 @@
-const getName = function (action) {
+const getName = function (actionIfSuccessful, actionIfFailed) {
   let xhr = new XMLHttpRequest();
   let url = "/api/username";
   let token = localStorage.getItem("token");
@@ -6,7 +6,13 @@ const getName = function (action) {
   xhr.setRequestHeader("x-access-token", "Bearer " + token);
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE) {
-      action(xhr.responseText);
+      console.log(xhr.responseText);
+      let JSONanswer = JSON.parse(xhr.responseText);
+      if (this.status == 200 && JSONanswer.successful) {
+        actionIfSuccessful(JSONanswer.name);
+      } else {
+        actionIfFailed();
+      }
     }
   };
   xhr.send();

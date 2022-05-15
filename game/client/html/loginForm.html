@@ -1,24 +1,52 @@
 <!DOCTYPE html>
-<Html>
-    <head>
-        <title>
-            Login Page
-        </title>
-    </head>
-
-    <body>
-        <label> User login </label>
-        <br>
-        <br>
-        <form>
-            <label> Login </label>
-            <input type="text" name="login" size="15" id="login" /> <br> <br>
-            <label> Password: </label>
-            <input type="text" name="password" size="15" id="password"/> <br> <br>
-
-            <input type="button" value="Submit" id="loginButton" />
-        </form>
-    </body>
+<html>
+  <head>
+    <title>Sign in</title>
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div id="page-wrapper">
+      <main class="main horizontal-center">
+        <div id="swup" class="scene transition-fade">
+          <div class="box center">
+            <h1>User login</h1>
+            <br />
+            <br />
+            <form class="form-vertical">
+              <div class="form-single-line">
+                <label for="username"> Username </label>
+                <input type="text" name="login" size="15" id="login" /> <br />
+              </div>
+              <div class="form-single-line">
+                <label for="password"> Password: </label>
+                <input
+                  type="password"
+                  name="password"
+                  size="15"
+                  id="password"
+                />
+              </div>
+              <br />
+              <br />
+              <div class="form-single-line">
+                <input
+                  class="button-submit"
+                  type="button"
+                  value="Sign in"
+                  id="loginButton"
+                />
+              </div>
+              <div class="form-single-line text-only">
+                <a class="signup-link" id="signup-link"
+                  >You don't have an account yet? Sign up now.</a
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
     <script src="/client/js/loginUser.js"></script>
-
+  </body>
 </html>

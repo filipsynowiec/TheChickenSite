@@ -9,9 +9,14 @@ class ChatClient {
     document.getElementById("send_message").onclick = () => {
       ChatClient.sendChatMessage(instance);
     };
-    getName((name) => {
-      instance._name = name;
-    });
+    getName(
+      (name) => {
+        instance._name = name;
+      },
+      () => {
+        instance._name = "Guest User";
+      }
+    );
   }
   static updateHTML(element, data) {
     document.getElementById(element).innerHTML = data;

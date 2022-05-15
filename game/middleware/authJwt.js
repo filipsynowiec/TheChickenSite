@@ -13,7 +13,8 @@ verifyToken = (req, res, next) => {
   jwt.verify(token.split(" ")[1], config.secret, (err, decoded) => {
     if (err) {
       return res.status(401).send({
-        message: "Unauthorized access!",
+        message:
+          "Invalid token provided! Please generate new token by logging in.",
       });
     }
     req.userId = decoded.id;

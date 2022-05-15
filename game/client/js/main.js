@@ -32,7 +32,7 @@ class Main {
     let list = document.getElementById("available-rooms-list");
     if (list == null) return;
     let room = new Room(data.roomId);
-    room.htmlElement.onclick = () => Main.selectRoom(this, room);
+    room.setOnClick(() => Main.selectRoom(this, room));
     this._rooms.push(room);
     list.appendChild(room._htmlElement);
   }

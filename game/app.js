@@ -59,10 +59,10 @@ class Server {
     });
     this._app.use("/client", express.static(path.join(__dirname, "client")));
     this._app.use("/public", express.static(path.join(__dirname, "public")));
-    this._app.get("/api/auth/signup", function (req, res) {
+    this._app.get("/signup", function (req, res) {
       res.sendFile(path.join(__dirname, "client/html", "registerForm.html"));
     });
-    this._app.get("/api/auth/signin", function (req, res) {
+    this._app.get("/signin", function (req, res) {
       res.sendFile(path.join(__dirname, "client/html", "loginForm.html"));
     });
     this._app.get("/api/test", function (req, res) {
@@ -76,6 +76,7 @@ class Server {
       logger.info("Drop and resync database");
       this.initial();
     });
+    // this._db.sequelize.sync({ force: false });
 
     this._io.sockets.on("connect", (socket) =>
       Server.clientConnect(socket, this)

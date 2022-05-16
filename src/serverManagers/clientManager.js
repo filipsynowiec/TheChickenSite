@@ -127,7 +127,7 @@ class ClientManager {
       RoomManager.sendClientReady(data, this, socketId)
     );
     socket.on("sendSeatClaim", (data) =>
-      RoomManager.sendSeatClaim(data, instance, socketId)
+      RoomManager.sendSeatClaim(data, this, socketId)
     );
   }
 }

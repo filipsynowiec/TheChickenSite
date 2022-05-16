@@ -97,9 +97,7 @@ class RoomManager {
 
   static sendSeatClaim(data, instance, socketId) {
     let roomId = ServerUtils.getRoomIdFromRelative(
-      instance._ROOM_URL_LENGTH,
-      instance.getRelativeURL(
-        instance._URL,
+      ServerUtils.getRelativeURL(
         instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
       )
     );

@@ -1,11 +1,11 @@
-#!/usr/local/bin/node
+#!/usr/bin/node
 
 const express = require("express");
 const http = require("http");
 const { logger } = require("./server/logger");
-const { ServerUtils } = require("./utils/serverUtils");
-const { HtmlManager } = require("./serverManagers/htmlManager");
-const { ClientManager } = require("./serverManagers/clientManager");
+const { HtmlManager } = require("./server/serverManagers/htmlManager");
+const { ClientManager } = require("./server/serverManagers/clientManager");
+const { DatabaseManager } = require("./database/dbManager");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const constants = require("./constants");
@@ -19,6 +19,7 @@ class Server {
     this._server = http.Server(this._app);
     this._clientManager = new ClientManager(this._server);
     this._db = require("./models");
+    this._databaseManager = new DatabaseManager(this._db);
   }
   run() {
     // routes
@@ -31,33 +32,8 @@ class Server {
 
     HtmlManager.setHtmlFiles(this, __dirname);
     this._server.listen(constants.PORT);
-
-    const instance = this;
-    this._db.sequelize.sync({ force: true }).then(() => {
-      logger.info("Drop and resync database");
-      this.initial();
-    });
-    // this._db.sequelize.sync({ force: false });
-
+    this._databaseManager.setUpDatabase(true); // true - drop and sync db; false - dont drop
     this._clientManager.setHandlers(this._app);
-  }
-  /* for database */
-  initial() {
-    let Role = this._db.role;
-    Role.create({
-      id: 1,
-      name: "admin",
-    });
-
-    Role.create({
-      id: 2,
-      name: "moderator",
-    });
-
-    Role.create({
-      id: 3,
-      name: "user",
-    });
   }
 }
 

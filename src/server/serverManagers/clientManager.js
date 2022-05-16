@@ -1,11 +1,11 @@
-const { logger } = require("../server/logger");
-const { ServerUtils } = require("../utils/serverUtils");
+const { logger } = require("../logger");
+const { ServerUtils } = require("../../utils/serverUtils");
 const { RoomManager } = require("./roomManager");
 const { GameChoiceManager } = require("./gameChoiceManager");
 const { RoomChoiceManager } = require("./roomChoiceManager");
 const randomstring = require("randomstring");
 const child_process = require("child_process");
-const constants = require("../constants");
+const constants = require("../../constants");
 
 class ClientManager {
   constructor(server) {

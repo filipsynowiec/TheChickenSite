@@ -1,4 +1,4 @@
-const { logger } = require("../server/logger");
+const { logger } = require("../logger");
 
 /* Inter process communication*/
 

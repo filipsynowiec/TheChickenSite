@@ -1,4 +1,4 @@
-const { logger } = require("../server/logger");
+const { logger } = require("../logger");
 
 /*
  * This is a class that handles all communications connected to room choosing.

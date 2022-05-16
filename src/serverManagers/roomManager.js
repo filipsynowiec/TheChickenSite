@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const { logger } = require("../server/logger");
 const fs = require("fs");
+const constants = require("../constants");
 
 const {
   RoomRequest,
@@ -59,9 +60,7 @@ class RoomManager {
   /* Function invoked when client udpates the status of the game */
   static updateStatus(data, instance, socketId) {
     let roomId = ServerUtils.getRoomIdFromRelative(
-      instance._ROOM_URL_LENGTH,
       ServerUtils.getRelativeURL(
-        instance._URL,
         instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
       )
     );
@@ -74,9 +73,7 @@ class RoomManager {
 
   static sendClientReady(data, instance, socketId) {
     let roomId = ServerUtils.getRoomIdFromRelative(
-      instance._ROOM_URL_LENGTH,
       ServerUtils.getRelativeURL(
-        instance._URL,
         instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
       )
     );
@@ -88,9 +85,7 @@ class RoomManager {
 
   static sendChatMessage(data, instance, socketId) {
     let roomId = ServerUtils.getRoomIdFromRelative(
-      instance._ROOM_URL_LENGTH,
       ServerUtils.getRelativeURL(
-        instance._URL,
         instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
       )
     );

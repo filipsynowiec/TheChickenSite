@@ -5,30 +5,26 @@ const { GameChoiceManager } = require("../server/gameChoiceManager");
 const { RoomChoiceManager } = require("../server/roomChoiceManager");
 const randomstring = require("randomstring");
 const child_process = require("child_process");
+const constants = require("../constants");
 
 class ClientManager {
-  constructor(server, port) {
+  constructor(server) {
     this._io = require("socket.io")(server, {});
     this._numberOfClients = 0;
     this._SOCKET_CLIENTS = {};
     this._ROOMS = {};
-    this._URL = "http://127.0.0.1:" + port + "/";
-    this._ROOM_URL_LENGTH = 8;
-    this._port = port;
     this._gameChoiceManager = new GameChoiceManager();
     this._roomChoiceManager = new RoomChoiceManager();
     this._gameChoiceManager.loadGamesJSON();
     this._roomChoiceManager.setGames(this._gameChoiceManager.games);
   }
 
-  setHandlers(instance) {
-    this._io.sockets.on("connect", (socket) =>
-      this.clientConnect(socket, instance)
-    );
+  setHandlers(app) {
+    this._io.sockets.on("connect", (socket) => this.clientConnect(socket, app));
   }
 
   /* Function invoked when client connects to page */
-  clientConnect(socket, instance) {
+  clientConnect(socket, app) {
     if (socket.handshake.headers.source == "GAME_CHOICE") {
       this._gameChoiceManager.manage(socket);
       return;
@@ -41,16 +37,12 @@ class ClientManager {
     this._SOCKET_CLIENTS[socketId] = socket;
     logger.info(`Params ---->>> ${socket.handshake.query.param}`);
 
-    this.setRequestMethods(socket, instance);
+    this.setRequestMethods(socket, app);
 
     let relative_url = ServerUtils.getRelativeURL(
-      this._URL,
       socket.handshake.headers.referer
     ).substring();
-    let roomId = ServerUtils.getRoomIdFromRelative(
-      this._ROOM_URL_LENGTH,
-      relative_url
-    );
+    let roomId = ServerUtils.getRoomIdFromRelative(relative_url);
 
     logger.info(`Client ${socketId} connected to ${relative_url}`);
     /* if client connected to certain room -> handle the connection */
@@ -91,10 +83,10 @@ class ClientManager {
     }
   }
 
-  setRequestMethods(socket, instance) {
+  setRequestMethods(socket, app) {
     let socketId = socket.id;
     socket.on("createRoom", (data) => {
-      let roomId = randomstring.generate(this._ROOM_URL_LENGTH);
+      let roomId = randomstring.generate(constants.ROOM_URL_LENGTH);
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]
       );
@@ -113,7 +105,7 @@ class ClientManager {
       this._ROOMS[roomId] = childProcess;
       this._roomChoiceManager.addRoom(roomId, game);
 
-      RoomManager.createRoom(instance._app, childProcess, roomId, game);
+      RoomManager.createRoom(app, childProcess, roomId, game);
       this.sendToOneClient("roomId", { roomId: roomId }, socketId);
       this.sendToAllClients("newRoomCreated", { roomId: roomId });
     });
@@ -125,7 +117,7 @@ class ClientManager {
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]
       );
-      RoomManager.joinRoom(data.roomId, game, instance._app);
+      RoomManager.joinRoom(data.roomId, game, app);
       this.sendToOneClient("roomId", { roomId: data.roomId }, socketId);
     });
     socket.on("sendChatMessage", (data) =>

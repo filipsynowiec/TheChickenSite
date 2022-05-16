@@ -1,6 +1,7 @@
 const path = require("path");
 const express = require("express");
 const { logger } = require("../server/logger");
+const constants = require("../constants");
 
 class ServerUtils {
   static setHtmlFiles(instance, basePath) {
@@ -27,13 +28,12 @@ class ServerUtils {
   }
 
   /* Cuts relative adress from given url */
-  static getRelativeURL(serverUrl, url) {
-      logger.info(`url: ${serverUrl}`)
-    return url.substring(serverUrl.length, serverUrl.lastIndex);
+  static getRelativeURL(url) {
+    return url.substring(constants.URL.length, constants.URL.lastIndex);
   }
   /* Cuts room id from relativer adress*/
-  static getRoomIdFromRelative(roomUrlLength, url) {
-    return url.substring(url.length - roomUrlLength);
+  static getRoomIdFromRelative(url) {
+    return url.substring(url.length - constants.ROOM_URL_LENGTH);
   }
 }
 

@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/bin/node
 
 const express = require("express");
 const http = require("http");
@@ -7,20 +7,17 @@ const { ServerUtils } = require("./utils/serverUtils");
 const { ClientManager } = require("./serverManagers/clientManager");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
+const constants = require("./constants");
 let corsOptions = {
   origin: "http://localhost:8081",
 };
 
 class Server {
-  constructor(port) {
-    this._port = port;
+  constructor() {
     this._app = express();
     this._server = http.Server(this._app);
-    this._clientManager = new ClientManager(this._server, port);
+    this._clientManager = new ClientManager(this._server);
     this._db = require("./models");
-    this._URL = "http://127.0.0.1:" + port + "/";
-    this._ROOM_URL_LENGTH = 8;
   }
   run() {
     // routes
@@ -32,7 +29,7 @@ class Server {
     require("./routes/user.routes")(this._app);
 
     ServerUtils.setHtmlFiles(this, __dirname);
-    this._server.listen(this._port);
+    this._server.listen(constants.PORT);
 
     const instance = this;
     this._db.sequelize.sync({ force: true }).then(() => {
@@ -41,7 +38,7 @@ class Server {
     });
     // this._db.sequelize.sync({ force: false });
 
-    this._clientManager.setHandlers(this);
+    this._clientManager.setHandlers(this._app);
   }
   /* for database */
   initial() {
@@ -63,6 +60,6 @@ class Server {
   }
 }
 
-let serv = new Server(8080);
-logger.info("Server is starting");
+let serv = new Server();
+logger.info(`Server is starting on port ${constants.PORT}`);
 serv.run();

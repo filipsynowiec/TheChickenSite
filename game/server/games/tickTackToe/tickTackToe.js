@@ -11,7 +11,7 @@ class TickTackToe {
     this._turn = CROSS;
     this._won = EMPTY
     this._fields = []
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       this._fields[i] = EMPTY;
     }
   }
@@ -69,8 +69,19 @@ class TickTackToe {
     this._won = this.cheackIfWon();
     this._observers.forEach((observer) => observer.sendStatus());
   }
-  updateGame(data) { 
-    this.changeField(data.field)
+  restart() {
+    for (var i = 0; i < 9; i++) {
+      this._fields[i] = EMPTY;
+    }
+    this._turn = CROSS;
+    this._won = false;
+  }
+  updateGame(data) {
+    if(data.restart == true) {
+      this.restart();
+    } else {
+      this.changeField(data.field)
+    }
     this._observers.forEach((observer) => observer.sendStatus());
   }
   getStatus() {

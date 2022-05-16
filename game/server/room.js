@@ -53,6 +53,7 @@ class Room {
   }
   prepareClient(client) {
     this.sendChat();
+    this.sendSeats();
     this.sendStatus();
     logger.info(`Client ${client} ready`);
   }

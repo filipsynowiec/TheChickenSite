@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
+body {
+  background: rgb(180, 180, 180);
+  font-family: "Bungee", cursive;
+}
+
+.main {
+  width: 70vw;
+  min-width: 1200px;
+}
+
+#greeter {
+  border-radius: 3px;
+  border-color: black;
+}
+#greeter h1 {
+  text-align: center;
+  font-size: xx-large;
+}
+
+.box {
+  background: rgba(223, 223, 223, 0.7);
+  border-color: rgb(0, 0, 0);
+  border-radius: 6px;
+  padding: 1em;
+  position: relative;
+  box-shadow: 4px -3px 5px 0px rgb(130, 130, 130);
+  text-align: center;
+  vertical-align: middle;
+  height: 700px;
+}
+.scene {
+  height: 90vh;
+  padding: 2em;
+  border-radius: 1px;
+  border-color: grey;
+  border-style: dotted;
+}
+
+.area {
+  display: inline-block;
+  border-radius: 1px;
+  border-style: dotted;
+  border-color: black;
+  background-color: white;
+  padding: 1em;
+  height: 85%;
+}
+.area-left {
+  float: left;
+  min-width: 60%;
+}
+.area-right {
+  text-align: right;
+  max-width: 30%;
+  min-width: 30%;
+  float: right;
+}
+.area input {
+  display: inline-block;
+}
+
+.index-panel {
+  padding: 2em;
+  margin: 0 auto;
+}
+
+.button {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 2px;
+  border-style: solid;
+  border-color: black;
+  min-width: 200px;
+  min-height: 40px;
+  background: rgb(180, 180, 180);
+  opacity: 0.6;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.button:hover {
+  opacity: 1;
+}
+
+.horizontal-center {
+  margin: 0 auto;
+}
+
+.transition-fade {
+  opacity: 1;
+  transition: 500ms;
+  transform: translateX(0);
+  transform-origin: left;
+}
+
+html.is-animating .transition-fade {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+html.is-leaving .transition-fade {
+  opacity: 0;
+  transform: translateX(0);
+}
+
+.form-vertical .form-single-line {
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+}
+.form-vertical .form-single-line label {
+  margin: 0 auto;
+  padding: 1em;
+  width: 40%;
+  display: block;
+}
+.form-vertical .form-single-line input {
+  margin: 0 auto;
+  padding: 1em;
+  width: 40%;
+  display: block;
+  font-family: "Bungee", cursive;
+}
+.form-vertical .form-single-line .button-submit {
+  width: 40%;
+  padding: 1em;
+  text-align: center;
+  margin-top: 2em;
+}
+.form-vertical .form-single-line select {
+  margin: 0 auto;
+  padding: 1em;
+  width: 40%;
+  display: block;
+  font-family: "Bungee", cursive;
+  background-color: white;
+}
+.form-vertical .text-only {
+  margin-top: 2em;
+  display: block;
+  padding: 1em;
+  color: blue;
+  text-decoration: underline;
+  font-size: smaller;
+}
+.form-vertical .text-only:hover {
+  color: purple;
+  cursor: pointer;
+}
+
+.account-info-bar {
+  border-radius: 1px;
+  border-style: dotted;
+  border-color: black;
+  height: 8%;
+  font-size: small;
+  text-align: right;
+  display: block;
+}
+
+.list-element {
+  margin: 0 auto;
+  margin-top: 0.5em;
+  padding: 0.5em;
+  height: 2em;
+  width: 50%;
+  border-radius: 1px;
+  border-style: dotted;
+  border-color: black;
+}
+.list-element-selected {
+  background: green;
+}
+
+.list-box {
+  margin-bottom: 2em;
+}
+
+/*# sourceMappingURL=style.css.map */

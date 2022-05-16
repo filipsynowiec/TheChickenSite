@@ -1,9 +1,9 @@
 const fs = require("fs");
-const { logger } = require("./logger");
+const { logger } = require("../server/logger");
 
-/* 
-  * This is a class that handles all communications connected to game choosing.
-*/ 
+/*
+ * This is a class that handles all communications connected to game choosing.
+ */
 class GameChoiceManager {
   constructor() {
     this._GAMES = {};
@@ -13,7 +13,7 @@ class GameChoiceManager {
   }
   /* provides list of games to requesting socket */
   manage(socket) {
-    logger.info(`${socket.id}`)
+    logger.info(`${socket.id}`);
     socket.emit("getGamesList", { gamesList: this._GAMES });
   }
   /* loads supported games from json file*/
@@ -23,5 +23,5 @@ class GameChoiceManager {
   }
 }
 module.exports = {
-  GameChoiceManager
+  GameChoiceManager,
 };

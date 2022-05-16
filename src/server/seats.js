@@ -1,11 +1,11 @@
 const { logger } = require("./logger");
-const NR_OF_SEATS = 2
+const NR_OF_SEATS = 2;
 
 class Seats {
   constructor(chatHistory) {
     this._observers = [];
     this._seats = [];
-    for(let i=0; i<NR_OF_SEATS; ++i) {
+    for (let i = 0; i < NR_OF_SEATS; ++i) {
       this._seats.push(null);
     }
   }
@@ -19,8 +19,8 @@ class Seats {
   }
 
   claimSeat(data, instance) {
-    for(let i=0; i<NR_OF_SEATS; ++i) {
-      if(this.seats[i] == data.name) {
+    for (let i = 0; i < NR_OF_SEATS; ++i) {
+      if (this.seats[i] == data.name) {
         this.seats[i] = null;
       }
     }

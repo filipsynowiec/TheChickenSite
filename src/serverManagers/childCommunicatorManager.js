@@ -1,10 +1,4 @@
 const { logger } = require("../server/logger");
-const {
-    RoomRequest,
-    RoomRequestType,
-    RoomMessage,
-    RoomMessageType,
-  } = require("../server/roomRequests");
 
 /* Inter process communication*/
 
@@ -13,7 +7,7 @@ class ChildCommunicatorManager {
   static sendRequestToChild(childProcess, request) {
     let ret = childProcess.send(request);
     if (ret === false) {
-      logger.info("Send failed");
+      logger.info("IPC failed - error while sending request to child process");
     }
   }
 }

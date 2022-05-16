@@ -1,9 +1,10 @@
-#!/usr/bin/node
+#!/usr/local/bin/node
 
 const express = require("express");
 const http = require("http");
 const { logger } = require("./server/logger");
 const { ServerUtils } = require("./utils/serverUtils");
+const { HtmlManager } = require("./serverManagers/htmlManager");
 const { ClientManager } = require("./serverManagers/clientManager");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -28,7 +29,7 @@ class Server {
     require("./routes/auth.routes")(this._app);
     require("./routes/user.routes")(this._app);
 
-    ServerUtils.setHtmlFiles(this, __dirname);
+    HtmlManager.setHtmlFiles(this, __dirname);
     this._server.listen(constants.PORT);
 
     const instance = this;

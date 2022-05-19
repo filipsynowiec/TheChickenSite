@@ -157,6 +157,9 @@ class Server {
     socket.on("sendChatMessage", (data) =>
       Server.sendChatMessage(data, instance, socketId)
     );
+    socket.on("sendSeatClaim", (data) =>
+      Server.sendSeatClaim(data, instance, socketId)
+    );
     socket.on("clientReady", (data) =>
       Server.sendClientReady(data, instance, socketId)
     );
@@ -205,6 +208,19 @@ class Server {
       new RoomRequest(socketId, RoomRequestType.SendChatMessage, data)
     );
   }
+
+  static sendSeatClaim(data, instance, socketId) {
+    let roomId = instance.getRoomIdFromRelative(
+      instance.getRelativeURL(
+        instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
+      )
+    );
+    Server.sendChild(
+      instance._ROOMS[roomId],
+      new RoomRequest(socketId, RoomRequestType.SendSeatClaim, data)
+    );
+  }
+
   /* Emits message to certain socket client */
   static sendClient(name, data, socketId, instance) {
     logger.info(`${socketId} wants to join`);
@@ -286,6 +302,13 @@ class Server {
         break;
       case RoomMessageType.ChatHistory:
         instance.sendToRoom("updateChat", message.getData(), roomId);
+        break;
+      case RoomMessageType.Seats:
+        instance.sendToRoom("updateSeats", message.getData(), roomId);
+        break;
+      default:
+          logger.error(`No such message type! - ${message.getType()}`);
+          return;
     }
   }
   /* Sends a request to certain room */

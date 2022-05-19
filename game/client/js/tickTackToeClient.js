@@ -16,6 +16,9 @@ class TickTackToeClient {
             instance.startGame(instance);
         });
         this._buttons = [];
+        getName((name) => {
+            instance._name = name;
+          });
     }
     updateHTML(element, data) {
         document.getElementById(element).innerHTML = data;
@@ -24,11 +27,19 @@ class TickTackToeClient {
         instance._socket.emit("requestAction", { field: index });
     }
     updateStatus(data) {
+        console.log(data.active);
+        console.log(this._name);
+        if(data.active == this._name) {
+            for(let i=0; i<9; ++i) {
+                this._buttons[i].disabled = false;
+            }
+        }
         if(data.turn == CROSS) {
             document.getElementById("turn").innerHTML = "Turn: X";
         } else {
             document.getElementById("turn").innerHTML = "Turn: O";
         }
+        document.getElementById("winner-pane").style.display = 'none';
             
         for(let i=0; i<9; ++i) {
             switch(data.fields[i]) {
@@ -59,7 +70,13 @@ class TickTackToeClient {
                     winner = "NONE";
                     break;
             }
-            document.getElementById("winner").innerHTML = "Winner: " + winner;
+            for(let i=0; i<9; ++i) {
+                this._buttons[i].disabled = true;
+            }
+            document.getElementById("winner").innerText = "Winner: " + winner;
+            document.getElementById("winner-pane").style.display = 'block';;
+        }
+        if(data.active != this._name) {
             for(let i=0; i<9; ++i) {
                 this._buttons[i].disabled = true;
             }
@@ -88,6 +105,18 @@ class TickTackToeClient {
                 div.appendChild(this._buttons[i*3+j]);
             }
         }
+        
+        let restartButton = document.createElement("button");
+        document.getElementById("winner-pane").appendChild(restartButton);
+        restartButton.innerHTML = "restart";
+        restartButton.style.width = '200px';
+        restartButton.style.height = '50px';
+        restartButton.style.fontSize = '20px';
+        restartButton.style.margin = '5px';
+
+        restartButton.onclick = () => {
+            instance._socket.emit("requestAction", { restart: true });
+        };
     }
     sendClientReady(instance) {
         instance._socket.emit("clientReady", {});

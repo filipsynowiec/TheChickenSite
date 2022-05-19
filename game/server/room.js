@@ -10,6 +10,7 @@ const {
 const { EggGame } = require("./games/eggGame/eggGame");
 const { TickTackToe } = require("./games/tickTackToe/tickTackToe");
 const { Chat } = require("./chat");
+const { Seats } = require("./seats");
 const fs = require("fs");
 
 class Room {
@@ -18,6 +19,8 @@ class Room {
     this._numberOfClients = 0;
     this._chat = new Chat("Chat history:\n");
     this._chat.registerObserver(this);
+    this._seats = new Seats();
+    this._seats.registerObserver(this);
     this._gameName = null;
   }
 
@@ -40,6 +43,9 @@ class Room {
       case RoomRequestType.SendChatMessage:
         instance.updateChat(request.getData());
         break;
+      case RoomRequestType.SendSeatClaim:
+        instance.updateSeats(request.getData());
+        break;
       case RoomRequestType.ClientReady:
         instance.prepareClient(request.getClient());
         break;
@@ -47,6 +53,7 @@ class Room {
   }
   prepareClient(client) {
     this.sendChat();
+    this.sendSeats();
     this.sendStatus();
     logger.info(`Client ${client} ready`);
   }
@@ -55,6 +62,9 @@ class Room {
   }
   updateChat(data) {
     this._chat.registerMessage(data, this._chat); // TODO: refactor
+  }
+  updateSeats(data) {
+    this._seats.claimSeat(data, this._seats);
   }
   addClient(client, data) {
     this._CLIENTS[this._numberOfClients] = client;
@@ -72,7 +82,7 @@ class Room {
         this._game = new EggGame();
         break;
       case "TICK_TACK_TOE":
-        this._game = new TickTackToe();
+        this._game = new TickTackToe(this._seats);
         break;
       default:
         logger.error(`No such game! - ${data.game}`);
@@ -90,6 +100,11 @@ class Room {
   sendChat() {
     this.sendMessage(RoomMessageType.ChatHistory, {
       chatHistory: this._chat.history,
+    });
+  }
+  sendSeats() {
+    this.sendMessage(RoomMessageType.Seats, {
+      seats: this._seats.seats,
     });
   }
   sendHTML(client) {

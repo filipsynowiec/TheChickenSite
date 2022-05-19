@@ -111,23 +111,56 @@ class ClientManager {
     });
 
     socket.on("requestAction", (data) =>
-      RoomManager.updateStatus(data, this, socketId)
+      RoomManager.updateStatus(
+        data,
+        this,
+        socketId,
+        this.getRoomIdFromSocketId(socketId)
+      )
     );
     socket.on("joinRoom", (data) => {
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]
       );
-      RoomManager.joinRoom(data.roomId, game, app);
+      RoomManager.joinRoom(
+        data.roomId,
+        game,
+        app,
+        this.getRoomIdFromSocketId(socketId)
+      );
       this.sendToOneClient("roomId", { roomId: data.roomId }, socketId);
     });
     socket.on("sendChatMessage", (data) =>
-      RoomManager.sendChatMessage(data, this, socketId)
+      RoomManager.sendChatMessage(
+        data,
+        this,
+        socketId,
+        this.getRoomIdFromSocketId(socketId)
+      )
     );
     socket.on("clientReady", (data) =>
-      RoomManager.sendClientReady(data, this, socketId)
+      RoomManager.sendClientReady(
+        data,
+        this,
+        socketId,
+        this.getRoomIdFromSocketId(socketId)
+      )
     );
     socket.on("sendSeatClaim", (data) =>
-      RoomManager.sendSeatClaim(data, this, socketId)
+      RoomManager.sendSeatClaim(
+        data,
+        this,
+        socketId,
+        this.getRoomIdFromSocketId(socketId)
+      )
+    );
+  }
+
+  getRoomIdFromSocketId(socketId) {
+    return ServerUtils.getRoomIdFromRelative(
+      ServerUtils.getRelativeURL(
+        this._SOCKET_CLIENTS[socketId].handshake.headers.referer
+      )
     );
   }
 }

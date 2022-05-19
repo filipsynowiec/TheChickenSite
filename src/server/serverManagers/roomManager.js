@@ -6,7 +6,6 @@ const {
   RoomMessage,
   RoomMessageType,
 } = require("../room/roomRequests");
-const { ServerUtils } = require("../../utils/serverUtils");
 const { ChildCommunicatorManager } = require("./childCommunicatorManager");
 
 class RoomManager {
@@ -52,49 +51,28 @@ class RoomManager {
   }
 
   /* Function invoked when client udpates the status of the game */
-  static updateStatus(data, instance, socketId) {
-    let roomId = ServerUtils.getRoomIdFromRelative(
-      ServerUtils.getRelativeURL(
-        instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
-      )
-    );
-
+  static updateStatus(data, instance, socketId, roomId) {
     ChildCommunicatorManager.sendRequestToChild(
       instance._ROOMS[roomId],
       new RoomRequest(socketId, RoomRequestType.Update, data)
     );
   }
 
-  static sendClientReady(data, instance, socketId) {
-    let roomId = ServerUtils.getRoomIdFromRelative(
-      ServerUtils.getRelativeURL(
-        instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
-      )
-    );
+  static sendClientReady(data, instance, socketId, roomId) {
     ChildCommunicatorManager.sendRequestToChild(
       instance._ROOMS[roomId],
       new RoomRequest(socketId, RoomRequestType.ClientReady, data)
     );
   }
 
-  static sendChatMessage(data, instance, socketId) {
-    let roomId = ServerUtils.getRoomIdFromRelative(
-      ServerUtils.getRelativeURL(
-        instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
-      )
-    );
+  static sendChatMessage(data, instance, socketId, roomId) {
     ChildCommunicatorManager.sendRequestToChild(
       instance._ROOMS[roomId],
       new RoomRequest(socketId, RoomRequestType.SendChatMessage, data)
     );
   }
 
-  static sendSeatClaim(data, instance, socketId) {
-    let roomId = ServerUtils.getRoomIdFromRelative(
-      ServerUtils.getRelativeURL(
-        instance._SOCKET_CLIENTS[socketId].handshake.headers.referer
-      )
-    );
+  static sendSeatClaim(data, instance, socketId, roomId) {
     ChildCommunicatorManager.sendRequestToChild(
       instance._ROOMS[roomId],
       new RoomRequest(socketId, RoomRequestType.SendSeatClaim, data)

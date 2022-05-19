@@ -1,5 +1,5 @@
-const db = require("../models");
-const { logger } = require("../server/logger.js");
+const db = require("../../database/models");
+const { logger } = require("../../utils/logger");
 const ROLES = db.ROLES;
 const User = db.user;
 

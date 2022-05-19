@@ -1,14 +1,14 @@
 #!/usr/bin/node
 
-const { logger } = require("./logger");
+const { logger } = require("../../utils/logger");
 const {
   RoomRequest,
   RoomRequestType,
   RoomMessage,
   RoomMessageType,
 } = require("./roomRequests");
-const { EggGame } = require("./games/eggGame/eggGame");
-const { TickTackToe } = require("./games/tickTackToe/tickTackToe");
+const { EggGame } = require("../games/eggGame/eggGame");
+const { TickTackToe } = require("../games/tickTackToe/tickTackToe");
 const { Chat } = require("./chat");
 const { Seats } = require("./seats");
 const fs = require("fs");
@@ -25,29 +25,29 @@ class Room {
   }
 
   run() {
-    process.on("message", (msg) => Room.receiveMessage(msg, this));
+    process.on("message", (msg) => this.receiveMessage(msg));
     logger.info(`Room running.`);
   }
-  static receiveMessage(msg, instance) {
+  receiveMessage(msg) {
     let request = new RoomRequest(null, null, null, msg);
     switch (request.getType()) {
       case RoomRequestType.Join:
-        instance.addClient(request.getClient());
+        this.addClient(request.getClient());
         break;
       case RoomRequestType.Update:
-        instance.updateGame(request.getData());
+        this.updateGame(request.getData());
         break;
       case RoomRequestType.SetGame:
-        instance.setGame(request.getData());
+        this.setGame(request.getData());
         break;
       case RoomRequestType.SendChatMessage:
-        instance.updateChat(request.getData());
+        this.updateChat(request.getData());
         break;
       case RoomRequestType.SendSeatClaim:
-        instance.updateSeats(request.getData());
+        this.updateSeats(request.getData());
         break;
       case RoomRequestType.ClientReady:
-        instance.prepareClient(request.getClient());
+        this.prepareClient(request.getClient());
         break;
     }
   }
@@ -61,12 +61,12 @@ class Room {
     this._game.updateGame(data);
   }
   updateChat(data) {
-    this._chat.registerMessage(data, this._chat); // TODO: refactor
+    this._chat.registerMessage(data);
   }
   updateSeats(data) {
-    this._seats.claimSeat(data, this._seats);
+    this._seats.claimSeat(data);
   }
-  addClient(client, data) {
+  addClient(client) {
     this._CLIENTS[this._numberOfClients] = client;
     this._numberOfClients++;
     this.sendHTML(client);

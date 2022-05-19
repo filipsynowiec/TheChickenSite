@@ -1,11 +1,11 @@
-const { logger } = require("../logger");
+const { logger } = require("../../utils/logger");
 const { ServerUtils } = require("../../utils/serverUtils");
 const { RoomManager } = require("./roomManager");
 const { GameChoiceManager } = require("./gameChoiceManager");
 const { RoomChoiceManager } = require("./roomChoiceManager");
 const randomstring = require("randomstring");
 const child_process = require("child_process");
-const constants = require("../../constants");
+const constants = require("../../utils/constants");
 
 class ClientManager {
   constructor(server) {
@@ -90,7 +90,7 @@ class ClientManager {
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]
       );
-      let childProcess = child_process.fork("./server/room.js", {
+      let childProcess = child_process.fork("./server/room/room.js", {
         detached: false,
       });
       childProcess.on("message", (msg) => {

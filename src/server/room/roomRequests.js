@@ -1,4 +1,4 @@
-const { logger } = require("./logger");
+const { logger } = require("../../utils/logger");
 
 class RoomRequestType {
   static Join = new RoomRequestType("Join");

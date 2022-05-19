@@ -1,9 +1,9 @@
-const { logger } = require("../../logger");
+const { logger } = require("../../../utils/logger");
 
 const {
   RoomMessage,
   RoomMessageType,
-} = require("../../roomRequests");
+} = require("../../room/roomRequests");
 
 const fs = require("fs");
 

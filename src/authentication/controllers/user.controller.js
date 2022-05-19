@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require("../../database/models");
 const User = db.user;
 
 exports.allAccess = (req, res) => {

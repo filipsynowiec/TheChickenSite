@@ -1,4 +1,4 @@
-const { logger } = require("./logger");
+const { logger } = require("../../utils/logger");
 
 class Chat {
   constructor(chatHistory) {
@@ -14,9 +14,9 @@ class Chat {
     this._observers.push(observer);
   }
 
-  registerMessage(message, instance) {
-    instance._chatHistory += `${message.name}: ${message.value}\n`;
-    instance._observers.forEach((obs) => obs.sendChat());
+  registerMessage(message) {
+    this._chatHistory += `${message.name}: ${message.value}\n`;
+    this._observers.forEach((obs) => obs.sendChat());
   }
 }
 

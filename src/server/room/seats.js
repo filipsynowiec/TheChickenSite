@@ -1,8 +1,8 @@
-const { logger } = require("./logger");
+const { logger } = require("../../utils/logger");
 const NR_OF_SEATS = 2;
 
 class Seats {
-  constructor(chatHistory) {
+  constructor() { // NR OF SEATS in constructor?
     this._observers = [];
     this._seats = [];
     for (let i = 0; i < NR_OF_SEATS; ++i) {
@@ -18,15 +18,15 @@ class Seats {
     this._observers.push(observer);
   }
 
-  claimSeat(data, instance) {
+  claimSeat(data) {
     for (let i = 0; i < NR_OF_SEATS; ++i) {
       if (this.seats[i] == data.name) {
         this.seats[i] = null;
       }
     }
-    instance._seats[data.seat] = data.name;
-    instance._observers.forEach((obs) => obs.sendSeats());
-    instance._observers.forEach((observer) => observer.sendStatus());
+    this._seats[data.seat] = data.name;
+    this._observers.forEach((obs) => obs.sendSeats());
+    this._observers.forEach((observer) => observer.sendStatus());
   }
 }
 

@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { logger } = require("../logger");
+const { logger } = require("../../utils/logger");
 
 /*
  * This is a class that handles all communications connected to game choosing.

@@ -1,11 +1,11 @@
-const { logger } = require("../logger");
+const { logger } = require("../../utils/logger");
 const fs = require("fs");
 const {
   RoomRequest,
   RoomRequestType,
   RoomMessage,
   RoomMessageType,
-} = require("../roomRequests");
+} = require("../room/roomRequests");
 const { ServerUtils } = require("../../utils/serverUtils");
 const { ChildCommunicatorManager } = require("./childCommunicatorManager");
 

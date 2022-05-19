@@ -2,13 +2,13 @@
 
 const express = require("express");
 const http = require("http");
-const { logger } = require("./server/logger");
+const { logger } = require("./utils/logger");
 const { HtmlManager } = require("./server/serverManagers/htmlManager");
 const { ClientManager } = require("./server/serverManagers/clientManager");
 const { DatabaseManager } = require("./database/dbManager");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const constants = require("./constants");
+const constants = require("./utils/constants");
 let corsOptions = {
   origin: "http://localhost:8081",
 };
@@ -18,7 +18,7 @@ class Server {
     this._app = express();
     this._server = http.Server(this._app);
     this._clientManager = new ClientManager(this._server);
-    this._db = require("./models");
+    this._db = require("./database/models");
     this._databaseManager = new DatabaseManager(this._db);
   }
   run() {
@@ -27,8 +27,8 @@ class Server {
     this._app.use(bodyParser.json());
     this._app.use(bodyParser.urlencoded({ extended: true }));
 
-    require("./routes/auth.routes")(this._app);
-    require("./routes/user.routes")(this._app);
+    require("./authentication/routes/auth.routes")(this._app);
+    require("./authentication/routes/user.routes")(this._app);
 
     HtmlManager.setHtmlFiles(this, __dirname);
     this._server.listen(constants.PORT);

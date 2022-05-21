@@ -1,16 +1,15 @@
-const fs = require("fs");
-const { logger } = require("./logger");
+const { logger } = require("../../utils/logger");
 
-/* 
-  * This is a class that handles all communications connected to room choosing.
-*/ 
+/*
+ * This is a class that handles all communications connected to room choosing.
+ */
 class RoomChoiceManager {
   constructor() {
     this._ROOMS = {};
   }
   /* extracts game name from url (there might be a better way to do this, but I haven't been able to find yet) */
   static getGameFromUrl(url) {
-    return url.substring(url.indexOf('?game=') + 6, url.lastIndex);
+    return url.substring(url.indexOf("?game=") + 6, url.lastIndex);
   }
   /* extracts game name directly from socket (see getGameFromUrl function) */
   static getGameFromSocket(socket) {
@@ -22,7 +21,7 @@ class RoomChoiceManager {
     let url = socket.handshake.headers.referer;
     let game = RoomChoiceManager.getGameFromUrl(url);
     logger.info(`Game ${game}`);
-    socket.emit("getRoomList", { roomList: this._ROOMS[game]});
+    socket.emit("getRoomList", { roomList: this._ROOMS[game] });
   }
   /* adds room to rooms subset adequate to the game*/
   addRoom(room, game) {

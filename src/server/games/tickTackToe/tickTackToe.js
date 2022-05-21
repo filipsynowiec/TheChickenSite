@@ -1,4 +1,4 @@
-const { logger } = require("../../logger");
+const { logger } = require("../../../utils/logger");
 const EMPTY = 0
 const CROSS = 1
 const CIRCLE = 2

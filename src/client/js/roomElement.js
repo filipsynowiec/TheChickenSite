@@ -1,4 +1,4 @@
-class Room {
+class RoomElement {
   constructor(roomId, players) {
     this._roomId = roomId;
     this._players = players;

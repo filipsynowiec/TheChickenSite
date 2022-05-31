@@ -36,7 +36,7 @@ class GameChoiceClient {
       let name = value.name;
       let title = value.title;
       let room_url = value.room_url;
-      let game = new Game(name, title, room_url);
+      let game = new GameElement(name, title, room_url);
       cslogger.info(`new game added ${game.name}, ${game.title}, ${game.url}`);
 
       game.setOnClick(() => instance.selectGame(game));
@@ -56,6 +56,6 @@ class GameChoiceClient {
 const socket = io({
   extraHeaders: {
     source: "GAME_CHOICE",
-  }
-})
+  },
+});
 let gameChoiceClient = new GameChoiceClient(socket);

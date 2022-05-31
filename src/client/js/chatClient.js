@@ -1,13 +1,13 @@
 class ChatClient {
   constructor(socket) {
     this._socket = socket;
+    let instance = this;
     this._socket.on("updateChat", (data) => {
-      ChatClient.updateHTML("chat_history", data.chatHistory);
+      instance.updateHTML("chat_history", data.chatHistory);
       console.log("Received chat history");
     });
-    let instance = this;
     document.getElementById("send_message").onclick = () => {
-      ChatClient.sendChatMessage(instance);
+      instance.sendChatMessage();
     };
     getName(
       (name) => {
@@ -18,13 +18,13 @@ class ChatClient {
       }
     );
   }
-  static updateHTML(element, data) {
+  updateHTML(element, data) {
     document.getElementById(element).innerHTML = data;
   }
-  static sendChatMessage(instance) {
+  sendChatMessage() {
     let mes = document.getElementById("message").value;
     let name = instance._name;
-    instance._socket.emit("sendChatMessage", {
+    this._socket.emit("sendChatMessage", {
       name: name,
       value: mes,
     });

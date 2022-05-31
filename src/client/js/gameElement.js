@@ -1,11 +1,11 @@
-class Game {
+class GameElement {
   constructor(name, title, url) {
     this._name = name;
     this._title = title;
-    this._url = url
-    let template = document.getElementById('list-element-template');
+    this._url = url;
+    let template = document.getElementById("list-element-template");
     this._htmlElement = template.content.firstElementChild.cloneNode(true);
-    let listElementText = this._htmlElement.querySelector('.list-element-text');
+    let listElementText = this._htmlElement.querySelector(".list-element-text");
     listElementText.innerHTML = title;
   }
   get name() {

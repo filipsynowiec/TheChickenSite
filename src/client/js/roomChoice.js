@@ -26,7 +26,7 @@ class RoomChoiceClient {
   addRoom(data) {
     let list = document.getElementById("available-rooms-list");
     if (list == null || data.roomId == null) return;
-    let room = new Room(data.roomId);
+    let room = new RoomElement(data.roomId);
     let instance = this;
     room.setOnClick(() => instance.selectRoom(room));
     this._rooms.push(room);

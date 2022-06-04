@@ -3,43 +3,110 @@
   <head>
     <title></title>
     <link rel="stylesheet" href="/public/css/style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <meta charset="UTF-8" />
   </head>
 
   <body>
-    <div id="page-wrapper">
-      <main class="main horizontal-center">
-        <div id="swup" class="scene transition-fade">
-          <!-- Greeting chicken -->
-          <div class="box box-room">
-            <div class="account-info-bar">
-              <h2 id="user-info">Logged in as</h2>
-            </div>
-            <div class="area area-left" id="game-area"></div>
-            <div class="area area-right" id="chat-area">
-              <div id="seats_area"></div>
-              <textarea
-                id="chat_history"
-                readonly
-                style="resize: none"
-                cols="40"
-                rows="10"
-              ></textarea
-              ><br />
-              <input type="text" id="message" /><br />
-              <button type="button" id="send_message">send</button>
-            </div>
-          </div>
+    <template id="chat-row-template">
+      <div class="row overflow-scroll w-90 px-3"></div>
+    </template>
+    <template id="seat-template">
+      <div class="row py-1">
+        <div class="col-6">
+          <div class="player"></div>
         </div>
-      </main>
-
-      <footer>
-        <!-- Disclaimer-->
-      </footer>
+        <div class="col-6">
+          <button type="button" class="btn btn-primary seat"></button>
+        </div>
+      </div>
+    </template>
+    <div class="main container">
+      <!-- Greeting chicken -->
+      <div class="box box-room container">
+        <nav class="row h-10 navbar navbar-expand-lg py-2">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
+              </li>
+              <li class="nav-item" id="user-info"></li>
+            </ul>
+          </div>
+        </nav>
+        <div class="row h-90 py-2">
+          <main class="container h-100">
+            <div class="row h-100">
+              <div class="col-8 area">
+                <div id="game-area"></div>
+              </div>
+              <div class="col-4 area">
+                <div id="utils-area" class="container h-100">
+                  <div class="row h-10 py-2">
+                    <h3>Room</h3>
+                  </div>
+                  <div class="row h-20 py-2">
+                    <div class="container h-100" id="seats-area"></div>
+                  </div>
+                  <div class="row h-15 py-2"></div>
+                  <div class="row h-50 py-2">
+                    <div class="container h-100">
+                      <div class="row h-10 py-2">
+                        <h3>Chat</h3>
+                      </div>
+                      <div class="row h-80 py-2">
+                        <div
+                          id="chat-history"
+                          class="h-100 overflow-scroll p-2 pb-4"
+                        ></div>
+                      </div>
+                      <div class="row h-10 py-2">
+                        <div class="col-8">
+                          <input
+                            type="text"
+                            id="message"
+                            class="form-control h-100"
+                          />
+                        </div>
+                        <div class="col-4">
+                          <button
+                            type="button"
+                            class="btn btn-primary h-100"
+                            id="send-message"
+                          >
+                            send
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/client/js/getName.js"></script>
-    <script src="/client/js/accountInfo.js"></script> 
+    <script src="/client/js/accountInfo.js"></script>
     <script src="/client/js/chatClient.js"></script>
     <script src="/client/js/seatsClient.js"></script>
     <!--__GAME_SCRIPT__-->

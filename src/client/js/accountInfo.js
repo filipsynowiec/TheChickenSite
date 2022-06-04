@@ -1,9 +1,9 @@
 let userInfo = document.getElementById("user-info");
-
 function setUserName(username) {
-  userInfo.innerHTML = "Logged in as " + username;
+  userInfo.innerHTML = '<a class="nav-link" href="/profile">' + username + '</a>';
+
 }
 function setNotLogedIn() {
-  userInfo.innerHTML = "";
+  userInfo.innerHTML = '<a class="nav-link" href="/signin">Log in</a>';
 }
 getName(setUserName, setNotLogedIn);

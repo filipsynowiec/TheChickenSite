@@ -40,3 +40,9 @@ exports.userGetName = (req, res) => {
     });
   return;
 };
+exports.ranking = (req, res) => {
+  queries.getAllRankings().then(([result, metadata]) => {
+    data = { result, metadata };
+    res.status(200).send(JSON.stringify(data));
+  });
+};

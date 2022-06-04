@@ -1,4 +1,4 @@
-const { game } = require("./models");
+const { game, sequelize } = require("./models");
 const db = require("./models");
 const User = db.user;
 const Game = db.game;
@@ -63,7 +63,14 @@ const updateScore = function (userId, gameName, newValue) {
   });
 };
 
+const getAllRankings = function () {
+  return sequelize.query(
+    `SELECT u.username, s.score, g.name AS "game" FROM scores AS s LEFT JOIN users AS u ON (s.user_id = u.id) LEFT JOIN games AS g on (s.game_id = g.id);`
+  );
+};
+
 exports.findUserName = findUserName;
 // no need to export findGameId
 exports.getScore = getScore;
 exports.updateScore = updateScore;
+exports.getAllRankings = getAllRankings;

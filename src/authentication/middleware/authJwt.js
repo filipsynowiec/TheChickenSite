@@ -7,18 +7,16 @@ const Role = db.role;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
+  console.log(token);
   logger.info(`Token read is ${token}`);
   if (!token) {
-    return res.status(403).send({
-      message: "No token provided!",
-    });
+    // user has no valid token, he didn't sign in or didn't link it in the request
+    return res.redirect("/games");
   }
   jwt.verify(token.split(" ")[1], config.secret, (err, decoded) => {
     if (err) {
-      return res.status(401).send({
-        message:
-          "Invalid token provided! Please generate new token by logging in.",
-      });
+      // user has invalid token, only way to regenerate it is to sign in
+      return res.redirect("/signin");
     }
     req.userId = decoded.id;
     next();
@@ -26,8 +24,11 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then((user) => {
-    Role.findByPk(user.roleId).then((role) => {
+  User.findByPk(req.userId)
+    .then((user) => {
+      return Role.findByPk(user.role_id);
+    })
+    .then((role) => {
       if (role.name === "admin") {
         next();
         return;
@@ -35,14 +36,17 @@ isAdmin = (req, res, next) => {
       res.status(403).send({
         message: "Require Admin Role!",
       });
-      return;
     });
-  });
 };
 
 isModerator = (req, res, next) => {
-  User.findByPk(req.userId).then((user) => {
-    Role.findByPk(user.roleId).then((role) => {
+  User.findByPk(req.userId)
+    .then((user) => {
+      console.log(`FOUND: ${user}`);
+      return Role.findByPk(user.role_id);
+    })
+    .then((role) => {
+      console.log(`FOUND: ${role}`);
       if (role.name === "moderator" || role.name === "admin") {
         next();
         return;
@@ -51,7 +55,6 @@ isModerator = (req, res, next) => {
         message: "Require Moderator Role!",
       });
     });
-  });
 };
 
 const authJwt = {

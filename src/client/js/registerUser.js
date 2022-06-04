@@ -6,7 +6,7 @@ button.onclick = function () {
   let params = {
     username: document.getElementById("login").value,
     password: document.getElementById("password").value,
-    roles: [document.getElementById("roles").value],
+    role: document.getElementById("roles").value,
   };
   post(address, params);
 };

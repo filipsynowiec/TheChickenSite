@@ -1,44 +1,66 @@
 const db = require("../../database/models");
+const { logger } = require("../../utils/logger");
 const config = require("../../config/auth.config");
 const User = db.user;
 const Role = db.role;
+const Game = db.game;
+const Score = db.score;
 const Op = db.Sequelize.Op;
 let jwt = require("jsonwebtoken");
 let bcrypt = require("bcryptjs");
+const { user } = require("../../database/models");
+const roleModel = require("../../database/models/role.model");
 
 exports.signup = (req, res) => {
-  // Save User to Database
-  User.create({
-    username: req.body.username,
-    password: bcrypt.hashSync(req.body.password, 8),
-  })
-    .then((user) => {
-      if (req.body.roles) {
-        Role.findAll({
-          where: {
-            name: {
-              [Op.or]: req.body.roles,
-            },
-          },
-        }).then((roles) => {
-          user.setRoles(roles).then(() => {
-            res.send({ message: "User was registered successfully!" });
-          });
+  // list all games
+  const findGames = Game.findAll();
+
+  // find role_id and add user
+  const createUser = Role.findOne({
+    where: {
+      name: {
+        [Op.eq]: req.body.role,
+      },
+    },
+  }).then((role) => {
+    const user = User.create({
+      username: req.body.username,
+      password: bcrypt.hashSync(req.body.password, 8),
+      role_id: role.id,
+    });
+    logger.info(`New user added: ${req.body.username}, ${role.name}`);
+    return user;
+  });
+
+  // set player's elo to 1000 in every game
+  Promise.all([findGames, createUser])
+    .then((values) => {
+      logger.error(values);
+      const games = values[0];
+      const user = values[1];
+
+      for (var i = 0; i < games.length; i++) {
+        Score.create({
+          user_id: user.id,
+          game_id: games[i].id,
+          score: 1000,
         });
-      } else {
-        // user is role 2
-        user.setRoles([2]).then(() => {
-          res.send({ message: "User was registered successfully!" });
-        });
+        logger.info(
+          `Setting ${user.username}'s score in ${games[i].name} to 1000`
+        );
       }
     })
+    .then(() => {
+      res.send({ message: "User was registered successfully!" });
+    })
     .catch((err) => {
+      logger.error(err);
       res.status(500).send({ message: err.message });
     });
 };
 
 exports.signin = (req, res) => {
-  User.findOne({
+  const request = User.findOne({
     where: {
       username: req.body.username,
     },
@@ -54,31 +76,26 @@ exports.signin = (req, res) => {
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
+          successful: false,
           message: "Invalid Password!",
         });
       }
-      var token = jwt.sign(
-        { id: user.id },
-        config.secret,
-        {
-          expiresIn: 86400*365*100, // 24 hours * 365 * 100
-        }
-      );
-      var authorities = [];
-      user.getRoles().then((roles) => {
-        for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].name.toUpperCase());
-        }
+      var token = jwt.sign({ id: user.id }, config.secret, {
+        expiresIn: 86400 * 365 * 100, // 24 hours * 365 * 100
+      });
+      Role.findByPk(user.role_id).then((role) => {
         res.cookie("auth", token);
         res.status(200).send({
           id: user.id,
           username: user.username,
-          roles: authorities,
+          successful: true,
+          role: role.name.toUpperCase(),
           accessToken: token,
         });
       });
     })
     .catch((err) => {
-      res.status(500).send({ message: err.message });
+      logger.error(err.message);
+      res.status(500).send({ message: err.message, successful: false });
     });
 };

@@ -22,13 +22,13 @@ class EggGame {
     }
     this._eggValue += 1;
 
-    let player_id = 1;
+    logger.info(`Data sent by player with id=${data.userId}`);
 
     queries
-      .getScore(1, "EGG-GAME")
+      .getScore(data.userId, "EGG-GAME")
       .then((oldScore) => {
         logger.info(`Player's old score is ${oldScore}`);
-        return queries.updateScore(1, "EGG-GAME", oldScore + 1);
+        return queries.updateScore(data.userId, "EGG-GAME", oldScore + 1);
       })
       .then(() => logger.info("Score increased"))
       .catch((err) => {

@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 
 class HtmlManager {
+  // TODO: move this to routes
   static setHtmlFiles(instance, basePath) {
     instance._app.get("/", function (req, res) {
       res.sendFile(path.join(basePath, "client/html", "index.html"));

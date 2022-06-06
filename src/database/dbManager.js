@@ -15,21 +15,23 @@ class DatabaseManager {
 
   /* for database */
   initialize() {
-    let role = this._db.role;
-    role.create({
-      id: 1,
-      name: "admin",
-    });
+    const role = this._db.role;
 
-    role.create({
-      id: 2,
-      name: "moderator",
-    });
+    for (var i = 0; i < this._db.ROLES.length; i++) {
+      role.create({
+        id: i + 1,
+        name: this._db.ROLES[i],
+      });
+    }
 
-    role.create({
-      id: 3,
-      name: "user",
-    });
+    const game = this._db.game;
+
+    for (var i = 0; i < this._db.GAMES.length; i++) {
+      game.create({
+        id: i + 1,
+        name: this._db.GAMES[i],
+      });
+    }
   }
 }
 

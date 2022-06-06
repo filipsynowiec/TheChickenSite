@@ -3,57 +3,85 @@
   <head>
     <title>Sign up</title>
     <link rel="stylesheet" href="/public/css/style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <meta charset="UTF-8" />
   </head>
   <body>
-    <div id="page-wrapper">
-      <main class="main horizontal-center">
-        <div id="swup" class="scene transition-fade">
-          <!-- Greeting chicken -->
-          <div class="box center">
-            <h1>Sign up</h1>
-            <br />
-            <br />
-            <form class="form-vertical">
-              <div class="form-single-line">
-                <label for="username"> Username </label>
-                <input type="text" name="login" size="15" id="login" /> <br />
-              </div>
-              <div class="form-single-line">
-                <label for="password"> Password </label>
-                <input
-                  type="password"
-                  name="password"
-                  size="15"
-                  id="password"
-                />
-              </div>
-              <div class="form-single-line">
-                <label for="roles">Choose a role</label>
-                <select name="roles" id="roles">
-                  <option value="user">user</option>
-                  <option value="moderator">moderator</option>
-                  <option value="admin">admin</option>
-                </select>
-              </div>
-              <div class="form-single-line">
-                <input
-                  class="button-submit"
-                  type="button"
-                  value="Submit"
-                  id="registerButton"
-                />
-              </div>
-              <div class="form-single-line text-only">
-                <a class="signin-link" id="signin-link"
-                  >Already have an account? Sign in now.</a
-                >
-              </div>
-            </form>
+    <div class="main container">
+      <div
+        class="box container position-absolute top-50 start-50 translate-middle"
+      >
+        <nav class="navbar navbar-expand-lg container h-10">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
+              </li>
+              <li class="nav-item" id="user-info"></li>
+            </ul>
           </div>
-        </div>
-      </main>
+        </nav>
+        <main class="container h-90">
+          <div class="row align-items-center h-10">
+            <div id="greeter">
+              <h1>Sign up</h1>
+            </div>
+          </div>
+          <div class="row align-text-top justify-content-center h-90">
+            <div class="col-4">
+              <form class="container">
+                <div class="row pt-5 mb-3">
+                  <label for="username">Username</label>
+                  <input type="text" id="login" class="form-control" />
+                </div>
+                <div class="row mb-3">
+                  <label for="password">Password</label>
+                  <input type="password" id="password" class="form-control" />
+                </div>
+                <div class="row mb-3">
+                  <label for="roles">Choose a role</label>
+                  <select class="form-select" name="roles" id="roles">
+                    <option value="user">user</option>
+                    <option value="moderator">moderator</option>
+                    <option value="admin">admin</option>
+                  </select>
+                </div>
+                <div class="row align-items-center mt-5">
+                  <button
+                    type="submit"
+                    id="registerButton"
+                    class="btn btn-primary"
+                  >
+                    Submit
+                  </button>
+                </div>
+                <div class="row align-items-center">
+                  <a class="signin-link text-only-link" id="signin-link"
+                    >Already have an account? Sign in now.</a
+                  >
+                </div>
+              </form>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
     <script src="/client/js/registerUser.js"></script>
   </body>

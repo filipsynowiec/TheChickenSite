@@ -12,8 +12,10 @@
   <body>
     <div class="main container">
       <!-- Greeting chicken -->
-      <div class="box container">
-        <nav class="navbar navbar-expand-lg">
+      <div
+        class="box container position-absolute top-50 start-50 translate-middle"
+      >
+        <nav class="navbar navbar-expand-lg row h-10">
           <button
             class="navbar-toggler"
             type="button"
@@ -28,7 +30,7 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="">Home</a>
+                <a class="nav-link" href="/">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
@@ -37,13 +39,16 @@
             </ul>
           </div>
         </nav>
-        <main class="container">
-          <div class="row align-items-center">
+        <main class="container h-90">
+          <div class="row h-10 align-items-center">
             <div id="greeter">
               <h1>Welcome to The Chicken Site</h1>
             </div>
           </div>
-          <div class="row align-items-center justify-content-center">
+          <div class="row h-50 align-items-center justify-content-center">
+            <img src="/public/media/logo.png" class="img-fluid img-auto-width" >
+          </div>
+          <div class="row h-10 align-items-center justify-content-center">
             <div class="col-4">
               <button type="button" id="login-button" class="btn btn-primary">
                 Log In

@@ -119,6 +119,18 @@ html.is-leaving .transition-fade {
   transform: translateX(0);
 }
 
+.text-only-link {
+  margin-top: 2em;
+  display: block;
+  padding: 1em;
+  color: blue;
+  text-decoration: underline;
+  font-size: smaller;
+}
+.text-only-link:hover {
+  color: purple;
+  cursor: pointer;
+}
 //Forms
 .form-vertical {
   .form-single-line {
@@ -244,4 +256,9 @@ button {
   &-90 {
     height: 90% !important;
   }
+}
+
+.img-auto-width{
+  height: 100%;
+  width: auto !important;
 }

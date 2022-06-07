@@ -43,7 +43,7 @@ class EggGame {
   }
   getHTMLLocation() {
     // required
-    return "server/games/eggGame/eggGame.html";
+    return "src/server/games/eggGame/eggGame.html";
   }
 }
 

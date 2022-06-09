@@ -11,11 +11,13 @@ const { EggGame } = require("../games/eggGame/eggGame");
 const { TickTackToe } = require("../games/tickTackToe/tickTackToe");
 const { Chat } = require("./chat");
 const { Seats } = require("./seats");
+const { SocketIdManager } = require("./socketIdManager");
 const fs = require("fs");
 
 class Room {
   constructor() {
-    this._CLIENTS = {};
+    this._CLIENTS = {}; // all sockets
+    this._socketIdManager = new SocketIdManager(); // sockets <=> ids
     this._numberOfClients = 0;
     this._chat = new Chat("Chat history:\n");
     this._chat.registerObserver(this);
@@ -47,11 +49,17 @@ class Room {
         this.updateSeats(request.getData());
         break;
       case RoomRequestType.ClientReady:
-        this.prepareClient(request.getClient());
+        this.prepareClient(request.getClient(), request.getData());
         break;
     }
   }
-  prepareClient(client) {
+  prepareClient(client, data) {
+    if (!data.userId) {
+      logger.warning("User Id is not known!");
+    } else {
+      logger.info(`Client ${data.userId} prepared.`);
+      this._socketIdManager.addSocket(client, data.userId);
+    }
     this.sendChat();
     this.sendSeats();
     this.sendStatus();

@@ -19,7 +19,7 @@ class RoomRequest {
       this._type = RoomRequestType[obj._type._name];
       this._data = obj._data;
       logger.info(
-        `Got ${this._type} with ${Object.entries(this._data)} from object`
+        `Got ${this._type._name} request with data ${Object.entries(this._data)}`
       );
     } else {
       this._client = client;

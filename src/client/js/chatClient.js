@@ -7,7 +7,7 @@ class ChatClient {
       console.log("Received chat history");
     });
     document.getElementById("send_message").onclick = () => {
-      instance.sendChatMessage();
+      instance.sendChatMessage(instance);
     };
     getName(
       (name) => {
@@ -21,7 +21,7 @@ class ChatClient {
   updateHTML(element, data) {
     document.getElementById(element).innerHTML = data;
   }
-  sendChatMessage() {
+  sendChatMessage(instance) {
     let mes = document.getElementById("message").value;
     let name = instance._name;
     this._socket.emit("sendChatMessage", {
@@ -31,4 +31,4 @@ class ChatClient {
   }
 }
 
-let chatClient = new ChatClient(io());
+let chatClient = new ChatClient(getIO());

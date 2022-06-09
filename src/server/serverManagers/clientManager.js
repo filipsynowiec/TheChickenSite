@@ -8,13 +8,14 @@ const child_process = require("child_process");
 const constants = require("../../utils/constants");
 const jwt = require("jsonwebtoken");
 const config = require("../../config/auth.config");
+const { RoomSocketManager } = require("../room/socketIdManager");
 
 class ClientManager {
   constructor(server) {
     this._io = require("socket.io")(server, {});
     this._numberOfClients = 0;
-    this._SOCKET_CLIENTS = {};
-    this._ROOMS = {};
+    this._SOCKET_CLIENTS = {}; // stores sockets of all clients
+    this._ROOMS = {}; // stores child processes
     this._gameChoiceManager = new GameChoiceManager();
     this._roomChoiceManager = new RoomChoiceManager();
     this._gameChoiceManager.loadGamesJSON();
@@ -114,27 +115,22 @@ class ClientManager {
 
     socket.on("requestAction", (data) => {
       logger.info(`Received request action, data: ${Object.entries(data)}`);
-      logger.info(config.secret);
-      jwt.verify(data.token, config.secret, (err, decoded) => {
-        if (err) {
-          // TODO: tell the client to relog
-          logger.error("Data sent by someone with invalid token");
-          return;
-        }
-        data.userId = decoded.id;
-        RoomManager.updateStatus(
-          data,
-          this,
-          socketId,
-          this.getRoomIdFromSocketId(socketId)
-        );
-      });
+      data = ClientManager.preprocessData(data);
+      if (!data) return;
+      RoomManager.updateStatus(
+        data,
+        this,
+        socketId,
+        this.getRoomIdFromSocketId(socketId)
+      );
     });
 
     socket.on("joinRoom", (data) => {
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]
       );
+      data = ClientManager.preprocessData(data);
+      if (!data) return;
       RoomManager.joinRoom(
         data.roomId,
         game,
@@ -143,30 +139,39 @@ class ClientManager {
       );
       this.sendToOneClient("roomId", { roomId: data.roomId }, socketId);
     });
-    socket.on("sendChatMessage", (data) =>
+
+    socket.on("sendChatMessage", (data) => {
+      data = ClientManager.preprocessData(data);
+      if (!data) return;
       RoomManager.sendChatMessage(
         data,
         this,
         socketId,
         this.getRoomIdFromSocketId(socketId)
-      )
-    );
-    socket.on("clientReady", (data) =>
+      );
+    });
+
+    socket.on("clientReady", (data) => {
+      data = ClientManager.preprocessData(data);
+      if (!data) return;
       RoomManager.sendClientReady(
         data,
         this,
         socketId,
         this.getRoomIdFromSocketId(socketId)
-      )
-    );
-    socket.on("sendSeatClaim", (data) =>
+      );
+    });
+
+    socket.on("sendSeatClaim", (data) => {
+      data = ClientManager.preprocessData(data);
+      if (!data) return;
       RoomManager.sendSeatClaim(
         data,
         this,
         socketId,
         this.getRoomIdFromSocketId(socketId)
-      )
-    );
+      );
+    });
   }
 
   getRoomIdFromSocketId(socketId) {
@@ -175,6 +180,18 @@ class ClientManager {
         this._SOCKET_CLIENTS[socketId].handshake.headers.referer
       )
     );
+  }
+
+  static preprocessData(data) {
+    jwt.verify(data.token, config.secret, (err, decoded) => {
+      if (err) {
+        // TODO: tell the client to relog
+        logger.error("Data sent by someone with invalid or no token!");
+        return;
+      }
+      data.userId = decoded.id;
+    });
+    return data;
   }
 }
 

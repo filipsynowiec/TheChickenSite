@@ -12,10 +12,13 @@
 
   <body>
     <template id="chat-row-template">
-      <div class="row overflow-scroll w-90 px-3"></div>
+      <div class="row overflow-wrap w-90 px-3">
+        <div class="chat-text chat-text-username"></div>
+        <div class="chat-text chat-text-message"></div>
+      </div>
     </template>
     <template id="seat-template">
-      <div class="row py-1">
+      <div class="row py-1 seat-row">
         <div class="col-6">
           <div class="player"></div>
         </div>
@@ -44,7 +47,7 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link nav-link-left" href="/">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
@@ -56,10 +59,10 @@
         <div class="row h-90 py-2">
           <main class="container h-100">
             <div class="row h-100">
-              <div class="col-8 area">
+              <div class="col-8 area area-left">
                 <div id="game-area"></div>
               </div>
-              <div class="col-4 area">
+              <div class="col-4 area area-right">
                 <div id="utils-area" class="container h-100">
                   <div class="row h-10 py-2">
                     <h3>Room</h3>
@@ -70,27 +73,27 @@
                   <div class="row h-15 py-2"></div>
                   <div class="row h-50 py-2">
                     <div class="container h-100">
-                      <div class="row h-10 py-2">
-                        <h3>Chat</h3>
+                      <div class="row h-15 py-1 chat-box chat-box-top">
+                        <h3 class="h-100">Chat</h3>
                       </div>
-                      <div class="row h-80 py-2">
+                      <div class="row h-70 py-1 chat-box">
                         <div
                           id="chat-history"
                           class="h-100 overflow-scroll p-2 pb-4"
                         ></div>
                       </div>
-                      <div class="row h-10 py-2">
-                        <div class="col-8">
+                      <div class="row h-15 py-1 chat-box chat-box-bottom">
+                        <div class="col-8 h-100 no-padding-right">
                           <input
                             type="text"
                             id="message"
-                            class="form-control h-100"
+                            class="form-control chat-text h-100 w-100 no-padding-right outline-dark"
                           />
                         </div>
-                        <div class="col-4">
+                        <div class="col-4 h-100 no-padding-left">
                           <button
                             type="button"
-                            class="btn btn-primary h-100"
+                            class="btn btn-outline-dark h-100 w-100 no-padding-left"
                             id="send-message"
                           >
                             send

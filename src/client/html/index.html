@@ -30,7 +30,7 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link nav-link-left" href="/">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
@@ -40,26 +40,20 @@
           </div>
         </nav>
         <main class="container h-90">
-          <div class="row h-10 align-items-center">
-            <div id="greeter">
-              <h1>Welcome to The Chicken Site</h1>
+          <div class="row h-10 align-items-center justify-content-center">
+            <div id="greeter" class="typewriter">
+              <h1>Welcome to The Chicken Site!</h1>
             </div>
           </div>
-          <div class="row h-50 align-items-center justify-content-center">
-            <img src="/public/media/logo.png" class="img-fluid img-auto-width" >
+          <div class="row h-60 align-items-center justify-content-center py-3">
+            <img
+              src="/public/media/logo.png"
+              class="img-fluid img-auto-width"
+            />
           </div>
           <div class="row h-10 align-items-center justify-content-center">
             <div class="col-4">
-              <button type="button" id="login-button" class="btn btn-primary">
-                Log In
-              </button>
-            </div>
-            <div class="col-4">
-              <button
-                type="button"
-                id="play-guest-button"
-                class="btn btn-primary"
-              >
+              <button type="button" id="play-button" class="btn btn-primary">
                 Play
               </button>
             </div>

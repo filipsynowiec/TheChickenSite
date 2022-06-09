@@ -38,8 +38,12 @@ class SeatsClient {
     for (let i = 0; i < NR_OF_SEATS; ++i) {
       if (data.seats[i] == null) {
         this._buttons[i].innerHTML = "-";
+        this._buttons[i].classList.remove("seat-taken");
+        this._buttons[i].classList.add("seat-empty");
       } else {
         this._buttons[i].innerHTML = data.seats[i];
+        this._buttons[i].classList.add("seat-taken");
+        this._buttons[i].classList.remove("seat-empty");
       }
     }
   }

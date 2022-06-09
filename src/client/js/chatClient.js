@@ -26,7 +26,10 @@ class ChatClient {
     document.getElementById(element).innerHTML = '';
     for (let i = 0; i < data.length; i++) {
       let htmlElement = template.content.firstElementChild.cloneNode(true);
-      htmlElement.innerHTML = `${data[i].user}: ${data[i].message}`;
+      let textUsername = htmlElement.querySelector(".chat-text-username");
+      let textMessage = htmlElement.querySelector(".chat-text-message");
+      textUsername.innerHTML = `${data[i].user}:`;
+      textMessage.innerHTML = ` ${data[i].message}`;
       document.getElementById(element).appendChild(htmlElement);
     }
   }

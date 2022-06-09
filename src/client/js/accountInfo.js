@@ -6,4 +6,11 @@ function setUserName(username) {
 function setNotLogedIn() {
   userInfo.innerHTML = "";
 }
-getName(setUserName, setNotLogedIn);
+
+getUserData()
+  .then((data) => {
+    setUserName(data.name);
+  })
+  .catch((err) => {
+    setNotLogedIn();
+  });

@@ -7,7 +7,6 @@ const Role = db.role;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
-  console.log(token);
   logger.info(`Token read is ${token}`);
   if (!token) {
     // user has no valid token, he didn't sign in or didn't link it in the request
@@ -42,11 +41,9 @@ isAdmin = (req, res, next) => {
 isModerator = (req, res, next) => {
   User.findByPk(req.userId)
     .then((user) => {
-      console.log(`FOUND: ${user}`);
       return Role.findByPk(user.role_id);
     })
     .then((role) => {
-      console.log(`FOUND: ${role}`);
       if (role.name === "moderator" || role.name === "admin") {
         next();
         return;

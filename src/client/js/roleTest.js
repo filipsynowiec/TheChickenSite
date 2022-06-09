@@ -19,14 +19,13 @@ document.getElementById("adminButton").onclick = function () {
 };
 
 document.getElementById("nameButton").onclick = function () {
-  getName(
-    (name) => {
-      console.log(`My name is ${name}.`);
-    },
-    () => {
+  getUserData()
+    .then((data) => {
+      console.log(`My name is ${data.name}, my id is ${data.userId}.`);
+    })
+    .catch((err) => {
       console.log(`I don't have a name.`);
-    }
-  );
+    });
 };
 
 const getUrl = function (url) {

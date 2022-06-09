@@ -8,10 +8,10 @@ button.onclick = function () {
     password: document.getElementById("password").value,
     role: ["user"],
   };
-  post2(address, params);
+  post(address, params);
 };
 
-function post2(url, params) {
+function post(url, params) {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -19,8 +19,10 @@ function post2(url, params) {
     if (this.readyState === XMLHttpRequest.DONE) {
       console.log(xhr.responseText);
       let JSONanswer = JSON.parse(xhr.responseText);
-      localStorage.setItem("token", JSONanswer.accessToken);
-      window.location.href = "/";
+      if (JSONanswer.successful) {
+        localStorage.setItem("token", JSONanswer.accessToken);
+        window.location.href = "/";
+      }
     }
   };
   let data = JSON.stringify(params);

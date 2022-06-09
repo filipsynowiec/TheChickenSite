@@ -1,3 +1,3 @@
 module.exports = {
-  secret: "definitely-a-secret-string",
+  secret: "surely-a-secret-string.",
 };

@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Role = sequelize.define("roles", {
+  const Game = sequelize.define("games", {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
@@ -10,5 +10,5 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
   });
-  return Role;
+  return Game;
 };

@@ -4,7 +4,7 @@ class SeatsClient {
   constructor(socket) {
     this._socket = socket;
     this._buttons = [];
-    let instance = this;
+    const instance = this;
     for (let i = 0; i < NR_OF_SEATS; ++i) {
       let template = document.getElementById("seat-template");
       let htmlElement = template.content.firstElementChild.cloneNode(true);
@@ -15,6 +15,14 @@ class SeatsClient {
       };
       document.getElementById("seats-area").appendChild(htmlElement);
     }
+
+    this._startButton = document.createElement("button");
+    this._startButton.innerHTML = "Start"
+    document.getElementById("seats-area").appendChild(this._startButton);
+    this._startButton.onclick = () => {
+      instance._socket.emit("sendSeatClaim", { running: true });
+    };
+    this._startButton.style.marginTop = "25px";
 
     this._socket.on("updateSeats", (data) => {
       instance.updateSeats(data);
@@ -35,6 +43,7 @@ class SeatsClient {
   }
 
   updateSeats(data) {
+    this._startButton.disabled = data.gameRunning;
     for (let i = 0; i < NR_OF_SEATS; ++i) {
       if (data.seats[i] == null) {
         this._buttons[i].innerHTML = "-";
@@ -45,6 +54,9 @@ class SeatsClient {
         this._buttons[i].classList.add("seat-taken");
         this._buttons[i].classList.remove("seat-empty");
       }
+    }
+    for(const button of this._buttons) {
+      button.disabled = data.gameRunning;
     }
   }
 }

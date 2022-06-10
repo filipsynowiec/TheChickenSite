@@ -6,4 +6,11 @@ function setUserName(username) {
 function setNotLogedIn() {
   userInfo.innerHTML = '<a class="nav-link nav-link-right" href="/signin">Log in</a>';
 }
-getName(setUserName, setNotLogedIn);
+
+getUserData()
+  .then((data) => {
+    setUserName(data.name);
+  })
+  .catch((err) => {
+    setNotLogedIn();
+  });

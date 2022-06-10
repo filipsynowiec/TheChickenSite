@@ -5,6 +5,9 @@ class ChatClient {
       instance.updateHTML("chat-history", data.chatHistory);
       console.log("Received chat history");
     });
+    getUserData().then((data) => {
+      instance._name = data.name;
+    });
     document.getElementById("message").onkeydown = (event) => {
       if (event.key === 'Enter') instance.sendChatMessage();
     }
@@ -12,14 +15,6 @@ class ChatClient {
       instance.sendChatMessage();
 
     };
-    getName(
-      (name) => {
-        this._name = name;
-      },
-      () => {
-        this._name = "Guest User";
-      }
-    );
   }
   updateHTML(element, data) {
     let template = document.getElementById("chat-row-template");
@@ -33,7 +28,7 @@ class ChatClient {
       document.getElementById(element).appendChild(htmlElement);
     }
   }
-  sendChatMessage() {
+  sendChatMessage(instance) {
     let mes = document.getElementById("message").value;
     document.getElementById("message").value = null;
     let element = document.getElementById("chat-history");
@@ -46,4 +41,4 @@ class ChatClient {
   }
 }
 
-let chatClient = new ChatClient(io());
+let chatClient = new ChatClient(getIO());

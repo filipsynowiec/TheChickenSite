@@ -10,7 +10,7 @@ module.exports = function (app) {
   });
   app.get("/api/test/all", controller.allAccess);
   app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
-  app.get("/api/username", [authJwt.verifyToken], controller.userGetName);
+  app.get("/api/userdata", [authJwt.verifyToken], controller.userGetData);
   app.get(
     "/api/test/mod",
     [authJwt.verifyToken, authJwt.isModerator],

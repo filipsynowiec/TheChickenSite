@@ -14,8 +14,8 @@ class TickTackToeClient {
       instance.startGame(instance);
     });
     this._buttons = [];
-    getName((name) => {
-      instance._name = name;
+    getUserData().then((data) => {
+      instance._name = data.name;
     });
   }
   updateHTML(element, data) {

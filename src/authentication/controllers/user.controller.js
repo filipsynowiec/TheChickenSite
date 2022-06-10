@@ -14,7 +14,7 @@ exports.adminBoard = (req, res) => {
 exports.moderatorBoard = (req, res) => {
   res.status(200).send("Only logged in mod can see this.");
 };
-exports.userGetName = (req, res) => {
+exports.userGetData = (req, res) => {
   queries
     .findUserName(req.userId)
     .then((name) => {
@@ -25,9 +25,10 @@ exports.userGetName = (req, res) => {
         });
       } else {
         res.status(200).send({
-          message: "Successfully received name.",
+          message: "Successfully received data.",
           successful: true,
           name: name,
+          userId: req.userId,
         });
       }
     })

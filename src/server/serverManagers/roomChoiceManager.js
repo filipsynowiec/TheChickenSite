@@ -21,7 +21,8 @@ class RoomChoiceManager {
     let url = socket.handshake.headers.referer;
     let game = RoomChoiceManager.getGameFromUrl(url);
     logger.info(`Game ${game}`);
-    socket.emit("getRoomList", { roomList: this._ROOMS[game] });
+
+    // user will send "roomList" request to get the list
   }
   /* adds room to rooms subset adequate to the game*/
   addRoom(room, game) {

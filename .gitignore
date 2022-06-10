@@ -4,3 +4,4 @@ logs/
 requests.rest
 public/
 package-lock.json
+src/config/db.config.js

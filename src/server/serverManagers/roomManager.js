@@ -29,13 +29,13 @@ class RoomManager {
         }
 
         switch (game) {
-          case "EGG_GAME":
+          case "EGG-GAME":
             data = data.replace(
               "<!--__GAME_SCRIPT__-->",
               '<script src="/client/js/eggGameClient.js"></script>'
             );
             break;
-          case "TICK_TACK_TOE":
+          case "TIC-TAC-TOE":
             data = data.replace(
               "<!--__GAME_SCRIPT__-->",
               '<script src="/client/js/tickTackToeClient.js"></script>'
@@ -124,7 +124,7 @@ class RoomManager {
         };
       case RoomMessageType.UserIds:
         return {
-          name: "roomCreatedOrUpdated",
+          name: "userIds",
           data: message.getData(),
         };
       default:

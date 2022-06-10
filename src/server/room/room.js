@@ -60,6 +60,7 @@ class Room {
   SendUserIdsToParent() {
     let data = {
       userIds: this._socketIdManager.getPlayerIds(),
+      gameName: this._gameName,
     };
     logger.info(`Room: sending data: ${Object.entries(data)} to parent`);
     this.sendMessage(RoomMessageType.UserIds, data);
@@ -101,10 +102,10 @@ class Room {
   setGame(data) {
     this._gameName = data.game;
     switch (data.game) {
-      case "EGG_GAME":
+      case "EGG-GAME":
         this._game = new EggGame();
         break;
-      case "TICK_TACK_TOE":
+      case "TIC-TAC-TOE":
         this._game = new TickTackToe(this._seats);
         break;
       case "SCRABBLE":

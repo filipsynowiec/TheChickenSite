@@ -9,6 +9,7 @@ const constants = require("../../utils/constants");
 const jwt = require("jsonwebtoken");
 const config = require("../../config/auth.config");
 const { RoomSocketManager } = require("../room/socketIdManager");
+const queries = require("../../database/dbQueries");
 
 class ClientManager {
   constructor(server) {
@@ -99,16 +100,31 @@ class ClientManager {
       childProcess.on("message", (msg) => {
         let receivedMessage = RoomManager.receiveMessageFromRoom(msg, roomId);
         logger.info(
-          `Received message from room with keys ${Object.keys(receivedMessage)}`
+          `Received message from room with keys ${Object.keys(
+            receivedMessage
+          )}, ${Object.keys(receivedMessage.data)}`
         );
-        if (receivedMessage.name === "roomCreatedOrUpdated") {
+        // a BIG case for userIds message
+        if (receivedMessage.name === "userIds") {
+          logger.info("Received userIds message");
           receivedMessage.data.roomId = roomId;
-          this.sendToAllClients(
-            receivedMessage.name,
-            receivedMessage.data,
-            receivedMessage.roomId
-          );
-        } else {
+          let instance = this;
+          queries
+            .getGameRankings(
+              receivedMessage.data.userIds,
+              receivedMessage.data.gameName
+            )
+            .then((results) => {
+              receivedMessage.data.results = results;
+              instance.sendToAllClients(
+                "roomCreatedOrUpdated",
+                receivedMessage.data,
+                receivedMessage.roomId
+              );
+            });
+        }
+        // and all the other messages
+        else {
           this.sendToClientsInRoom(
             receivedMessage.name,
             receivedMessage.data,

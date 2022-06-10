@@ -3,3 +3,4 @@ logs/
 .vscode/
 requests.rest
 public/
+package-lock.json

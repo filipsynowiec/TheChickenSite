@@ -1,3 +1,4 @@
+//*
 module.exports = {
   HOST: "thechickensitedb.postgres.database.azure.com",
   USER: "tcs_user",
@@ -12,6 +13,8 @@ module.exports = {
     idle: 10000,
   },
 };
+//*/
+
 /* For local testing
 module.exports = {
   HOST: "localhost",
@@ -25,5 +28,6 @@ module.exports = {
     acquire: 30000,
     idle: 10000,
   },
-};*/
+};
+//*/
 

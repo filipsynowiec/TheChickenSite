@@ -4,6 +4,7 @@ class DatabaseManager {
   }
 
   setUpDatabase(dropBefore) {
+    //dropBefore = true;
     if (dropBefore == false) {
       this._db.sequelize.sync({ force: false });
       return;

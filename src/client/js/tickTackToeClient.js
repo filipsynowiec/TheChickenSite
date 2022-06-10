@@ -73,6 +73,7 @@ class TickTackToeClient {
       }
       document.getElementById("winner").innerText = "Winner: " + winner;
       document.getElementById("winner-pane").style.display = "block";
+      return;
     }
     if (data.active != this._name) {
       for (let i = 0; i < 9; ++i) {
@@ -104,6 +105,7 @@ class TickTackToeClient {
       }
     }
 
+    /*
     let restartButton = document.createElement("button");
     document.getElementById("winner-pane").appendChild(restartButton);
     restartButton.innerHTML = "restart";
@@ -115,6 +117,7 @@ class TickTackToeClient {
     restartButton.onclick = () => {
       instance._socket.emit("requestAction", { restart: true });
     };
+    */
   }
   sendClientReady(instance) {
     instance._socket.emit("clientReady", {});

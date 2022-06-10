@@ -6,7 +6,7 @@
 
 ## Build
 
-- `npm run compile::sass` - build sass ( while developing use `npm run watch:sass` to compile on every change). _Do not modify `style.css` file. It is an output file and will be overwritten during next compilation. Modify `index.scss` instead._
+- `npm run build` - build sass ( while developing use `npm run watch:sass` to compile on every change) and media into public directory. _Do not modify `style.css` file. It is an output file and will be overwritten during next compilation. Modify `index.scss` instead._
 
 ## Run
 

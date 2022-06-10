@@ -98,11 +98,23 @@ class ClientManager {
       });
       childProcess.on("message", (msg) => {
         let receivedMessage = RoomManager.receiveMessageFromRoom(msg, roomId);
-        this.sendToClientsInRoom(
-          receivedMessage.name,
-          receivedMessage.data,
-          receivedMessage.roomId
+        logger.info(
+          `Received message from room with keys ${Object.keys(receivedMessage)}`
         );
+        if (receivedMessage.name === "roomCreatedOrUpdated") {
+          receivedMessage.data.roomId = roomId;
+          this.sendToAllClients(
+            receivedMessage.name,
+            receivedMessage.data,
+            receivedMessage.roomId
+          );
+        } else {
+          this.sendToClientsInRoom(
+            receivedMessage.name,
+            receivedMessage.data,
+            receivedMessage.roomId
+          );
+        }
       });
 
       this._ROOMS[roomId] = childProcess;
@@ -110,7 +122,16 @@ class ClientManager {
 
       RoomManager.createRoom(app, childProcess, roomId, game);
       this.sendToOneClient("roomId", { roomId: roomId }, socketId);
-      this.sendToAllClients("newRoomCreated", { roomId: roomId });
+
+      // unnecessary as of right now - player who created room
+      // joins it immediately and therefore sends another
+      // message with this room
+      /*
+      this.sendToAllClients("roomCreatedOrUpdated", {
+        roomId: roomId,
+        players: [],
+      });
+      */
     });
 
     socket.on("requestAction", (data) => {
@@ -137,6 +158,7 @@ class ClientManager {
         app,
         this.getRoomIdFromSocketId(socketId)
       );
+
       this.sendToOneClient("roomId", { roomId: data.roomId }, socketId);
     });
 
@@ -160,6 +182,21 @@ class ClientManager {
         socketId,
         this.getRoomIdFromSocketId(socketId)
       );
+
+      RoomManager.getAndResendUserIds(
+        data,
+        this,
+        socketId,
+        this.getRoomIdFromSocketId(socketId)
+      );
+    });
+
+    socket.on("roomList", (data) => {
+      let roomIds = Object.keys(this._ROOMS);
+      for (let i = 0; i < roomIds.length; i++) {
+        logger.info(`Asking room ${roomIds[i]} about player ids.`);
+        RoomManager.getAndResendUserIds(data, this, socketId, roomIds[i]);
+      }
     });
 
     socket.on("sendSeatClaim", (data) => {

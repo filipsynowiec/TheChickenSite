@@ -1,10 +1,10 @@
 class RoomElement {
-  constructor(roomId, players) {
-    this._roomId = roomId;
-    this._players = players;
+  constructor(data) {
+    this._roomId = data.roomId;
+    this._players = data.userIds;
     let template = document.getElementById("list-element-template");
     this._htmlElement = template.content.firstElementChild.cloneNode(true);
-    this._htmlElement.innerHTML = roomId;
+    this._htmlElement.innerHTML = `${data.roomId}, players: ${data.userIds}`;
   }
   get roomId() {
     return this._roomId;

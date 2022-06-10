@@ -52,8 +52,19 @@ class Room {
       case RoomRequestType.ClientReady:
         this.prepareClient(request.getClient(), request.getData());
         break;
+      case RoomRequestType.SendUserIdsToParent:
+        this.SendUserIdsToParent();
+        break;
     }
   }
+  SendUserIdsToParent() {
+    let data = {
+      userIds: this._socketIdManager.getPlayerIds(),
+    };
+    logger.info(`Room: sending data: ${Object.entries(data)} to parent`);
+    this.sendMessage(RoomMessageType.UserIds, data);
+  }
+
   prepareClient(client, data) {
     if (!data.userId) {
       logger.warning("User Id is not known!");

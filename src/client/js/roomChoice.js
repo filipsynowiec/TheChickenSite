@@ -15,8 +15,8 @@ class RoomChoiceClient {
     }
 
     this._socket.on("roomId", (data) => instance.goToRoom(data));
-    this._socket.on("newRoomCreated", (data) => instance.addRoom(data));
-    this._socket.on("getRoomList", (data) => instance.addRoomsList(data));
+    this._socket.on("roomCreatedOrUpdated", (data) => instance.addRoom(data));
+    this._socket.emit("roomList", {});
   }
   goToRoom(data) {
     if (data.roomId != null) {
@@ -24,19 +24,19 @@ class RoomChoiceClient {
     }
   }
   addRoom(data) {
+    console.log(
+      `Received roomCreatedOrUpdated message with keys ${Object.keys(data)}`
+    );
+    console.log(`Adding room ${data.roomId}`);
     let list = document.getElementById("available-rooms-list");
     if (list == null || data.roomId == null) return;
-    let room = new RoomElement(data.roomId);
+    let room = new RoomElement(data);
     let instance = this;
     room.setOnClick(() => instance.selectRoom(room));
     this._rooms.push(room);
     list.appendChild(room.htmlElement);
   }
-  addRoomsList(data) {
-    for (let room of data.roomList) {
-      this.addRoom({ roomId: room });
-    }
-  }
+
   selectRoom(room) {
     this._selectedRoom = room;
     for (let r of this._rooms) {

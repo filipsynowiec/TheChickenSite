@@ -92,7 +92,7 @@ class ClientManager {
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]
       );
-      let childProcess = child_process.fork("./server/room/room.js", {
+      let childProcess = child_process.fork("./src/server/room/room.js", {
         detached: false,
       });
       childProcess.on("message", (msg) => {

@@ -18,7 +18,7 @@ class GameChoiceManager {
   }
   /* loads supported games from json file*/
   loadGamesJSON() {
-    let raw = fs.readFileSync("server/json/games.json");
+    let raw = fs.readFileSync("src/server/json/games.json");
     this._GAMES = JSON.parse(raw);
   }
 }

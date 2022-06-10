@@ -22,7 +22,7 @@ class RoomManager {
 
   static joinRoom(roomId, game, app) {
     app.get("/room/" + roomId, function (req, res) {
-      fs.readFile("client/html/room.html", "utf8", (err, data) => {
+      fs.readFile("src/client/html/room.html", "utf8", (err, data) => {
         if (err) {
           logger.error(err);
           return;

@@ -1,7 +1,6 @@
 class ChatClient {
   constructor(socket) {
     this._socket = socket;
-    let instance = this;
     this._socket.on("updateChat", (data) => {
       instance.updateHTML("chat-history", data.chatHistory);
       console.log("Received chat history");
@@ -11,13 +10,14 @@ class ChatClient {
     }
     document.getElementById("send-message").onclick = () => {
       instance.sendChatMessage();
+
     };
     getName(
       (name) => {
-        instance._name = name;
+        this._name = name;
       },
       () => {
-        instance._name = "Guest User";
+        this._name = "Guest User";
       }
     );
   }

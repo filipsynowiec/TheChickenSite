@@ -6,6 +6,8 @@ const { RoomChoiceManager } = require("./roomChoiceManager");
 const randomstring = require("randomstring");
 const child_process = require("child_process");
 const constants = require("../../utils/constants");
+const jwt = require("jsonwebtoken");
+const config = require("../../config/auth.config");
 
 class ClientManager {
   constructor(server) {
@@ -90,7 +92,7 @@ class ClientManager {
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]
       );
-      let childProcess = child_process.fork("./server/room/room.js", {
+      let childProcess = child_process.fork("./src/server/room/room.js", {
         detached: false,
       });
       childProcess.on("message", (msg) => {
@@ -110,14 +112,25 @@ class ClientManager {
       this.sendToAllClients("newRoomCreated", { roomId: roomId });
     });
 
-    socket.on("requestAction", (data) =>
-      RoomManager.updateStatus(
-        data,
-        this,
-        socketId,
-        this.getRoomIdFromSocketId(socketId)
-      )
-    );
+    socket.on("requestAction", (data) => {
+      logger.info(`Received request action, data: ${Object.entries(data)}`);
+      logger.info(config.secret);
+      jwt.verify(data.token, config.secret, (err, decoded) => {
+        if (err) {
+          // TODO: tell the client to relog
+          logger.error("Data sent by someone with invalid token");
+          return;
+        }
+        data.userId = decoded.id;
+        RoomManager.updateStatus(
+          data,
+          this,
+          socketId,
+          this.getRoomIdFromSocketId(socketId)
+        );
+      });
+    });
+
     socket.on("joinRoom", (data) => {
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]

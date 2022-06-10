@@ -32,4 +32,4 @@ class EggGameClient {
   }
 }
 
-let client = new EggGameClient(io());
+const client = new EggGameClient(getIO());

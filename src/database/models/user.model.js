@@ -8,6 +8,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    role_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
   });
   return User;
 };

@@ -1,12 +1,12 @@
 {
-  "name": "game",
+  "name": "TheChickenSite",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile:sass": "sass frontend/index.scss public/css/style.css",
-    "watch:sass": "npm run compile:sass && sass frontend/index.scss -w public/css/style.css"
+    "compile:sass": "sass src/frontend/index.scss public/css/style.css",
+    "watch:sass": "npm run compile:sass && sass src/frontend/index.scss -w public/css/style.css"
   },
   "author": "",
   "license": "ISC",

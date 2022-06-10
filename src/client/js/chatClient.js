@@ -1,6 +1,7 @@
 class ChatClient {
   constructor(socket) {
     this._socket = socket;
+    let instance = this;
     this._socket.on("updateChat", (data) => {
       instance.updateHTML("chat-history", data.chatHistory);
       console.log("Received chat history");

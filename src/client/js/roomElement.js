@@ -4,7 +4,9 @@ class RoomElement {
     this._players = data.userIds;
     let template = document.getElementById("list-element-template");
     this._htmlElement = template.content.firstElementChild.cloneNode(true);
-    this._htmlElement.innerHTML = `${data.roomId}, players: ${data.userIds}`;
+    this._htmlElement.innerHTML = `${data.roomId}, players: ${JSON.stringify(
+      data.results
+    )}`;
   }
   get roomId() {
     return this._roomId;

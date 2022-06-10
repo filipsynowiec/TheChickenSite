@@ -3,3 +3,4 @@ logs/
 .vscode/
 requests.rest
 public/
+src/config/db.config.js

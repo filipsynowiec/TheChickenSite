@@ -25,7 +25,9 @@ class RoomChoiceClient {
   }
   addRoom(data) {
     console.log(
-      `Received roomCreatedOrUpdated message with keys ${Object.keys(data)}`
+      `Received roomCreatedOrUpdated message with entries ${Object.entries(
+        data
+      )}`
     );
     console.log(`Adding room ${data.roomId}`);
     let list = document.getElementById("available-rooms-list");

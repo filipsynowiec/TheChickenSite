@@ -8,12 +8,8 @@ class TickTackToe {
   constructor(seats) {
     this._seats = seats;
     this._observers = [];
-    this._turn = CROSS;
-    this._won = EMPTY
-    this._fields = []
-    for (let i = 0; i < 9; i++) {
-      this._fields[i] = EMPTY;
-    }
+    this._fields = [];
+    this.setStartingState();
   }
   registerObserver(observer) {
     this._observers.push(observer);
@@ -67,21 +63,24 @@ class TickTackToe {
     this._fields[x] = this._turn;
     this._turn = (this._turn==CROSS)? CIRCLE: CROSS;
     this._won = this.cheackIfWon();
+    if(this._won) {
+      this._seats.gameEnded();
+    }
     this._observers.forEach((observer) => observer.sendStatus());
   }
-  restart() {
+  setStartingState() {
     for (var i = 0; i < 9; i++) {
       this._fields[i] = EMPTY;
     }
     this._turn = CROSS;
-    this._won = false;
+    this._won = EMPTY;
+  }
+  restart() {
+    this.setStartingState();
+    this._observers.forEach((observer) => observer.sendStatus());
   }
   updateGame(data) {
-    if(data.restart == true) {
-      this.restart();
-    } else {
-      this.changeField(data.field)
-    }
+    this.changeField(data.field)
     this._observers.forEach((observer) => observer.sendStatus());
   }
   getStatus() {

@@ -9,6 +9,7 @@ const {
 } = require("./roomRequests");
 const { EggGame } = require("../games/eggGame/eggGame");
 const { TickTackToe } = require("../games/tickTackToe/tickTackToe");
+const { Scrabble } = require("../games/scrabble/scrabble");
 const { Chat } = require("./chat");
 const { Seats } = require("./seats");
 const fs = require("fs");
@@ -75,6 +76,9 @@ class Room {
   sendMessage(type, data) {
     process.send(new RoomMessage(type, data));
   }
+  restartGame() {
+    this._game.restart();
+  }
   setGame(data) {
     this._gameName = data.game;
     switch (data.game) {
@@ -84,6 +88,9 @@ class Room {
       case "TICK_TACK_TOE":
         this._game = new TickTackToe(this._seats);
         break;
+      case "SCRABBLE":
+          this._game = new TickTackToe(this._seats);
+          break;
       default:
         logger.error(`No such game! - ${data.game}`);
         return;
@@ -93,7 +100,7 @@ class Room {
     logger.info(`Game set`);
   }
   sendStatus() {
-    let status = this._game.getStatus();
+    const status = this._game.getStatus();
     this.sendMessage(RoomMessageType.Send, status);
     logger.info(`Message sent to server with status: ${status}`);
   }
@@ -103,9 +110,8 @@ class Room {
     });
   }
   sendSeats() {
-    this.sendMessage(RoomMessageType.Seats, {
-      seats: this._seats.seats,
-    });
+    const status = this._seats.getSeatsStatus();
+    this.sendMessage(RoomMessageType.Seats, status);
   }
   sendHTML(client) {
     fs.readFile(this._game.getHTMLLocation(), "utf8", (err, data) => {

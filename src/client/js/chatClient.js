@@ -23,7 +23,7 @@ class ChatClient {
   }
   sendChatMessage() {
     let mes = document.getElementById("message").value;
-    let name = instance._name;
+    let name = this._name;
     this._socket.emit("sendChatMessage", {
       name: name,
       value: mes,

@@ -3,34 +3,66 @@
   <head>
     <title></title>
     <link rel="stylesheet" href="/public/css/style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <meta charset="UTF-8" />
   </head>
   <body>
-    <div id="page-wrapper">
-      <main class="main horizontal-center">
-        <!-- Greeting chicken -->
-        <div id="swup" class="scene transition-fade">
-          <div class="box center">
-            <div class="account-info-bar">
-              <h2 id="user-info">Logged in as</h2>
-            </div>
-            <div id="greeter" class="container">
-              <h1>Welcome to The Chicken Site</h1>
-            </div>
-            <div class="index-panel horizontal-center">
-              <div id="login-button" class="button horizontal-center">
-                Log In
-              </div>
-              <div id="play-guest-button" class="button horizontal-center">
-                Play
-              </div>
+    <div class="main container">
+      <!-- Greeting chicken -->
+      <div
+        class="box container position-absolute top-50 start-50 translate-middle"
+      >
+        <nav class="navbar navbar-expand-lg row h-10">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item active">
+                <a class="nav-link nav-link-left" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
+              </li>
+              <li class="nav-item" id="user-info"></li>
+            </ul>
+          </div>
+        </nav>
+        <main class="container h-90">
+          <div class="row h-10 align-items-center justify-content-center">
+            <div id="greeter" class="typewriter">
+              <h1>Welcome to The Chicken Site!</h1>
             </div>
           </div>
-        </div>
-      </main>
+          <div class="row h-60 align-items-center justify-content-center py-3">
+            <img
+              src="/public/media/logo.png"
+              class="img-fluid img-auto-width"
+            />
+          </div>
+          <div class="row h-10 align-items-center justify-content-center">
+            <div class="col-4">
+              <button type="button" id="play-button" class="btn btn-primary">
+                Play
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
-    <script src="/client/js/index.js"></script>
     <script src="/client/js/getName.js"></script>
-    <script src="/client/js/accountInfo.js"></script> 
+    <script src="/client/js/accountInfo.js"></script>
+    <script src="/client/js/index.js"></script>
   </body>
 </html>

@@ -1,27 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap");
+@import "../node_modules/bootstrap/scss/bootstrap";
 $background-light: rgb(180, 180, 180);
 $background-box-light: rgba(223, 223, 223, 0.7);
 $border-box-light: rgb(0, 0, 0);
 $border-box-shadow-light: rgb(130, 130, 130);
-$button-background-light: $background-light;
-
+$button-background-light: rgb(227, 157, 7);
+$button-background-dark: rgb(173, 117, 5);
+$auxiliary-first-color-light: rgb(6, 186, 222);
+$auxiliary-first-color-dark: rgb(5, 145, 173);
+$auxiliary-second-color-light: rgb(150, 6, 222);
+$auxiliary-second-color-dark: rgb(117, 5, 173);
 body {
   background: $background-light;
   font-family: "Bungee", cursive;
 }
 //Main
 .main {
-  width: 70vw;
+  width: 90vw;
   min-width: 1200px;
-}
-//Greeter
-#greeter {
-  border-radius: 3px;
-  border-color: black;
-  h1 {
-    text-align: center;
-    font-size: xx-large;
-  }
 }
 
 //Box
@@ -37,12 +34,7 @@ body {
   text-align: center;
   vertical-align: middle;
 
-  height: 700px;
-  &-room {
-    // justify-content: space-around;
-    // display: flex;
-    // justify-content: space-around;
-  }
+  height: 90vh;
 }
 //Scene
 .scene {
@@ -59,31 +51,25 @@ body {
   // display: inline-block;
   display: inline-block;
   border-radius: 1px;
-  border-style: dotted;
-  border-color: black;
+  border-style: solid;
+  border-color: $button-background-dark;
   background-color: white;
   padding: 1em;
-  height: 85%;
+  height: 100%;
   &-left {
-    float: left;
-    // max-width: 65%;
-    min-width: 60%;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
   }
   &-right {
-    text-align: right;
-    max-width: 30%;
-    min-width: 30%;
-    float:right;
+    border-left: 0;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
   input {
     display: inline-block;
   }
 }
-//Index Panel
-.index-panel {
-  padding: 2em;
-  margin: 0 auto;
-}
+
 .button {
   display: inline-block;
   padding: 2px 8px;
@@ -122,6 +108,18 @@ html.is-leaving .transition-fade {
   transform: translateX(0);
 }
 
+.text-only-link {
+  margin-top: 2em;
+  display: block;
+  padding: 1em;
+  color: $auxiliary-first-color-dark;
+  text-decoration: underline;
+  font-size: smaller;
+}
+.text-only-link:hover {
+  color: $auxiliary-second-color-dark;
+  cursor: pointer;
+}
 //Forms
 .form-vertical {
   .form-single-line {
@@ -153,7 +151,7 @@ html.is-leaving .transition-fade {
       width: 40%;
       display: block;
       font-family: "Bungee", cursive;
-      background-color:white;
+      background-color: white;
     }
   }
   .text-only {
@@ -167,25 +165,25 @@ html.is-leaving .transition-fade {
   .text-only:hover {
     color: purple;
     cursor: pointer;
-  } 
+  }
 }
 //Account info top bar
 .account-info-bar {
   border-radius: 1px;
   border-style: dotted;
   border-color: black;
-  height:8%;
+  height: 8%;
   font-size: small;
   text-align: right;
   display: block;
 }
 //Lists
-.list-element{
+.list-element {
   margin: 0 auto;
   margin-top: 0.5em;
   padding: 0.5em;
   height: 2em;
-  width:50%;
+  width: 50%;
   border-radius: 1px;
   border-style: dotted;
   border-color: black;
@@ -194,6 +192,210 @@ html.is-leaving .transition-fade {
   }
 }
 
-.list-box{
+.list-box {
   margin-bottom: 2em;
+  background-color: white;
+  border: 2px solid;
+  border-radius: 10px;
+  border-color: $button-background-dark;
+}
+.chat-area {
+  input {
+    input {
+      margin: 0 auto;
+      padding: 1em;
+      width: 40%;
+      display: block;
+    }
+  }
+}
+button {
+  width: 100%;
+}
+.fit-height {
+  object-fit: cover;
+}
+.mh-50 {
+  max-height: 50%;
+}
+.h {
+  &-10 {
+    height: 10% !important;
+  }
+  &-15 {
+    height: 15% !important;
+  }
+  &-20 {
+    height: 20% !important;
+  }
+  &-30 {
+    height: 30% !important;
+  }
+  &-40 {
+    height: 40% !important;
+  }
+  &-50 {
+    height: 50% !important;
+  }
+  &-60 {
+    height: 60% !important;
+  }
+  &-70 {
+    height: 70% !important;
+  }
+  &-80 {
+    height: 80% !important;
+  }
+  &-90 {
+    height: 90% !important;
+  }
+}
+
+.img-auto-width {
+  height: 100%;
+  width: auto !important;
+}
+.preserve-white-space {
+  white-space: pre-wrap;
+}
+#greeter {
+  width: auto;
+}
+.typewriter h1 {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: 0.15em solid $button-background-light; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: 0.15em; /* Adjust as needed */
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: $button-background-light;
+  }
+}
+
+.btn-primary {
+  background-color: $button-background-light;
+  border-color: $button-background-dark;
+  color: black;
+}
+.btn-primary:hover {
+  background-color: $button-background-dark;
+  border-color: $button-background-light;
+}
+.btn-primary:active {
+  background-color: $button-background-dark;
+  border-color: $button-background-light;
+}
+.btn-primary:focus {
+  background-color: $button-background-dark;
+  border-color: $button-background-light;
+}
+.nav-link {
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  border: 1px solid;
+  border-color: $button-background-light;
+  background-color: $button-background-light;
+  color: black;
+  &-left {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    margin-left: 0;
+  }
+  &-right {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-right: 0;
+  }
+}
+.nav-link:hover {
+  background-color: $button-background-dark;
+  color: white;
+}
+.nav-link:active {
+  background-color: $button-background-dark;
+  color: white;
+}
+.nav-link:focus {
+  background-color: $button-background-dark;
+  color: white;
+}
+
+.list-group-item {
+  width: 100%;
+}
+.list-group-item.active {
+  background-color: $button-background-dark;
+  border-color: $button-background-light;
+}
+.chat-box {
+  border: 1px solid;
+  border-color: $button-background-dark;
+  &-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: $button-background-light;
+  }
+  &-bottom {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: $button-background-light;
+  }
+}
+.no-padding {
+  &-left {
+    padding-left: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+  &-right {
+    padding-right: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}
+
+.outline-dark {
+  border-color: black;
+}
+
+.chat-text {
+  font-family: "Roboto Mono", monospace;
+  color: black;
+  display: inline-block;
+  width: auto;
+  &-username {
+    font-weight: bold;
+  }
+  &-message {
+    text-align: left;
+    overflow: wrap;
+  }
+}
+
+.seat{
+  &-taken {
+    background-color: $button-background-light;
+  }
+  &-empty {
+    background-color: $background-box-light;
+  }
 }

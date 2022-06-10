@@ -4,8 +4,7 @@ class RoomElement {
     this._players = players;
     let template = document.getElementById("list-element-template");
     this._htmlElement = template.content.firstElementChild.cloneNode(true);
-    let listElementText = this._htmlElement.querySelector(".list-element-text");
-    listElementText.innerHTML = roomId;
+    this._htmlElement.innerHTML = roomId;
   }
   get roomId() {
     return this._roomId;
@@ -20,9 +19,9 @@ class RoomElement {
     this._htmlElement.onclick = action;
   }
   select() {
-    this._htmlElement.classList.add("list-element-selected");
+    this._htmlElement.classList.add("active");
   }
   deselect() {
-    this._htmlElement.classList.remove("list-element-selected");
+    this._htmlElement.classList.remove("active");
   }
 }

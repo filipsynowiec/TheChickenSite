@@ -15,7 +15,7 @@ class Chat {
   }
 
   registerMessage(message) {
-    this._chatHistory += `${message.name}: ${message.value}\n`;
+    this._chatHistory.push({ user: message.name, message: message.value });
     this._observers.forEach((obs) => obs.sendChat());
   }
 }

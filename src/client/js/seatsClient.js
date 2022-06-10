@@ -6,24 +6,15 @@ class SeatsClient {
     this._buttons = [];
     let instance = this;
     for (let i = 0; i < NR_OF_SEATS; ++i) {
-      this._buttons[i] = document.createElement("button");
-
-      this._buttons[i].style.width = "200px";
-      this._buttons[i].style.height = "50px";
-      this._buttons[i].style.fontSize = "20px";
-      this._buttons[i].style.margin = "5px";
-
+      let template = document.getElementById("seat-template");
+      let htmlElement = template.content.firstElementChild.cloneNode(true);
+      htmlElement.querySelector(".player").innerHTML = "Player " + (i + 1);
+      this._buttons[i] = htmlElement.querySelector(".btn");
       this._buttons[i].onclick = () => {
         instance.claimSeat(i);
       };
-      this._buttons[i].innerHTML = "-";
-      let div = document.createElement("div");
-      div.innerText = "Player " + (i + 1);
-      div.appendChild(this._buttons[i]);
-      document.getElementById("seats_area").appendChild(div);
+      document.getElementById("seats-area").appendChild(htmlElement);
     }
-
-    document.getElementById("seats_area").style.marginBottom = "25px";
 
     this._socket.on("updateSeats", (data) => {
       instance.updateSeats(data);
@@ -47,8 +38,12 @@ class SeatsClient {
     for (let i = 0; i < NR_OF_SEATS; ++i) {
       if (data.seats[i] == null) {
         this._buttons[i].innerHTML = "-";
+        this._buttons[i].classList.remove("seat-taken");
+        this._buttons[i].classList.add("seat-empty");
       } else {
         this._buttons[i].innerHTML = data.seats[i];
+        this._buttons[i].classList.add("seat-taken");
+        this._buttons[i].classList.remove("seat-empty");
       }
     }
   }

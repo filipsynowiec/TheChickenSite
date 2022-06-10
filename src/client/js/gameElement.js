@@ -5,8 +5,7 @@ class GameElement {
     this._url = url;
     let template = document.getElementById("list-element-template");
     this._htmlElement = template.content.firstElementChild.cloneNode(true);
-    let listElementText = this._htmlElement.querySelector(".list-element-text");
-    listElementText.innerHTML = title;
+    this._htmlElement.innerHTML = title;
   }
   get name() {
     return this._name;
@@ -24,9 +23,9 @@ class GameElement {
     this._htmlElement.onclick = action;
   }
   select() {
-    this._htmlElement.classList.add("list-element-selected");
+    this._htmlElement.classList.add("active");
   }
   deselect() {
-    this._htmlElement.classList.remove("list-element-selected");
+    this._htmlElement.classList.remove("active");
   }
 }

@@ -1,1 +1,30 @@
-{}
+{
+  "name": "TheChickenSite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile:sass": "sass src/frontend/index.scss public/css/style.css",
+    "watch:sass": "npm run compile:sass && sass src/frontend/index.scss -w public/css/style.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "bootstrap": "^5.1.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "list.js": "^2.3.1",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "randomstring": "^1.2.2",
+    "sass": "^1.51.0",
+    "sequelize": "^6.19.0",
+    "socket.io": "^4.4.1",
+    "swup": "^2.0.14",
+    "winston": "^3.6.0"
+  }
+}

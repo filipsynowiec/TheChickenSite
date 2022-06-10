@@ -19,7 +19,7 @@ class Room {
     this._CLIENTS = {}; // all sockets
     this._socketIdManager = new SocketIdManager(); // sockets <=> ids
     this._numberOfClients = 0;
-    this._chat = new Chat("Chat history:\n");
+    this._chat = new Chat([]);
     this._chat.registerObserver(this);
     this._seats = new Seats();
     this._seats.registerObserver(this);

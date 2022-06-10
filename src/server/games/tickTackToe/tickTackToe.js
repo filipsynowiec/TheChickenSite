@@ -93,7 +93,7 @@ class TickTackToe {
     }
   }
   getHTMLLocation() {
-    return "server/games/tickTackToe/tickTackToe.html";
+    return "src/server/games/tickTackToe/tickTackToe.html";
   }
 }
 

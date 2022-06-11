@@ -8,5 +8,10 @@
     "name": "TICK_TACK_TOE",
     "title": "Tick Tack Toe",
     "room_url": "rooms?game=TICK_TACK_TOE"
+  },
+  "SCRABBLE": {
+    "name": "SCRABBLE",
+    "title": "Scrabble",
+    "room_url": "rooms?game=SCRABBLE"
   }
 }

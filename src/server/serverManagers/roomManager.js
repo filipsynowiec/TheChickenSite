@@ -41,6 +41,12 @@ class RoomManager {
               '<script src="/client/js/tickTackToeClient.js"></script>'
             );
             break;
+          case "SCRABBLE":
+            data = data.replace(
+              "<!--__GAME_SCRIPT__-->",
+              '<script src="/client/js/scrabbleClient.js"></script>'
+            );
+            break;
           default:
             logger.error(`No such game! - ${game}`);
             return;

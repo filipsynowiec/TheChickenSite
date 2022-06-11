@@ -1,5 +1,5 @@
 const valueDict = {
-    "blank": 0,
+    " ": 0,
     "a": 1,
     "b": 3,
     "c": 3,
@@ -29,7 +29,7 @@ const valueDict = {
 }
 
 const startingNumberDict = {
-    "blank": 2,
+    " ": 2,
     "a": 9,
     "b": 2,
     "c": 2,
@@ -58,20 +58,6 @@ const startingNumberDict = {
     "z": 1,
 }
 
-class Tile { 
-    Tile(letter) {
-        this.letter = letter;
-    }
-    getLetter() {
-        return this.letter;
-    }
-    getValue() {
-        return valueDict[this.letter];
-    }
-}
-
-startingDeck = []
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -80,21 +66,21 @@ function shuffleArray(array) {
 }
 
 class Deck {
-    Deck() {
-        this._deck = [];
+    static getDeck() {
+        let deck = [];
         for(const [letter, times] of Object.entries(startingNumberDict)) {
-            for(const i=0; i<times; ++i) {
-                this._deck.push(new Letter(letter));
+            for(let i=0; i<times; ++i) {
+                deck.push({
+                    letter: letter,
+                    value: valueDict[letter],
+                });
             }
         }
-        shuffleArray(this._deck);
-    }
-    get deck() {
-        return this._deck;
+        shuffleArray(deck);
+        return deck;
     }
 }
 
 module.exports = {
     Deck: Deck,
-    Tile: Tile,
 };

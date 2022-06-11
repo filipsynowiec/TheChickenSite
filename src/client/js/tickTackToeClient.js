@@ -7,6 +7,10 @@ class TickTackToeClient {
   constructor(socket) {
     this._socket = socket;
     let instance = this;
+
+    document.getElementById("leave-room").innerHTML =
+      '<a class="nav-link nav-link-left" href="../rooms?game=TIC-TAC-TOE">Leave room</a>';
+
     this._socket.on("updateStatus", (data) => instance.updateStatus(data));
     this._socket.on("gameHTML", (data) => {
       instance.updateHTML("game-area", data.gameHTML);

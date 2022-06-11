@@ -5,6 +5,9 @@ class ScrabbleClient {
     constructor(socket) {
         this._socket = socket;
         let instance = this;
+
+        document.getElementById("leave-room").innerHTML =
+            '<a class="nav-link nav-link-left" href="../rooms?game=SCRABBLE">Leave room</a>';
         
         this._board = [];
         for (let i = 0; i < BOARD_SIZE; i++) {

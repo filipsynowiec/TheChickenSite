@@ -4,6 +4,10 @@ class EggGameClient {
     this._rooms = [];
     console.log(this._socket);
     let instance = this;
+
+    document.getElementById("leave-room").innerHTML =
+      '<a class="nav-link nav-link-left" href="../rooms?game=EGG-GAME">Leave room</a>';
+
     this._socket.on("updateStatus", (data) =>
       instance.updateStatus(data.eggValue)
     );

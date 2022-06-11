@@ -12,7 +12,27 @@
 
   <body>
     <template id="list-element-template">
-      <li class="list-group-item list-group-item-action"></li>
+      <li class="list-group-item list-group-item-action">
+        <div class="container w-100">
+          <div class="row">
+            <div class="col-6">
+              <h4 class="roomId text-center d-inline"></h4>
+            </div>
+            <div class="col-6 players container"></div>
+          </div>
+        </div>
+      </li>
+    </template>
+    <template id="list-player-template">
+      <div class="w-100 custom-row">
+        <div
+          class="overflow-hidden player-name d-inline-block mw-80 px-1"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title=""
+        ></div>
+        <div class="player-elo d-inline-block mw-20"></div>
+      </div>
     </template>
     <div class="main container">
       <div
@@ -48,7 +68,7 @@
               <h1>Available rooms</h1>
             </div>
           </div>
-          <div class="row h-50 justify-content-center pt-5">
+          <div class="row h-70 justify-content-center pt-5">
             <div class="rooms-list-box list-box col-8 h-100">
               <div class="list-wrapper h-100">
                 <ul

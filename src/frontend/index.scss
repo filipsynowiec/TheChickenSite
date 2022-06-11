@@ -308,6 +308,10 @@ button {
   background-color: $button-background-dark;
   border-color: $button-background-light;
 }
+.btn-primary:disabled {
+  background-color: $auxiliary-first-color-light;
+  border-color: $auxiliary-first-color-dark;
+}
 .nav-link {
   margin-left: 0.1em;
   margin-right: 0.1em;
@@ -391,11 +395,79 @@ button {
   }
 }
 
-.seat{
+.seat {
   &-taken {
     background-color: $button-background-light;
   }
   &-empty {
     background-color: $background-box-light;
   }
+}
+
+.btn-secondary {
+  background-color: $background-box-light;
+  border-color: black;
+  color: black;
+}
+.btn-secondary:hover {
+  background-color: $border-box-shadow-light;
+  border-color: black;
+}
+.btn-secondary:active {
+  background-color: $border-box-shadow-light;
+  border-color: black;
+}
+.btn-secondary:focus {
+  background-color: $border-box-shadow-light;
+  border-color: black;
+}
+.btn-secondary:disabled {
+  background-color: $auxiliary-first-color-dark;
+  border-color: black;
+}
+input {
+  font-family: "Roboto Mono", monospace;
+}
+.player {
+  &-name {
+    font-family: "Roboto Mono", monospace;
+    font-weight: bold;
+    vertical-align:top
+  }
+  &-elo {
+    font-family: "Roboto Mono", monospace;
+    vertical-align:top
+  }
+}
+.mw {
+  &-10 {
+    max-width: 10%;
+  }
+  &-20 {
+    max-width: 20%;
+  }
+  &-30 {
+    max-width: 30%;
+  }
+  &-40 {
+    max-width: 40%;
+  }
+  &-50 {
+    max-width: 50%;
+  }
+  &-60 {
+    max-width: 60%;
+  }
+  &-70 {
+    max-width: 70%;
+  }
+  &-80 {
+    max-width: 80%;
+  }
+  &-90 {
+    max-width: 90%;
+  }
+}
+.custom-row {
+  text-align:left;
 }

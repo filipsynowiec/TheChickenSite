@@ -8,7 +8,7 @@ checkDuplicateUsername = (req, res, next) => {
   logger.info("Checking for duplicate username");
   User.findOne({
     where: {
-      username: req.body.username,
+      username: req.body.username.toLowerCase(),
     },
   }).then((user) => {
     if (user) {

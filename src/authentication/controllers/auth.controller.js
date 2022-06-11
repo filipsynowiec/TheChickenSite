@@ -24,11 +24,11 @@ exports.signup = (req, res) => {
     },
   }).then((role) => {
     const user = User.create({
-      username: req.body.username,
+      username: req.body.username.toLowerCase(),
       password: bcrypt.hashSync(req.body.password, 8),
       role_id: role.id,
     });
-    logger.info(`New user added: ${req.body.username}, ${role.name}`);
+    logger.info(`New user added: ${req.body.username.toLowerCase()}, ${role.name}`);
     return user;
   });
 
@@ -62,7 +62,7 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
   User.findOne({
     where: {
-      username: req.body.username,
+      username: req.body.username.toLowerCase(),
     },
   })
     .then((user) => {

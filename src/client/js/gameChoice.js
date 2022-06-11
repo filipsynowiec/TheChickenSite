@@ -56,6 +56,7 @@ class GameChoiceClient {
 const socket = io({
   extraHeaders: {
     source: "GAME_CHOICE",
+    "x-access-token": "Bearer " + localStorage.getItem("token"),
   },
 });
 let gameChoiceClient = new GameChoiceClient(socket);

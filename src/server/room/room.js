@@ -125,7 +125,7 @@ class Room {
         this._game = new TickTackToe(this._seats);
         break;
       case "SCRABBLE":
-        this._game = new TickTackToe(this._seats);
+        this._game = new Scrabble(this._seats);
         break;
       default:
         logger.error(`No such game! - ${data.game}`);

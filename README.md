@@ -10,7 +10,7 @@
 
 ## Run
 
-- `./src/app.js` in project main directory
+- `node app` in project main directory
 
 ## Setup docker
 

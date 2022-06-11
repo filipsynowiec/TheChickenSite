@@ -68,7 +68,7 @@ class Room {
 
   prepareClient(client, data) {
     if (!data.userId) {
-      logger.warning("User Id is not known!");
+      logger.warn("User Id is not known!");
     } else {
       logger.info(`Client ${data.userId} prepared.`);
       this._socketIdManager.addSocket(client, data.userId);

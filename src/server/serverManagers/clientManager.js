@@ -90,6 +90,13 @@ class ClientManager {
   setRequestMethods(socket, app) {
     let socketId = socket.id;
     socket.on("createRoom", (data) => {
+      if (!data.token) {
+        logger.warn("Unlogged player tried to create room");
+        this.sendToOneClient("signInRequired", {}, socketId);
+        return;
+      } else {
+        logger.info("Logged player creates a room");
+      }
       let roomId = randomstring.generate(constants.ROOM_URL_LENGTH);
       let game = RoomChoiceManager.getGameFromSocket(
         this._SOCKET_CLIENTS[socketId]
@@ -168,6 +175,11 @@ class ClientManager {
       );
       data = ClientManager.preprocessData(data);
       if (!data) return;
+      if (!data.token) {
+        logger.warn("Unlogged player tried to join into a room");
+        this.sendToOneClient("signInRequired", {}, socketId);
+        return;
+      }
       RoomManager.joinRoom(
         data.roomId,
         game,

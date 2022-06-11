@@ -52,11 +52,6 @@ class ClientManager {
                 "<!--__GAME_SCRIPT__-->",
                 '<script src="/client/js/tickTackToeClient.js"></script>'
               );
-            case "SCRABBLE":
-              data = data.replace(
-                "<!--__GAME_SCRIPT__-->",
-                '<script src="/client/js/scrabbleClient.js"></script>'
-              );
               break;
             default:
               logger.error(`No such game! - ${game}`);

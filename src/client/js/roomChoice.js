@@ -18,12 +18,17 @@ class RoomChoiceClient {
         instance.joinRoom();
     }
 
+    this._socket.on("signInRequired", (data) => instance.goToSignIn(data));
     this._socket.on("roomId", (data) => instance.goToRoom(data));
     this._socket.on("roomCreatedOrUpdated", (data) =>
       instance.addOrUpdateRoom(data)
     );
     this._socket.emit("roomList", {});
   }
+  goToSignIn(data) {
+    window.location.href = `signin`;
+  }
+
   goToRoom(data) {
     if (data.roomId != null) {
       window.location.href = `room/${data.roomId}`;
@@ -75,4 +80,14 @@ let socket = io({
     source: "ROOM_CHOICE",
   },
 });
+
+socket.emit = (function (emitter) {
+  return function () {
+    const token = localStorage.getItem("token");
+    if (token) {
+      arguments[1].token = token;
+    }
+    return emitter.apply(this, arguments);
+  };
+})(socket.emit);
 let roomChoiceClient = new RoomChoiceClient(socket);

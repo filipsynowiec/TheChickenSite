@@ -17,9 +17,8 @@ const fs = require("fs");
 
 class Room {
   constructor() {
-    this._CLIENTS = {}; // all sockets
     this._socketIdManager = new SocketIdManager(); // sockets <=> ids
-    this._numberOfClients = 0;
+    this._numberOfSockets = 0;
     this._chat = new Chat([]);
     this._chat.registerObserver(this);
     this._seats = new Seats();
@@ -47,19 +46,23 @@ class Room {
         this.updateChat(request.getData());
         break;
       case RoomRequestType.SendSeatClaim:
-        this.updateSeats(request.getData());
+        this.updateSeats(request.getClient(), request.getData());
         break;
       case RoomRequestType.ClientReady:
         this.prepareClient(request.getClient(), request.getData());
+        break;
+      case RoomRequestType.RemoveClient:
+        this.removeClient(request.getClient());
         break;
     }
   }
   prepareClient(client, data) {
     if (!data.userId) {
-      logger.warning("User Id is not known!");
+      // logger.warning("User Id is not known!");
     } else {
-      logger.info(`Client ${data.userId} prepared.`);
+      logger.info(`Client ${data.userId} with socket ${client} prepared.`);
       this._socketIdManager.addSocket(client, data.userId);
+      this._numberOfSockets++;
     }
     this.sendChat();
     this.sendSeats();
@@ -72,14 +75,27 @@ class Room {
   updateChat(data) {
     this._chat.registerMessage(data);
   }
-  updateSeats(data) {
-    this._seats.claimSeat(data);
+  updateSeats(client, data) {
+    let clientId = this._socketIdManager.getUserId(client);
+    logger.info(`Client id ${clientId} socke ${client}`);
+    this._seats.claimSeat(clientId, data);
   }
   addClient(client) {
-    this._CLIENTS[this._numberOfClients] = client;
-    this._numberOfClients++;
     this.sendHTML(client);
-    logger.info(`Client ${client} added as ${this._numberOfClients - 1}`);
+  }
+  removeClient(client) {
+    let clientId = this._socketIdManager.getUserId(client);
+    let abandonSeat = this._socketIdManager.removeSocket(client);
+    logger.info(`${clientId} removed from  room`);
+    this._numberOfSockets--;
+    if (abandonSeat) {
+      this._seats.abandonSeat(clientId);
+      this.sendSeats();
+      this.sendStatus();
+    }
+    if (this._numberOfSockets == 0) {
+      this.sendKillRequest();
+    }
   }
   sendMessage(type, data) {
     process.send(new RoomMessage(type, data));
@@ -97,8 +113,8 @@ class Room {
         this._game = new TickTackToe(this._seats);
         break;
       case "SCRABBLE":
-          this._game = new TickTackToe(this._seats);
-          break;
+        this._game = new TickTackToe(this._seats);
+        break;
       default:
         logger.error(`No such game! - ${data.game}`);
         return;
@@ -106,6 +122,9 @@ class Room {
 
     this._game.registerObserver(this);
     logger.info(`Game set`);
+  }
+  sendKillRequest() {
+    this.sendMessage(RoomMessageType.KillRequest, {});
   }
   sendStatus() {
     const status = this._game.getStatus();

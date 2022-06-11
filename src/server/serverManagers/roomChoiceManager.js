@@ -21,17 +21,25 @@ class RoomChoiceManager {
     let url = socket.handshake.headers.referer;
     let game = RoomChoiceManager.getGameFromUrl(url);
     logger.info(`Game ${game}`);
-    socket.emit("getRoomList", { roomList: this._ROOMS[game] });
+    socket.emit("getRoomList", { roomList: Array.from(this._ROOMS[game]) });
   }
   /* adds room to rooms subset adequate to the game*/
   addRoom(room, game) {
     logger.info(`Game ${game}`);
-    this._ROOMS[game].push(room);
+    this._ROOMS[game].add(room);
+  }
+  removeRoom(room) {
+    for (const [key, value] of Object.entries(this._ROOMS)) {
+      if (value.has(room)) {
+        value.delete(room);
+        break;
+      }
+    }
   }
   /* initializes game buckets for rooms */
   setGames(games) {
     for (const [key, value] of Object.entries(games)) {
-      this._ROOMS[key] = [];
+      this._ROOMS[key] = new Set();
       logger.info(`${key}`);
     }
   }

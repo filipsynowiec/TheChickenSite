@@ -1,5 +1,6 @@
 const { logger } = require("../../utils/logger");
 const fs = require("fs");
+const { authJwt } = require("../../authentication/middleware");
 const {
   RoomRequest,
   RoomRequestType,
@@ -21,7 +22,7 @@ class RoomManager {
   }
 
   static joinRoom(roomId, game, app) {
-    app.get("/room/" + roomId, function (req, res) {
+    app.get("/room/" + roomId, [authJwt.verifyToken], function (req, res) {
       fs.readFile("src/client/html/room.html", "utf8", (err, data) => {
         if (err) {
           logger.error(err);
@@ -29,13 +30,13 @@ class RoomManager {
         }
 
         switch (game) {
-          case "EGG_GAME":
+          case "EGG-GAME":
             data = data.replace(
               "<!--__GAME_SCRIPT__-->",
               '<script src="/client/js/eggGameClient.js"></script>'
             );
             break;
-          case "TICK_TACK_TOE":
+          case "TIC-TAC-TOE":
             data = data.replace(
               "<!--__GAME_SCRIPT__-->",
               '<script src="/client/js/tickTackToeClient.js"></script>'
@@ -48,6 +49,13 @@ class RoomManager {
         res.send(data);
       });
     });
+  }
+  // get user ids, send them to server and let the server forward them to ALL connected users
+  static getAndResendUserIds(data, instance, socketId, roomId) {
+    ChildCommunicatorManager.sendRequestToChild(
+      instance._ROOMS[roomId],
+      new RoomRequest(socketId, RoomRequestType.SendUserIdsToParent, data)
+    );
   }
 
   /* Function invoked when client udpates the status of the game */
@@ -89,6 +97,7 @@ class RoomManager {
   /* Receives message from room and propagates it to all clients connected to that room */
   static receiveMessageFromRoom(msg, roomId) {
     let message = new RoomMessage(null, null, msg);
+    logger.info(`Message type: ${message.getType()}`);
     switch (message.getType()) {
       case RoomMessageType.Send:
         return {
@@ -113,6 +122,11 @@ class RoomManager {
           name: "updateSeats",
           data: message.getData(),
           roomId: roomId,
+        };
+      case RoomMessageType.UserIds:
+        return {
+          name: "userIds",
+          data: message.getData(),
         };
       default:
         logger.error(`No such message type! - ${message.getType()}`);

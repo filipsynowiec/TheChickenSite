@@ -7,6 +7,7 @@ class RoomRequestType {
   static SendChatMessage = new RoomRequestType("SendChatMessage");
   static SendSeatClaim = new RoomRequestType("SendSeatClaim");
   static ClientReady = new RoomRequestType("ClientReady");
+  static SendUserIdsToParent = new RoomRequestType("SendUserIdsToParent");
   constructor(name) {
     this._name = name;
   }
@@ -19,7 +20,9 @@ class RoomRequest {
       this._type = RoomRequestType[obj._type._name];
       this._data = obj._data;
       logger.info(
-        `Got ${this._type._name} request with data ${Object.entries(this._data)}`
+        `Got ${this._type._name} request with data ${Object.entries(
+          this._data
+        )}`
       );
     } else {
       this._client = client;
@@ -44,6 +47,7 @@ class RoomMessageType {
   static ChatHistory = new RoomMessageType("ChatHistory");
   static Seats = new RoomMessageType("Seats");
   static SendHTML = new RoomMessageType("SendHTML");
+  static UserIds = new RoomMessageType("UserIds");
   constructor(name) {
     this._name = name;
   }

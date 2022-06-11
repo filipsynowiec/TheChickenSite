@@ -1,4 +1,5 @@
 const { game, sequelize } = require("./models");
+const { logger } = require("../utils/logger");
 const db = require("./models");
 const User = db.user;
 const Game = db.game;
@@ -69,8 +70,32 @@ const getAllRankings = function () {
   );
 };
 
+// TODO: optimizations
+const getGameRankings = function (userIds, gameName) {
+  return sequelize
+    .query(
+      `SELECT u.id, u.username, s.score FROM scores AS s LEFT JOIN users AS u ON (s.user_id = u.id) LEFT JOIN games AS g ON (s.game_id = g.id) WHERE (g.name='${gameName}');`
+    )
+    .then(([results, metadata]) => {
+      logger.info(`Query: ${JSON.stringify(userIds)}, ${gameName}`);
+      logger.info(`Query result: ${JSON.stringify(results)}`);
+      result = {};
+      for (const tuple of results) {
+        for (const userId of userIds) {
+          // intentional == instead of ===
+          if (userId == tuple.id) {
+            result[tuple.username] = tuple.score;
+          }
+        }
+      }
+      logger.info(`Important result: ${JSON.stringify(result)}`);
+      return result;
+    });
+};
+
 exports.findUserName = findUserName;
 // no need to export findGameId
 exports.getScore = getScore;
 exports.updateScore = updateScore;
 exports.getAllRankings = getAllRankings;
+exports.getGameRankings = getGameRankings;

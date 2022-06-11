@@ -17,6 +17,10 @@ class Seats {
     return this._seats;
   }
 
+  getRunning() {
+    return this._gameRunning;
+  }
+
   getSeatsStatus() {
     return {
       seats: this._seats,
@@ -53,7 +57,6 @@ class Seats {
     }
 
     this._observers.forEach((obs) => obs.sendSeats());
-    //this._observers.forEach((observer) => observer.sendStatus());
   }
   abandonSeat(clientId) {
     for (let i = 0; i < NR_OF_SEATS; ++i) {

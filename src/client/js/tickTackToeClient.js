@@ -104,20 +104,6 @@ class TickTackToeClient {
         div.appendChild(this._buttons[i * 3 + j]);
       }
     }
-
-    /*
-    let restartButton = document.createElement("button");
-    document.getElementById("winner-pane").appendChild(restartButton);
-    restartButton.innerHTML = "restart";
-    restartButton.style.width = "200px";
-    restartButton.style.height = "50px";
-    restartButton.style.fontSize = "20px";
-    restartButton.style.margin = "5px";
-
-    restartButton.onclick = () => {
-      instance._socket.emit("requestAction", { restart: true });
-    };
-    */
   }
   sendClientReady(instance) {
     instance._socket.emit("clientReady", {});

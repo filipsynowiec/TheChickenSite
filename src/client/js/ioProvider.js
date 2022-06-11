@@ -7,10 +7,12 @@ const decorateEmitter = function (emitter) {
     return emitter.apply(this, arguments);
   };
 };
-
+let socket = null
 const getIO = function () {
-  const socket = io();
+  if (!socket) {
+    socket = io();
+    socket.emit = decorateEmitter(socket.emit);
+  }
   // decorate emit to
-  socket.emit = decorateEmitter(socket.emit);
   return socket;
 };

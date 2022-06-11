@@ -17,7 +17,7 @@ class SeatsClient {
     }
 
     this._startButton = document.createElement("button");
-    this._startButton.innerHTML = "Start"
+    this._startButton.innerHTML = "Start";
     document.getElementById("seats-area").appendChild(this._startButton);
     this._startButton.onclick = () => {
       instance._socket.emit("sendSeatClaim", { running: true });
@@ -55,10 +55,10 @@ class SeatsClient {
         this._buttons[i].classList.remove("seat-empty");
       }
     }
-    for(const button of this._buttons) {
+    for (const button of this._buttons) {
       button.disabled = data.gameRunning;
     }
   }
 }
 
-let seatsClient = new SeatsClient(io());
+let seatsClient = new SeatsClient(getIO());

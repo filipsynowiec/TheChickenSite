@@ -3,6 +3,8 @@ const { ServerUtils } = require("../../utils/serverUtils");
 const { RoomManager } = require("./roomManager");
 const { GameChoiceManager } = require("./gameChoiceManager");
 const { RoomChoiceManager } = require("./roomChoiceManager");
+const fs = require("fs");
+const path = require("path");
 const randomstring = require("randomstring");
 const child_process = require("child_process");
 const constants = require("../../utils/constants");
@@ -12,7 +14,7 @@ const { RoomSocketManager } = require("../room/socketIdManager");
 const queries = require("../../database/dbQueries");
 
 class ClientManager {
-  constructor(server) {
+  constructor(server, path) {
     this._io = require("socket.io")(server, {});
     this._numberOfClients = 0;
     this._SOCKET_CLIENTS = {}; // stores sockets of all clients
@@ -21,6 +23,44 @@ class ClientManager {
     this._roomChoiceManager = new RoomChoiceManager();
     this._gameChoiceManager.loadGamesJSON();
     this._roomChoiceManager.setGames(this._gameChoiceManager.games);
+    this._basepath = path;
+  }
+
+  registerRoomRoute(app, game) {
+    let instance = this;
+    app.get("/room/:roomId", function (req, res) {
+      if (instance._ROOMS[req.params.roomId] == undefined) {
+        res.sendFile(
+          path.join(instance._basepath, "src/client/html", "index.html")
+        );
+      } else {
+        fs.readFile("src/client/html/room.html", "utf8", (err, data) => {
+          if (err) {
+            logger.error(err);
+            return;
+          }
+
+          switch (game) {
+            case "EGG_GAME":
+              data = data.replace(
+                "<!--__GAME_SCRIPT__-->",
+                '<script src="/client/js/eggGameClient.js"></script>'
+              );
+              break;
+            case "TICK_TACK_TOE":
+              data = data.replace(
+                "<!--__GAME_SCRIPT__-->",
+                '<script src="/client/js/tickTackToeClient.js"></script>'
+              );
+              break;
+            default:
+              logger.error(`No such game! - ${game}`);
+              return;
+          }
+          res.send(data);
+        });
+      }
+    });
   }
 
   setHandlers(app) {
@@ -39,7 +79,6 @@ class ClientManager {
     let socketId = socket.id;
     this._numberOfClients++;
     this._SOCKET_CLIENTS[socketId] = socket;
-    logger.info(`Params ---->>> ${socket.handshake.query.param}`);
 
     this.setRequestMethods(socket, app);
 
@@ -52,9 +91,15 @@ class ClientManager {
     /* if client connected to certain room -> handle the connection */
     if (this._ROOMS[roomId] != null) {
       this.handleConnection(roomId, socketId);
+      socket.on("disconnect", () => {
+        this.clientDisconnect(socketId, roomId);
+      });
     }
   }
-
+  clientDisconnect(socketId, roomId) {
+    RoomManager.removeClientFromRoom(this._ROOMS[roomId], socketId);
+    delete this._SOCKET_CLIENTS[socketId];
+  }
   /* Connects client socket to both socket.room and room */
   handleConnection(roomId, client) {
     this._SOCKET_CLIENTS[client].join(roomId);
@@ -99,13 +144,18 @@ class ClientManager {
       });
       childProcess.on("message", (msg) => {
         let receivedMessage = RoomManager.receiveMessageFromRoom(msg, roomId);
+        
         logger.info(
           `Received message from room with keys ${Object.keys(
             receivedMessage
           )}, ${Object.keys(receivedMessage.data)}`
         );
+        // case for kill requests
+        if (receivedMessage.name == "killRequest") {
+          this.killRoom(roomId);
+        }
         // a BIG case for userIds message
-        if (receivedMessage.name === "userIds") {
+        else if (receivedMessage.name === "userIds") {
           logger.info("Received userIds message");
           receivedMessage.data.roomId = roomId;
           let instance = this;
@@ -136,7 +186,9 @@ class ClientManager {
       this._ROOMS[roomId] = childProcess;
       this._roomChoiceManager.addRoom(roomId, game);
 
+      this.registerRoomRoute(app, game);
       RoomManager.createRoom(app, childProcess, roomId, game);
+
       this.sendToOneClient("roomId", { roomId: roomId }, socketId);
 
       // unnecessary as of right now - player who created room
@@ -168,13 +220,6 @@ class ClientManager {
       );
       data = ClientManager.preprocessData(data);
       if (!data) return;
-      RoomManager.joinRoom(
-        data.roomId,
-        game,
-        app,
-        this.getRoomIdFromSocketId(socketId)
-      );
-
       this.sendToOneClient("roomId", { roomId: data.roomId }, socketId);
     });
 
@@ -233,6 +278,12 @@ class ClientManager {
         this._SOCKET_CLIENTS[socketId].handshake.headers.referer
       )
     );
+  }
+
+  killRoom(roomId) {
+    this._roomChoiceManager.removeRoom(roomId);
+    this._ROOMS[roomId].kill();
+    delete this._ROOMS[roomId];
   }
 
   static preprocessData(data) {

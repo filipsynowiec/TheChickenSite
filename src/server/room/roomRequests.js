@@ -7,6 +7,7 @@ class RoomRequestType {
   static SendChatMessage = new RoomRequestType("SendChatMessage");
   static SendSeatClaim = new RoomRequestType("SendSeatClaim");
   static ClientReady = new RoomRequestType("ClientReady");
+  static RemoveClient = new RoomRequestType("RemoveClient");
   static SendUserIdsToParent = new RoomRequestType("SendUserIdsToParent");
   constructor(name) {
     this._name = name;
@@ -47,6 +48,7 @@ class RoomMessageType {
   static ChatHistory = new RoomMessageType("ChatHistory");
   static Seats = new RoomMessageType("Seats");
   static SendHTML = new RoomMessageType("SendHTML");
+  static KillRequest = new RoomMessageType("KillRequest");
   static UserIds = new RoomMessageType("UserIds");
   constructor(name) {
     this._name = name;

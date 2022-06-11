@@ -37,6 +37,11 @@ class EggGame {
 
     this._observers.forEach((observer) => observer.sendStatus());
   }
+  restart() {
+    // required
+    this._eggValue = 0;
+    this._observers.forEach((observer) => observer.sendStatus());
+  }
   getStatus() {
     // required
     return { eggValue: this._eggValue };

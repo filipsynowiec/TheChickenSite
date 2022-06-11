@@ -41,13 +41,13 @@ class ClientManager {
           }
 
           switch (game) {
-            case "EGG_GAME":
+            case "EGG-GAME":
               data = data.replace(
                 "<!--__GAME_SCRIPT__-->",
                 '<script src="/client/js/eggGameClient.js"></script>'
               );
               break;
-            case "TICK_TACK_TOE":
+            case "TIC-TAC-TOE":
               data = data.replace(
                 "<!--__GAME_SCRIPT__-->",
                 '<script src="/client/js/tickTackToeClient.js"></script>'

@@ -26,7 +26,7 @@ class ClientManager {
     this._basepath = path;
   }
 
-  registerRoomRoute(app, game) {
+  registerRoomRoute(app) {
     let instance = this;
     app.get("/room/:roomId", function (req, res) {
       if (instance._ROOMS[req.params.roomId] == undefined) {
@@ -34,6 +34,7 @@ class ClientManager {
           path.join(instance._basepath, "src/client/html", "index.html")
         );
       } else {
+        let game = instance._roomChoiceManager.getGameFromRoomId(req.params.roomId);
         fs.readFile("src/client/html/room.html", "utf8", (err, data) => {
           if (err) {
             logger.error(err);
@@ -156,7 +157,7 @@ class ClientManager {
       });
       childProcess.on("message", (msg) => {
         let receivedMessage = RoomManager.receiveMessageFromRoom(msg, roomId);
-        
+
         logger.info(
           `Received message from room with keys ${Object.keys(
             receivedMessage
@@ -198,7 +199,7 @@ class ClientManager {
       this._ROOMS[roomId] = childProcess;
       this._roomChoiceManager.addRoom(roomId, game);
 
-      this.registerRoomRoute(app, game);
+      this.registerRoomRoute(app);
       RoomManager.createRoom(app, childProcess, roomId, game);
 
       this.sendToOneClient("roomId", { roomId: roomId }, socketId);

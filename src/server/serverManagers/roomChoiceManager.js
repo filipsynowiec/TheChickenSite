@@ -36,6 +36,12 @@ class RoomChoiceManager {
       }
     }
   }
+  getGameFromRoomId(roomId) {
+    for (const [game, rooms] of Object.entries(this._ROOMS)) {
+      if (rooms.has(roomId)) return game;
+    }
+    return null;
+  }
   /* initializes game buckets for rooms */
   setGames(games) {
     for (const [key, value] of Object.entries(games)) {

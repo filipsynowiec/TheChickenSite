@@ -27,6 +27,12 @@ class HtmlManager {
     instance._app.get("/api/test", function (req, res) {
       res.sendFile(path.join(basePath, "src/client/html", "roleTest.html"));
     });
+    instance._app.get("/profile", function (req, res) {
+      res.sendFile(path.join(basePath, "src/client/html", "profile.html"));
+    })
+    instance._app.get("/hallOfFame", function (req, res) {
+      res.sendFile(path.join(basePath, "src/client/html", "hallOfFame.html"));
+    });
   }
 }
 

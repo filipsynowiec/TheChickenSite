@@ -15,14 +15,10 @@ class SeatsClient {
       };
       document.getElementById("seats-area").appendChild(htmlElement);
     }
-
-    this._startButton = document.createElement("button");
-    this._startButton.innerHTML = "Start";
-    document.getElementById("seats-area").appendChild(this._startButton);
+    this._startButton = document.getElementById("start-game-button");
     this._startButton.onclick = () => {
       instance._socket.emit("sendSeatClaim", { running: true });
     };
-    this._startButton.style.marginTop = "25px";
 
     this._socket.on("updateSeats", (data) => {
       instance.updateSeats(data);

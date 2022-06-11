@@ -9,8 +9,12 @@ $button-background-light: rgb(227, 157, 7);
 $button-background-dark: rgb(173, 117, 5);
 $auxiliary-first-color-light: rgb(6, 186, 222);
 $auxiliary-first-color-dark: rgb(5, 145, 173);
+$auxiliary-first-color-ultra-light: rgb(46, 215, 249); 
 $auxiliary-second-color-light: rgb(150, 6, 222);
 $auxiliary-second-color-dark: rgb(117, 5, 173);
+$ranking-gold: rgb(212, 175, 55, 0.7);
+$ranking-silver: rgb(170, 169, 173, 0.7);
+$ranking-bronze: rgb(205, 127, 50, 0.7);
 body {
   background: $background-light;
   font-family: "Bungee", cursive;
@@ -308,6 +312,10 @@ button {
   background-color: $button-background-dark;
   border-color: $button-background-light;
 }
+.btn-primary:disabled {
+  background-color: $auxiliary-first-color-light;
+  border-color: $auxiliary-first-color-dark;
+}
 .nav-link {
   margin-left: 0.1em;
   margin-right: 0.1em;
@@ -335,6 +343,10 @@ button {
   color: white;
 }
 .nav-link:focus {
+  background-color: $button-background-dark;
+  color: white;
+}
+.nav-link-active {
   background-color: $button-background-dark;
   color: white;
 }
@@ -387,15 +399,115 @@ button {
   }
   &-message {
     text-align: left;
-    overflow: wrap;
+    overflow-wrap: break-word;
   }
 }
 
-.seat{
+.seat {
   &-taken {
     background-color: $button-background-light;
   }
   &-empty {
     background-color: $background-box-light;
   }
+}
+
+.btn-secondary {
+  background-color: $background-box-light;
+  border-color: black;
+  color: black;
+}
+.btn-secondary:hover {
+  background-color: $border-box-shadow-light;
+  border-color: black;
+}
+.btn-secondary:active {
+  background-color: $border-box-shadow-light;
+  border-color: black;
+}
+.btn-secondary:focus {
+  background-color: $border-box-shadow-light;
+  border-color: black;
+}
+.btn-secondary:disabled {
+  background-color: $auxiliary-first-color-dark;
+  border-color: black;
+}
+input {
+  font-family: "Roboto Mono", monospace;
+}
+.player {
+  &-name {
+    font-family: "Roboto Mono", monospace;
+    font-weight: bold;
+    vertical-align: top;
+  }
+  &-elo {
+    font-family: "Roboto Mono", monospace;
+    vertical-align: top;
+  }
+}
+.mw {
+  &-10 {
+    max-width: 10%;
+  }
+  &-20 {
+    max-width: 20%;
+  }
+  &-30 {
+    max-width: 30%;
+  }
+  &-40 {
+    max-width: 40%;
+  }
+  &-50 {
+    max-width: 50%;
+  }
+  &-60 {
+    max-width: 60%;
+  }
+  &-70 {
+    max-width: 70%;
+  }
+  &-80 {
+    max-width: 80%;
+  }
+  &-90 {
+    max-width: 90%;
+  }
+}
+.custom-row {
+  text-align: left;
+}
+.score-box {
+  border: 3px solid;
+  border-color: black;
+  &-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: $button-background-light;
+  }
+  &-bottom {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: white;
+  }
+}
+.score-row {
+  border-top: 0.5px dotted;
+  border-bottom: 0.5px dotted;
+  border-color: black;
+}
+
+.ranking-position{
+  &-1 {
+    background-color: $ranking-gold;
+  }
+  &-2 {
+    background-color: $ranking-silver;
+  }
+  &-3 {
+    background-color: $ranking-bronze;
+  }
+
 }

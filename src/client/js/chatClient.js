@@ -10,16 +10,15 @@ class ChatClient {
       instance._name = data.name;
     });
     document.getElementById("message").onkeydown = (event) => {
-      if (event.key === 'Enter') instance.sendChatMessage();
-    }
+      if (event.key === "Enter") instance.sendChatMessage();
+    };
     document.getElementById("send-message").onclick = () => {
       instance.sendChatMessage();
-
     };
   }
   updateHTML(element, data) {
     let template = document.getElementById("chat-row-template");
-    document.getElementById(element).innerHTML = '';
+    document.getElementById(element).innerHTML = "";
     for (let i = 0; i < data.length; i++) {
       let htmlElement = template.content.firstElementChild.cloneNode(true);
       let textUsername = htmlElement.querySelector(".chat-text-username");

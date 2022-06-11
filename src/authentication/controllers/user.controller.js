@@ -36,11 +36,66 @@ exports.userGetData = (req, res) => {
       res.status(500).send({
         message: `Internal error! ${err.message}`,
         successful: false,
-        name: null,
       });
     });
   return;
 };
+
+exports.gamesList = (req, res) => {
+  queries
+    .getAllGamesList()
+    .then((data) => {
+      res.status(200).send({
+        message: "Successfully received data.",
+        successful: true,
+        data: data,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: `Internal error! ${err.message}`,
+        successful: false,
+      });
+    });
+  return;
+};
+
+exports.gameScores = (req, res) => {
+  queries
+    .getGameRankings(req.query.gamename)
+    .then((data) => {
+      res.status(200).send({
+        message: "Successfully received data.",
+        successful: true,
+        data: data,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: `Internal error! ${err.message}`,
+        successful: false,
+      });
+    });
+};
+
+exports.userScores = (req, res) => {
+  queries
+    .getUserRankings(req.userId)
+    .then((data) => {
+      res.status(200).send({
+        message: "Successfully received data.",
+        successful: true,
+        data: data,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: `Internal error! ${err.message}`,
+        successful: false,
+      });
+    });
+};
+
 exports.ranking = (req, res) => {
   queries.getAllRankings().then(([result, metadata]) => {
     data = { result, metadata };

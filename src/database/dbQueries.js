@@ -70,16 +70,60 @@ const getAllRankings = function () {
   );
 };
 
-// TODO: optimizations
-const getGameRankings = function (userIds, gameName) {
+const getAllGamesList = function () {
+  return sequelize
+    .query(`SELECT g.name FROM games AS g;`)
+    .then(([results, metadata]) => {
+      logger.info(`Get all games list: ${JSON.stringify(results)}`);
+      let result = [];
+      for (let elem of results) {
+        let name = elem["name"];
+        result.push(name);
+      }
+      logger.info(`Returning: ${result}`);
+      return result;
+    });
+};
+
+const getGameRankings = function (gameName) {
   return sequelize
     .query(
       `SELECT u.id, u.username, s.score FROM scores AS s LEFT JOIN users AS u ON (s.user_id = u.id) LEFT JOIN games AS g ON (s.game_id = g.id) WHERE (g.name='${gameName}');`
     )
     .then(([results, metadata]) => {
-      logger.info(`Query: ${JSON.stringify(userIds)}, ${gameName}`);
-      logger.info(`Query result: ${JSON.stringify(results)}`);
-      result = {};
+      logger.info(`Get game ${gameName} results: ${JSON.stringify(results)}`);
+      let result = {};
+      for (const tuple of results) {
+        result[tuple.username] = tuple.score;
+      }
+      logger.info(`Returning: ${JSON.stringify(result)}`);
+      return result;
+    });
+};
+
+const getUserRankings = function (userId) {
+  return sequelize
+    .query(
+      `SELECT g.name, s.score FROM scores AS s LEFT JOIN games AS g ON (s.game_id = g.id) WHERE (s.user_id='${userId}');`
+    )
+    .then(([results, metadata]) => {
+      logger.info(`Get user ${userId} results: ${JSON.stringify(results)}`);
+      logger.info(`Returning: ${JSON.stringify(results)}`);
+      return results;
+    });
+};
+
+// TODO: optimizations
+const getFilteredGameRankings = function (userIds, gameName) {
+  return sequelize
+    .query(
+      `SELECT u.id, u.username, s.score FROM scores AS s LEFT JOIN users AS u ON (s.user_id = u.id) LEFT JOIN games AS g ON (s.game_id = g.id) WHERE (g.name='${gameName}');`
+    )
+    .then(([results, metadata]) => {
+      logger.info(
+        `Get filtered game results: ${JSON.stringify(userIds)}, ${gameName}`
+      );
+      let result = {};
       for (const tuple of results) {
         for (const userId of userIds) {
           // intentional == instead of ===
@@ -88,7 +132,7 @@ const getGameRankings = function (userIds, gameName) {
           }
         }
       }
-      logger.info(`Important result: ${JSON.stringify(result)}`);
+      logger.info(`Returning: ${JSON.stringify(result)}`);
       return result;
     });
 };
@@ -98,4 +142,7 @@ exports.findUserName = findUserName;
 exports.getScore = getScore;
 exports.updateScore = updateScore;
 exports.getAllRankings = getAllRankings;
+exports.getAllGamesList = getAllGamesList;
 exports.getGameRankings = getGameRankings;
+exports.getUserRankings = getUserRankings;
+exports.getFilteredGameRankings = getFilteredGameRankings;

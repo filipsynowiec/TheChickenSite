@@ -167,7 +167,7 @@ class ClientManager {
           receivedMessage.data.roomId = roomId;
           let instance = this;
           queries
-            .getGameRankings(
+            .getFilteredGameRankings(
               receivedMessage.data.userIds,
               receivedMessage.data.gameName
             )

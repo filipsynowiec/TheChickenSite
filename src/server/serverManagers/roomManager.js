@@ -1,5 +1,4 @@
 const { logger } = require("../../utils/logger");
-const fs = require("fs");
 const { authJwt } = require("../../authentication/middleware");
 const {
   RoomRequest,
@@ -17,39 +16,9 @@ class RoomManager {
       childProcess,
       new RoomRequest(null, RoomRequestType.SetGame, { game: game })
     );
-    RoomManager.joinRoom(roomId, game, app);
     return roomId;
   }
 
-  static joinRoom(roomId, game, app) {
-    app.get("/room/" + roomId, function (req, res) {
-      fs.readFile("src/client/html/room.html", "utf8", (err, data) => {
-        if (err) {
-          logger.error(err);
-          return;
-        }
-
-        switch (game) {
-          case "EGG-GAME":
-            data = data.replace(
-              "<!--__GAME_SCRIPT__-->",
-              '<script src="/client/js/eggGameClient.js"></script>'
-            );
-            break;
-          case "TIC-TAC-TOE":
-            data = data.replace(
-              "<!--__GAME_SCRIPT__-->",
-              '<script src="/client/js/tickTackToeClient.js"></script>'
-            );
-            break;
-          default:
-            logger.error(`No such game! - ${game}`);
-            return;
-        }
-        res.send(data);
-      });
-    });
-  }
   // get user ids, send them to server and let the server forward them to ALL connected users
   static getAndResendUserIds(data, instance, socketId, roomId) {
     ChildCommunicatorManager.sendRequestToChild(
@@ -93,7 +62,12 @@ class RoomManager {
       new RoomRequest(client, RoomRequestType.Join, {})
     );
   }
-
+  static removeClientFromRoom(room, client) {
+    ChildCommunicatorManager.sendRequestToChild(
+      room,
+      new RoomRequest(client, RoomRequestType.RemoveClient, {})
+    );
+  }
   /* Receives message from room and propagates it to all clients connected to that room */
   static receiveMessageFromRoom(msg, roomId) {
     let message = new RoomMessage(null, null, msg);
@@ -120,6 +94,12 @@ class RoomManager {
       case RoomMessageType.Seats:
         return {
           name: "updateSeats",
+          data: message.getData(),
+          roomId: roomId,
+        };
+      case RoomMessageType.KillRequest:
+        return {
+          name: "killRequest",
           data: message.getData(),
           roomId: roomId,
         };

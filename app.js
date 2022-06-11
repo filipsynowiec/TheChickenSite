@@ -17,7 +17,7 @@ class Server {
   constructor() {
     this._app = express();
     this._server = http.Server(this._app);
-    this._clientManager = new ClientManager(this._server);
+    this._clientManager = new ClientManager(this._server, __dirname);
     this._db = require("./src/database/models");
     this._databaseManager = new DatabaseManager(this._db);
   }

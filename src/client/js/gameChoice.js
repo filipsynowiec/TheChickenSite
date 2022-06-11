@@ -34,6 +34,12 @@ class GameChoiceClient {
     let instance = this;
     for (const [key, value] of Object.entries(data.gamesList)) {
       let name = value.name;
+      for (const game of this._games) {
+        if (game.name === name) {
+          cslogger.info(`Duplicate game ${name}`);
+          continue;
+        }
+      }
       let title = value.title;
       let room_url = value.room_url;
       let game = new GameElement(name, title, room_url);

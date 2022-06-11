@@ -31,6 +31,7 @@ class GameChoiceClient {
     let list = document.getElementById("games-list");
     if (list == null) return;
 
+    list.innerHTML = "";
     let instance = this;
     for (const [key, value] of Object.entries(data.gamesList)) {
       let name = value.name;

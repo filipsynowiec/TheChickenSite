@@ -9,8 +9,12 @@ $button-background-light: rgb(227, 157, 7);
 $button-background-dark: rgb(173, 117, 5);
 $auxiliary-first-color-light: rgb(6, 186, 222);
 $auxiliary-first-color-dark: rgb(5, 145, 173);
+$auxiliary-first-color-ultra-light: rgb(46, 215, 249); 
 $auxiliary-second-color-light: rgb(150, 6, 222);
 $auxiliary-second-color-dark: rgb(117, 5, 173);
+$ranking-gold: rgb(212, 175, 55, 0.7);
+$ranking-silver: rgb(170, 169, 173, 0.7);
+$ranking-bronze: rgb(205, 127, 50, 0.7);
 body {
   background: $background-light;
   font-family: "Bungee", cursive;
@@ -342,6 +346,10 @@ button {
   background-color: $button-background-dark;
   color: white;
 }
+.nav-link-active {
+  background-color: $button-background-dark;
+  color: white;
+}
 
 .list-group-item {
   width: 100%;
@@ -391,7 +399,7 @@ button {
   }
   &-message {
     text-align: left;
-    overflow: wrap;
+    overflow-wrap: break-word;
   }
 }
 
@@ -432,11 +440,11 @@ input {
   &-name {
     font-family: "Roboto Mono", monospace;
     font-weight: bold;
-    vertical-align:top
+    vertical-align: top;
   }
   &-elo {
     font-family: "Roboto Mono", monospace;
-    vertical-align:top
+    vertical-align: top;
   }
 }
 .mw {
@@ -469,5 +477,37 @@ input {
   }
 }
 .custom-row {
-  text-align:left;
+  text-align: left;
+}
+.score-box {
+  border: 3px solid;
+  border-color: black;
+  &-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: $button-background-light;
+  }
+  &-bottom {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: white;
+  }
+}
+.score-row {
+  border-top: 0.5px dotted;
+  border-bottom: 0.5px dotted;
+  border-color: black;
+}
+
+.ranking-position{
+  &-1 {
+    background-color: $ranking-gold;
+  }
+  &-2 {
+    background-color: $ranking-silver;
+  }
+  &-3 {
+    background-color: $ranking-bronze;
+  }
+
 }

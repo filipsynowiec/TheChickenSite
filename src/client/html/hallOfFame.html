@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel="stylesheet" href="/public/css/style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template id="score-template">
+      <div class="row justify-content-around score-row py-2">
+        <div class="col-1">
+          <h3 class="ranking-position"></h3>
+        </div>
+        <div class="col-8">
+          <h3
+            class="name overflow-hidden"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title=""
+          ></h3>
+        </div>
+        <div class="col-3">
+          <h3 class="score"></h3>
+        </div>
+      </div>
+    </template>
+    <template id="game-template">
+      <li class="nav-item">
+        <a class="nav-link" href=""></a>
+      </li>
+    </template>
+    <div class="main container">
+      <!-- Greeting chicken -->
+      <div
+        class="box container position-absolute top-50 start-50 translate-middle"
+      >
+        <nav class="navbar navbar-expand-lg row h-10">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item active">
+                <a class="nav-link nav-link-left" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
+              </li>
+              <li class="nav-item" id="user-info"></li>
+            </ul>
+          </div>
+        </nav>
+        <main class="container h-90">
+          <div class="row h-10 align-items-center justify-content-center">
+            <h1 id="header">Hall of Fame</h1>
+          </div>
+          <div class="row h-80 align-items-center justify-content-center py-3">
+            <div class="col-8 container h-100">
+              <div class="row score-box-top h-10 py-2">
+                <div class="container h-100">
+                  <nav
+                    class="navbar navbar-expand-lg row h-100 justify-content-center"
+                  >
+                    <button
+                      class="navbar-toggler"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#navbarNav"
+                      aria-controls="navbarNav"
+                      aria-expanded="false"
+                      aria-label="Toggle navigation"
+                    >
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div
+                      class="collapse navbar-collapse justify-content-center"
+                      id="navbarNav"
+                    >
+                      <ul
+                        class="navbar-nav ms-auto justify-content-center w-100"
+                        id="games"
+                      ></ul>
+                    </div>
+                  </nav>
+                </div>
+              </div>
+              <div
+                class="row score-box-bottom align-items-center justify-content-center h-80 pt-4 overflow-scroll"
+              >
+                <div
+                  class="container mw-80 h-100 pt-4"
+                  id="player-scores"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="/client/js/serverRequests.js"></script>
+    <script src="/client/js/accountInfo.js"></script>
+    <script src="/client/js/hallOfFame.js"></script>
+  </body>
+</html>

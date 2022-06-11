@@ -1,8 +1,12 @@
 class RoomChoiceClient {
   constructor(socket) {
     this._socket = socket;
-    this._rooms = [];
+    this._roomsById = {};
     this._selectedRoom = null;
+
+    const url = new URL(window.location.href);
+    this._game = url.searchParams.get("game");
+    console.log(`Selected game: ${this._game}`);
 
     let instance = this;
     if (document.getElementById("create-room-button") != null);
@@ -15,31 +19,46 @@ class RoomChoiceClient {
     }
 
     this._socket.on("roomId", (data) => instance.goToRoom(data));
-    this._socket.on("newRoomCreated", (data) => instance.addRoom(data));
-    this._socket.on("getRoomList", (data) => instance.addRoomsList(data));
+    this._socket.on("roomCreatedOrUpdated", (data) =>
+      instance.addOrUpdateRoom(data)
+    );
+    this._socket.emit("roomList", {});
   }
   goToRoom(data) {
     if (data.roomId != null) {
       window.location.href = `room/${data.roomId}`;
     }
   }
-  addRoom(data) {
+  addOrUpdateRoom(data) {
+    if (data.gameName != this._game) return;
+
+    console.log(
+      `Received roomCreatedOrUpdated message with entries ${Object.entries(
+        data
+      )}`
+    );
+    console.log(`Adding room ${data.roomId}`);
     let list = document.getElementById("available-rooms-list");
     if (list == null || data.roomId == null) return;
-    let room = new RoomElement(data.roomId);
+    let room = new RoomElement(data);
     let instance = this;
     room.setOnClick(() => instance.selectRoom(room));
-    this._rooms.push(room);
-    list.appendChild(room.htmlElement);
-  }
-  addRoomsList(data) {
-    for (let room of data.roomList) {
-      this.addRoom({ roomId: room });
+
+    // replace element if it is only an update
+    if (!this._roomsById[data.roomId]) {
+      list.appendChild(room.htmlElement);
+    } else {
+      list.replaceChild(
+        room.htmlElement,
+        this._roomsById[data.roomId].htmlElement
+      );
     }
+    this._roomsById[data.roomId] = room;
   }
+
   selectRoom(room) {
     this._selectedRoom = room;
-    for (let r of this._rooms) {
+    for (let [_, r] of Object.entries(this._roomsById)) {
       r.deselect();
     }
     room.select();

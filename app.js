@@ -32,7 +32,7 @@ class Server {
 
     HtmlManager.setHtmlFiles(this, __dirname);
     this._server.listen(constants.PORT);
-    this._databaseManager.setUpDatabase(true); // true - drop and sync db; false - dont drop
+    this._databaseManager.setUpDatabase(false); // true - drop and sync db; false - dont drop
     this._clientManager.setHandlers(this._app);
   }
 }

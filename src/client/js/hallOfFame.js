@@ -2,16 +2,17 @@ async function displayGameTabs() {
   let template = document.getElementById("game-template");
   let list = document.getElementById("games");
 
-  let data = await getGamesList();
-
-  let games = data.data;
-  for (const element of games) {
-    let htmlElement = template.content.firstElementChild.cloneNode(true);
-    htmlElement.classList.add(element);
-    htmlElement.querySelector(".nav-link").innerHTML = element;
-    htmlElement.querySelector(".nav-link").href = "/hallOfFame?game=" + element;
-    list.appendChild(htmlElement);
-  }
+  getGamesList().then((data) => {
+    let games = data.data;
+    for (const element of games) {
+      let htmlElement = template.content.firstElementChild.cloneNode(true);
+      htmlElement.classList.add(element);
+      htmlElement.querySelector(".nav-link").innerHTML = element;
+      htmlElement.querySelector(".nav-link").href =
+        "/hallOfFame?game=" + element;
+      list.appendChild(htmlElement);
+    }
+  });
 }
 function setActiveTab(game) {
   let tabs = document.getElementById("games").childNodes;

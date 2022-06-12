@@ -13,6 +13,25 @@ const roleModel = require("../../database/models/role.model");
 
 exports.signup = (req, res) => {
   // list all games
+  const userName = req.body.username.toLowerCase();
+  const password = req.body.password;
+
+  if (userName.length < 3) {
+    res.status(400).send({
+      message: "Username has to be at least 3 letters long!",
+      successful: false,
+    });
+    return;
+  }
+
+  if (password.length < 4) {
+    res.status(400).send({
+      message: "Password has to be at least 4 letters long!",
+      successful: false,
+    });
+    return;
+  }
+
   const findGames = Game.findAll();
 
   // find role_id and add user
@@ -24,11 +43,11 @@ exports.signup = (req, res) => {
     },
   }).then((role) => {
     const user = User.create({
-      username: req.body.username.toLowerCase(),
-      password: bcrypt.hashSync(req.body.password, 8),
+      username: userName,
+      password: bcrypt.hashSync(password, 8),
       role_id: role.id,
     });
-    logger.info(`New user added: ${req.body.username.toLowerCase()}, ${role.name}`);
+    logger.info(`New user added: ${userName}, ${role.name}`);
     return user;
   });
 
@@ -51,11 +70,14 @@ exports.signup = (req, res) => {
       }
     })
     .then(() => {
-      res.send({ message: "User was registered successfully!" });
+      res.send({
+        message: "User registered successfully!",
+        successful: true,
+      });
     })
     .catch((err) => {
       logger.error(err);
-      res.status(500).send({ message: err.message });
+      res.status(500).send({ message: err.message, successful: false });
     });
 };
 
@@ -67,7 +89,9 @@ exports.signin = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res
+          .status(404)
+          .send({ message: "User not found.", successful: false });
       }
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
@@ -77,7 +101,7 @@ exports.signin = (req, res) => {
         return res.status(401).send({
           accessToken: null,
           successful: false,
-          message: "Invalid Password!",
+          message: "Invalid password!",
         });
       }
       var token = jwt.sign({ id: user.id }, config.secret, {
@@ -86,6 +110,7 @@ exports.signin = (req, res) => {
       Role.findByPk(user.role_id).then((role) => {
         res.cookie("auth", token);
         res.status(200).send({
+          message: "Signed in successfully.",
           id: user.id,
           username: user.username,
           successful: true,

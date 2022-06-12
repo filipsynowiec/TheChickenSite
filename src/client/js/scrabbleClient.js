@@ -35,11 +35,14 @@ class ScrabbleClient {
         for (const change of this._changes) {
             console.log(change);
             this._board[change[1]][change[2]].innerText = "";
+            this._board[change[1]][change[2]].style.background = "white";
+            if(change[1] == Math.floor(BOARD_SIZE/2) && change[2] == Math.floor(BOARD_SIZE/2)) {
+                this._board[change[1]][change[2]].style.background = "red";
+            }
         }
         this._changes = [];
         for (let i = 0; i < BOARD_SIZE; ++i) {
             for (let j = 0; j < this._board[i].length; ++j) {
-                this._board[i][j].style.background = "white";
                 this._board[i][j].disabled = true;
             }
         }
@@ -51,7 +54,7 @@ class ScrabbleClient {
     select(a) {
         //console.log(`select ${a}`);
         this._selected = a;
-        this._handButtons[a].style.background = "yellow";
+        this._handButtons[a].style.background = "orange";
         for (let i = 0; i < BOARD_SIZE; ++i) {
             for (let j = 0; j < this._board[i].length; ++j) {
                 if (this._board[i][j].innerText == "") {
@@ -125,11 +128,13 @@ class ScrabbleClient {
             this._handButtons[i].style.width = "50px";
             this._handButtons[i].style.height = "50px";
             this._handButtons[i].style.fontSize = "17px";
-            this._handButtons[i].style.margin = "3px";
+            this._handButtons[i].style.margin = "5px";
             this._handButtons[i].style.background = "white";
             document.getElementById("hand-pane").appendChild(this._handButtons[i]);
         }
         if (data.active == this._name && data.running) {
+            let div = document.createElement("div");
+
             let resetButton = document.createElement("button");
             resetButton.style.fontSize = "17px";
             resetButton.style.height = "50px";
@@ -137,12 +142,10 @@ class ScrabbleClient {
             resetButton.style.marginTop = "15px";
             resetButton.style.width = "150px";
             resetButton.innerText = "Reset";
-            
             const instance = this;
             resetButton.onclick = () => {
                 instance.setStartingState();
             };
-            let div = document.createElement("div");
             div.appendChild(resetButton);
 
             let applyButton = document.createElement("button");
@@ -152,19 +155,42 @@ class ScrabbleClient {
             applyButton.style.marginTop = "15px";
             applyButton.style.width = "150px";
             applyButton.innerText = "Apply";
-
             applyButton.onclick = () => {
                 instance._socket.emit("requestAction", {changes: instance._changes,});
             };
             div.appendChild(applyButton);
+
+            let rerollButton = document.createElement("button");
+            rerollButton.style.fontSize = "17px";
+            rerollButton.style.height = "50px";
+            rerollButton.style.marginLeft = "15px";
+            rerollButton.style.marginTop = "15px";
+            rerollButton.style.width = "150px";
+            rerollButton.innerText = "Reroll All";
+            rerollButton.onclick = () => {
+                let toReroll = [];
+                for(let i=0; i<this._hand.length; ++i) {
+                    toReroll.push(i);
+                }
+                instance._socket.emit("requestAction", {reroll: toReroll,});
+            };
+            div.appendChild(rerollButton);
+
             document.getElementById("hand-pane").appendChild(div);
         }
         for (let i = 0; i < BOARD_SIZE; ++i) {
             for (let j = 0; j < this._board[i].length; ++j) {
                 if(data.board[i][j]) {
                     this._board[i][j].innerText = data.board[i][j].letter;
+                    this._board[i][j].style.background = "yellow";
+                } else {
+                    this._board[i][j].innerText = "";
+                    this._board[i][j].style.background = "white";
                 }
             }
+        }
+        if(!data.board[Math.floor(BOARD_SIZE/2)][Math.floor(BOARD_SIZE/2)]) {
+            this._board[Math.floor(BOARD_SIZE/2)][Math.floor(BOARD_SIZE/2)].style.background = "red";
         }
         console.log(data.scores);
         let scores = "";
@@ -173,7 +199,15 @@ class ScrabbleClient {
                 scores += `${name} - ${data.scores[name]}, `;
             }
         }
-        document.getElementById("scores").innerText = scores.slice(0, -2);
+        document.getElementById("scores").innerText = scores.slice(0, -2) + "\nDeck Size: " + data.deckSize;
+        if(data.message ) {
+            if( data.message[0] == this._name ) {
+                swal ( "Wrong move" ,  data.message[1] ,  "error" );
+            } else if (data.message[0]==null) {
+                swal ( data.message[1] );
+            }
+        }
+        
     }
     
     startGame(instance) {
@@ -197,6 +231,7 @@ class ScrabbleClient {
                 div.appendChild(this._board[i][j]);
             }
         }
+        this._board[Math.floor(BOARD_SIZE/2)][Math.floor(BOARD_SIZE/2)].style.background = "red";
     }
     sendClientReady(instance) {
         instance._socket.emit("clientReady", {});

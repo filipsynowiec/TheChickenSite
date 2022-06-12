@@ -29,7 +29,7 @@ const valueDict = {
 }
 
 const startingNumberDict = {
-    " ": 2,
+    //" ": 2,
     "a": 9,
     "b": 2,
     "c": 2,

@@ -27,7 +27,7 @@ function displayScores(game) {
   let template = document.getElementById("score-template");
   let list = document.getElementById("player-scores");
   if (game == null) {
-    return;
+    game = "TIC-TAC-TOE";
   }
   setActiveTab(game);
   getGameScores(game).then((data) => {

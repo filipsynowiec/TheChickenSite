@@ -11,8 +11,8 @@ module.exports = function (app) {
   app.get("/api/test/all", controller.allAccess);
   app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
   app.get("/api/userdata", [authJwt.verifyToken], controller.userGetData);
-  app.get("/api/gameslist", [authJwt.verifyToken], controller.gamesList);
-  app.get("/api/gamescores", [authJwt.verifyToken], controller.gameScores);
+  app.get("/api/gameslist", controller.gamesList);
+  app.get("/api/gamescores", controller.gameScores);
   app.get("/api/userscores", [authJwt.verifyToken], controller.userScores);
   app.get(
     "/api/test/mod",

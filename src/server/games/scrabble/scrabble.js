@@ -60,6 +60,10 @@ class Scrabble {
         }
         
         if(this._board[Math.floor(BOARD_SIZE/2)][Math.floor(BOARD_SIZE/2)] == null) {
+            if(changes.length == 1) {
+                this._message = [this._seats.seats[this._turn], "Start with word!"];
+                return false;
+            }
             let illegal = true;
             for (const change of changes) {
                 if(change[1] == Math.floor(BOARD_SIZE/2) && change[2] == Math.floor(BOARD_SIZE/2)) {

@@ -56,6 +56,7 @@ class ClientManager {
             case "SCRABBLE":
               data = data.replace(
                 "<!--__GAME_SCRIPT__-->",
+                '<script src="/client/js/scrabbleGraphicClient.js"></script>\n' +
                 '<script src="/client/js/scrabbleClient.js"></script>'
               );
               break;

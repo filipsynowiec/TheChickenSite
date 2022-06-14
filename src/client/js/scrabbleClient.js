@@ -9,6 +9,8 @@ class ScrabbleClient {
         document.getElementById("leave-room").innerHTML =
             '<a class="nav-link nav-link-left" href="../rooms?game=SCRABBLE">Leave room</a>';
         
+        this._graphic = new ScrabbleGraphicClient();
+
         this._board = [];
         for (let i = 0; i < BOARD_SIZE; i++) {
             this._board[i] = [];
@@ -105,8 +107,6 @@ class ScrabbleClient {
     }
     
     updateStatus(data) {
-        console.log(data);
-        
         document.getElementById("hand-pane").innerHTML = "";
         if(!data.running && this._hand.length == 0) {
             return;
@@ -205,9 +205,9 @@ class ScrabbleClient {
         document.getElementById("scores").innerText = scores.slice(0, -2) + "\nDeck Size: " + data.deckSize;
         if(data.message ) {
             if( data.message[0] == this._name ) {
-                swal ( "Wrong move" ,  data.message[1] ,  "error" );
+                Swal.fire ( "Wrong move" ,  data.message[1] ,  "error" );
             } else if (data.message[0]==null) {
-                swal ( data.message[1] );
+                Swal.fire ( data.message[1] );
             }
         }
         

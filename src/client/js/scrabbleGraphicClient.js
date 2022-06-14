@@ -1,0 +1,3 @@
+class ScrabbleGraphicClient { 
+    constructor() {}
+}

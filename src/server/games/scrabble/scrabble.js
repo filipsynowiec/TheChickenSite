@@ -42,14 +42,13 @@ class Scrabble {
     if (word.length < 2) {
       return true;
     }
-    //console.log("Asumming correctness:", word);
     return this._allowedWords.has(word.toUpperCase());
   }
   checkIfCorrect(changes) {
     if (changes.length == 0) {
       this._message = [
         this._seats.seats[this._turn],
-        "Use letter to make word!",
+        "Use letters to make word!",
       ];
       return false;
     }
@@ -244,7 +243,6 @@ class Scrabble {
     this._message = [null, `Game ended - ${this._seats.seats[won]} won`];
   }
   applyChanges(changes) {
-    //console.log(`applyChanges ${changes}`);
     const handCopy = [...this._hands[this._turn]];
     if (!this.checkIfCorrect(changes)) {
       return;

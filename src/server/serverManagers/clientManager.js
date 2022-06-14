@@ -45,19 +45,19 @@ class ClientManager {
             case "EGG-GAME":
               data = data.replace(
                 "<!--__GAME_SCRIPT__-->",
-                '<script src="/client/js/eggGameClient.js"></script>'
+                '<script src="/client/js/games/eggGameClient.js"></script>'
               );
               break;
             case "TIC-TAC-TOE":
               data = data.replace(
                 "<!--__GAME_SCRIPT__-->",
-                '<script src="/client/js/tickTackToeClient.js"></script>'
+                '<script src="/client/js/games/tickTackToeClient.js"></script>'
               );
             case "SCRABBLE":
               data = data.replace(
                 "<!--__GAME_SCRIPT__-->",
-                '<script src="/client/js/scrabbleGraphicClient.js"></script>\n' +
-                '<script src="/client/js/scrabbleClient.js"></script>'
+                '<script src="/client/js/games/scrabbleGraphicClient.js"></script>\n' +
+                '<script src="/client/js/games/scrabbleClient.js"></script>'
               );
               break;
             default:

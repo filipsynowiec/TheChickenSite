@@ -25,6 +25,8 @@
     "sass": "^1.51.0",
     "sequelize": "^6.19.0",
     "socket.io": "^4.4.1",
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.4.17",
     "swup": "^2.0.14",
     "winston": "^3.6.0"
   }

@@ -1,6 +1,6 @@
 const { logger } = require("../../../utils/logger");
 const { Deck } = require("./deck");
-const fs = require("fs");
+const { DictionaryGenerator } = require("./dictionaryGenerator");
 
 const BOARD_SIZE = 15;
 const NR_OF_PLAYERS = 2;
@@ -10,17 +10,7 @@ class Scrabble {
   constructor(seats) {
     this._seats = seats;
     this._observers = [];
-    this._allowedWords = new Set();
-    var lineReader = require("readline").createInterface({
-      input: require("fs").createReadStream(
-        "src/server/games/scrabble/allowed_words.txt"
-      ),
-    });
-    let instance = this;
-    lineReader.on("line", function (line) {
-      instance._allowedWords.add(line);
-    });
-    console.log("allowed words length", this._allowedWords.size);
+    this._allowedWords = DictionaryGenerator.getDictionary();
     this.setStartingState();
   }
   registerObserver(observer) {
@@ -52,14 +42,13 @@ class Scrabble {
     if (word.length < 2) {
       return true;
     }
-    //console.log("Asumming correctness:", word);
     return this._allowedWords.has(word.toUpperCase());
   }
   checkIfCorrect(changes) {
     if (changes.length == 0) {
       this._message = [
         this._seats.seats[this._turn],
-        "Use letter to make word!",
+        "Use letters to make word!",
       ];
       return false;
     }
@@ -254,7 +243,6 @@ class Scrabble {
     this._message = [null, `Game ended - ${this._seats.seats[won]} won`];
   }
   applyChanges(changes) {
-    //console.log(`applyChanges ${changes}`);
     const handCopy = [...this._hands[this._turn]];
     if (!this.checkIfCorrect(changes)) {
       return;

@@ -15,37 +15,40 @@
         class="box container position-absolute top-50 start-50 translate-middle"
       >
         <nav class="navbar navbar-expand-lg container h-10">
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item active">
-                <a class="nav-link nav-link-left" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
-              </li>
-              <li class="nav-item" id="user-info"></li>
-            </ul>
+          <div class="container-fluid">
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="true"
+              aria-label="Toggle navigation"
+            >
+              <span>Menu</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item active">
+                  <a class="nav-link nav-link-left" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
+                </li>
+                <li class="nav-item" id="user-info"></li>
+              </ul>
+            </div>
           </div>
         </nav>
         <main class="container h-90">
           <div class="row align-items-center h-10 justify-content-center">
             <div id="greeter">
-              <h1>Sign up</h1>
+              <h2>Sign up</h2>
             </div>
           </div>
           <div class="row align-text-top justify-content-center h-90">
-            <div class="col-4">
+            <div class="col-4 mw-col-4">
               <form class="container">
                 <div class="row pt-5 mb-3">
                   <label for="username">Username</label>
@@ -84,5 +87,10 @@
       </div>
     </div>
     <script src="/client/js/registerUser.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

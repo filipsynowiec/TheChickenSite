@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap");
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
 $background-light: rgb(180, 180, 180);
 $background-box-light: rgba(223, 223, 223, 0.7);
 $border-box-light: rgb(0, 0, 0);
@@ -9,17 +9,42 @@ $button-background-light: rgb(227, 157, 7);
 $button-background-dark: rgb(173, 117, 5);
 $auxiliary-first-color-light: rgb(6, 186, 222);
 $auxiliary-first-color-dark: rgb(5, 145, 173);
-$auxiliary-first-color-ultra-light: rgb(46, 215, 249); 
+$auxiliary-first-color-ultra-light: rgb(46, 215, 249);
 $auxiliary-second-color-light: rgb(150, 6, 222);
 $auxiliary-second-color-dark: rgb(117, 5, 173);
 $ranking-gold: rgb(212, 175, 55, 0.7);
 $ranking-silver: rgb(170, 169, 173, 0.7);
 $ranking-bronze: rgb(205, 127, 50, 0.7);
+html {
+  @include media-breakpoint-up(sm) {
+    font-size: 10px;
+  }
+  @include media-breakpoint-up(md) {
+    font-size: 12px;
+  }
+  @include media-breakpoint-up(lg) {
+    font-size: 15px;
+  }
+  @include media-breakpoint-up(xl) {
+    font-size: 17px;
+  }
+  @include media-breakpoint-up(xxl) {
+    font-size: 20px;
+  }
+}
 body {
   background: $background-light;
   font-family: "Bungee", cursive;
 }
-//Main
+
+h1 {
+  @include media-breakpoint-down(sm) {
+    font-size: 14px;
+  }
+}
+.navbar-toggler {
+  background: $button-background-light;
+}
 .main {
   width: 90vw;
   min-width: 1200px;
@@ -294,7 +319,6 @@ button {
     border-color: $button-background-light;
   }
 }
-
 .btn-primary {
   background-color: $button-background-light;
   border-color: $button-background-dark;
@@ -323,15 +347,28 @@ button {
   border-color: $button-background-light;
   background-color: $button-background-light;
   color: black;
+  @include media-breakpoint-down(md) {
+    border-color: black;
+    background-color: white;
+    margin: 0;
+  }
   &-left {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     margin-left: 0;
+    @include media-breakpoint-down(md) {
+      border-radius: 0px;
+    }
   }
   &-right {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     margin-right: 0;
+    @include media-breakpoint-down(md) {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
   }
 }
 .nav-link:hover {
@@ -497,9 +534,14 @@ input {
   border-top: 0.5px dotted;
   border-bottom: 0.5px dotted;
   border-color: black;
+  @include media-breakpoint-down(md) {
+    h3 {
+      font-size: 1em;
+    }
+  }
 }
 
-.ranking-position{
+.ranking-position {
   &-1 {
     background-color: $ranking-gold;
   }
@@ -509,5 +551,32 @@ input {
   &-3 {
     background-color: $ranking-bronze;
   }
+}
 
+.mw-col {
+  &-1 {
+    @include media-breakpoint-down(sm) {
+      min-width: 80%;
+    }
+  }
+  &-3 {
+    @include media-breakpoint-down(sm) {
+      min-width: 80%;
+    }
+  }
+  &-4 {
+    @include media-breakpoint-down(sm) {
+      min-width: 80%;
+    }
+  }
+  &-6 {
+    @include media-breakpoint-down(sm) {
+      min-width: 80%;
+    }
+  }
+  &-8 {
+    @include media-breakpoint-down(sm) {
+      min-width: 100%;
+    }
+  }
 }

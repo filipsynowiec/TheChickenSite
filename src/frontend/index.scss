@@ -86,7 +86,7 @@ h1 {
   &-left {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       border-bottom-left-radius: 0px;
@@ -96,7 +96,7 @@ h1 {
     border-left: 0;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
       border-top-right-radius: 0px;
@@ -597,6 +597,11 @@ input {
       min-width: 80%;
     }
   }
+  &-1-small {
+    @include media-breakpoint-down(md) {
+      min-width: 20%;
+    }
+  }
   &-3 {
     @include media-breakpoint-down(md) {
       min-width: 80%;
@@ -621,7 +626,7 @@ input {
 .md-h {
   &-40 {
     @include media-breakpoint-down(md) {
-      height: 40%;
+      max-height: 40%;
     }
   }
   &-50 {
@@ -646,11 +651,18 @@ input {
 .small-size-adjust {
   @include media-breakpoint-down(md) {
     position: relative !important;
-    height: 120vh;
+    height: 200vh;
     transform: none !important;
     left: 0 !important;
     top: 0 !important;
+    #board-pane {
+      max-height: 50%;
+    }
+    #hand-pane {
+      max-height: 20%;
+    }
   }
+
   .text-size-adjust {
     @include media-breakpoint-down(md) {
       .h3 {

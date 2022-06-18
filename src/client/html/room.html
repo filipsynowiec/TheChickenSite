@@ -11,22 +11,6 @@
   </head>
 
   <body>
-    <template id="chat-row-template">
-      <div class="row overflow-wrap w-90 px-3">
-        <div class="chat-text chat-text-username"></div>
-        <div class="chat-text chat-text-message"></div>
-      </div>
-    </template>
-    <template id="seat-template">
-      <div class="row py-1 seat-row">
-        <div class="col-6">
-          <div class="player"></div>
-        </div>
-        <div class="col-6">
-          <button type="button" class="btn btn-primary seat"></button>
-        </div>
-      </div>
-    </template>
     <div class="main container small-size-adjust">
       <!-- Greeting chicken -->
       <div
@@ -62,8 +46,8 @@
         <div class="row h-90 py-2">
           <main class="container h-100">
             <div class="row h-100">
-              <div class="col-8 area area-left md-col-8 md-h-40">
-                <div id="game-area"></div>
+              <div class="col-8 area area-left md-col-8 h-100 md-h-40">
+                <div class="container h-100" id="game-area"></div>
               </div>
               <div class="col-4 area area-right md-col-4 md-h-60 text-size-adjust">
                 <div id="utils-area" class="container h-100">
@@ -122,6 +106,22 @@
         </div>
       </div>
     </div>
+    <template id="chat-row-template">
+      <div class="row overflow-wrap w-90 px-3">
+        <div class="chat-text chat-text-username"></div>
+        <div class="chat-text chat-text-message"></div>
+      </div>
+    </template>
+    <template id="seat-template">
+      <div class="row py-1 seat-row">
+        <div class="col-6">
+          <div class="player"></div>
+        </div>
+        <div class="col-6">
+          <button type="button" class="btn btn-primary seat"></button>
+        </div>
+      </div>
+    </template>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/client/js/ioProvider.js"></script>

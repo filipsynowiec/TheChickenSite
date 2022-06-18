@@ -47,7 +47,6 @@ h1 {
 }
 .main {
   width: 90vw;
-  min-width: 1200px;
 }
 
 //Box
@@ -79,8 +78,7 @@ h1 {
 .area {
   // display: inline-block;
   display: inline-block;
-  border-radius: 1px;
-  border-style: solid;
+  border: 3px solid;
   border-color: $button-background-dark;
   background-color: white;
   padding: 1em;
@@ -88,11 +86,23 @@ h1 {
   &-left {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    @include media-breakpoint-down(sm) {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-bottom-left-radius: 0px;
+    }
   }
   &-right {
     border-left: 0;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+    @include media-breakpoint-down(sm) {
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      border-top-right-radius: 0px;
+      border-left: 3px solid;
+      border-color: $button-background-dark;
+    }
   }
   input {
     display: inline-block;
@@ -553,7 +563,7 @@ input {
   }
 }
 
-.mw-col {
+.s-col {
   &-1 {
     @include media-breakpoint-down(sm) {
       min-width: 80%;
@@ -577,6 +587,82 @@ input {
   &-8 {
     @include media-breakpoint-down(sm) {
       min-width: 100%;
+    }
+  }
+}
+
+.md-col {
+  &-1 {
+    @include media-breakpoint-down(md) {
+      min-width: 80%;
+    }
+  }
+  &-3 {
+    @include media-breakpoint-down(md) {
+      min-width: 80%;
+    }
+  }
+  &-4 {
+    @include media-breakpoint-down(md) {
+      min-width: 100%;
+    }
+  }
+  &-6 {
+    @include media-breakpoint-down(md) {
+      min-width: 80%;
+    }
+  }
+  &-8 {
+    @include media-breakpoint-down(md) {
+      min-width: 100%;
+    }
+  }
+}
+.md-h {
+  &-40 {
+    @include media-breakpoint-down(md) {
+      height: 40%;
+    }
+  }
+  &-50 {
+    @include media-breakpoint-down(md) {
+      max-height: 50%;
+    }
+  }
+  &-60 {
+    @include media-breakpoint-down(md) {
+      height: 60%;
+    }
+  }
+}
+.h3-size-adjust {
+  @include media-breakpoint-down(sm) {
+    font-size: 14px;
+  }
+  @include media-breakpoint-down(md) {
+    font-size: 18px;
+  }
+}
+.small-size-adjust {
+  @include media-breakpoint-down(md) {
+    position: relative !important;
+    height: 120vh;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+  }
+  .text-size-adjust {
+    @include media-breakpoint-down(md) {
+      .h3 {
+        font-size: 14px;
+      }
+      .btn {
+        font-size: 12px;
+        line-height: 12px;
+      }
+      input {
+        font-size: 12px;
+      }
     }
   }
 }

@@ -13,6 +13,7 @@ checkDuplicateUsername = (req, res, next) => {
   }).then((user) => {
     if (user) {
       res.status(400).send({
+        successful: false,
         message: "Failed! Username is taken.",
       });
       return;
@@ -26,6 +27,7 @@ checkRolesExisted = (req, res, next) => {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
         res.status(400).send({
+          successful: false,
           message: "Failed! Role " + req.body.roles[i] + " does not exist.",
         });
         return;

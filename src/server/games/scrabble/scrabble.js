@@ -228,7 +228,7 @@ class Scrabble {
     for (const change of changes) {
       result += change[0].value; //temporary
     }
-    console.log(`result ${result}`);
+    logger.info(`result ${result}`);
     return result;
   }
   endGame() {

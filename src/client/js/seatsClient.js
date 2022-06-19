@@ -1,3 +1,4 @@
+let csloggerSeats = new CSLogger("ChatClient");
 const NR_OF_SEATS = 2;
 
 class SeatsClient {
@@ -22,7 +23,7 @@ class SeatsClient {
 
     this._socket.on("updateSeats", (data) => {
       instance.updateSeats(data);
-      console.log("Updated seats");
+      csloggerSeats.info("Updated seats");
     });
 
     getUserData().then((data) => {

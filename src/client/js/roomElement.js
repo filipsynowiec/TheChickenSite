@@ -1,3 +1,5 @@
+let csloggerElement = new CSLogger("RoomElement");
+
 class RoomElement {
   constructor(data) {
     this._roomId = data.roomId;
@@ -6,9 +8,10 @@ class RoomElement {
     let playerTemplate = document.getElementById("list-player-template");
     this._htmlElement = template.content.firstElementChild.cloneNode(true);
     this._htmlElement.querySelector(".roomId").innerHTML = `${data.roomId}`;
-    console.log(data.results);
+    csloggerElement.info(data.results);
     for (const [key, value] of Object.entries(data.results)) {
-      let playerElement = playerTemplate.content.firstElementChild.cloneNode(true);
+      let playerElement =
+        playerTemplate.content.firstElementChild.cloneNode(true);
       playerElement.querySelector(".player-name").innerHTML = key;
       playerElement.querySelector(".player-name").title = key;
       playerElement.querySelector(".player-elo").innerHTML = value;

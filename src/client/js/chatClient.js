@@ -32,6 +32,7 @@ class ChatClient {
   }
   sendChatMessage(instance) {
     let mes = document.getElementById("message").value;
+    if (mes === "") return;
     document.getElementById("message").value = null;
     let element = document.getElementById("chat-history");
     element.scrollTop = element.scrollHeight;

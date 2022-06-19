@@ -2,11 +2,12 @@ let csloggerSeats = new CSLogger("ChatClient");
 const NR_OF_SEATS = 2;
 
 class SeatsClient {
-  constructor(socket) {
+  constructor(socket, maxSeats) {
     this._socket = socket;
+    this._maxSeats = maxSeats;
     this._buttons = [];
     const instance = this;
-    for (let i = 0; i < NR_OF_SEATS; ++i) {
+    for (let i = 0; i < maxSeats; ++i) {
       let template = document.getElementById("seat-template");
       let htmlElement = template.content.firstElementChild.cloneNode(true);
       htmlElement.querySelector(".player").innerHTML = "Player " + (i + 1);

@@ -97,10 +97,10 @@ class Scrabble {
   }
   reroll(rerollTable) {
     for (const element of rerollTable) {
-      if (this._deck.length <= 0) {
-        this.endGame();
-        return;
-      }
+      this._deck.push(this._hands[this._turn][element]);
+    }
+    Deck.shuffleArray(this._deck);
+    for (const element of rerollTable) {
       this._hands[this._turn][element] = this._deck.pop();
     }
   }

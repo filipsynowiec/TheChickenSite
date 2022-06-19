@@ -59,4 +59,4 @@ class SeatsClient {
   }
 }
 
-let seatsClient = new SeatsClient(getIO());
+let seatsClient = new SeatsClient(getIO(), NR_OF_SEATS);

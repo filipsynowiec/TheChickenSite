@@ -4,7 +4,9 @@ const EMPTY = 0;
 const CROSS = 1;
 const CIRCLE = 2;
 const FULL = 3;
-
+const BUTTON_SIZE = "min(15vw, 10vh)";
+const FONT_SIZE = "min(15vw, 8vh)";
+const MARGIN_SIZE = "min(1vw, 1vh)";
 class TickTackToeClient {
   constructor(socket) {
     this._socket = socket;
@@ -87,17 +89,20 @@ class TickTackToeClient {
       }
     }
   }
+  createButton() {
+    let button = document.createElement("button");
+    button.style.height = BUTTON_SIZE;
+    button.style.width = BUTTON_SIZE;
+    button.style.background = "teal";
+    button.style.fontSize = FONT_SIZE;
+    button.style.color = "white";
+    button.style.marginLeft = MARGIN_SIZE;
+    button.style.verticalAlign = "top";
+    return button;
+  }
   startGame(instance) {
     for (let i = 0; i < 9; ++i) {
-      this._buttons[i] = document.createElement("button");
-
-      this._buttons[i].style.width = "100px";
-      this._buttons[i].style.height = "100px";
-      this._buttons[i].style.background = "teal";
-      this._buttons[i].style.color = "white";
-      this._buttons[i].style.fontSize = "50px";
-      this._buttons[i].style.margin = "5px";
-      this._buttons[i].style.verticalAlign = "top";
+      this._buttons[i] = this.createButton();
 
       this._buttons[i].onclick = () => {
         instance.clickField(instance, i);
@@ -105,6 +110,8 @@ class TickTackToeClient {
     }
     for (let i = 0; i < 3; ++i) {
       let div = document.createElement("div");
+      div.style.height = BUTTON_SIZE;
+      div.style.marginTop = MARGIN_SIZE;
       document.getElementById("tick_tack_buttons").appendChild(div);
       for (let j = 0; j < 3; ++j) {
         div.appendChild(this._buttons[i * 3 + j]);

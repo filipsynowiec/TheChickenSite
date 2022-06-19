@@ -74,6 +74,7 @@ class ScrabbleGraphicClient {
     button.style.fontSize = BOARD_FONT_SIZE;
     button.style.lineHeight = BOARD_FONT_SIZE;
     button.style.verticalAlign = "middle";
+    button.style.border = "1px solid grey";
     button.style.color = "black";
     return button;
   }

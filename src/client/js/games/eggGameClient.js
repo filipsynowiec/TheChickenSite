@@ -7,12 +7,14 @@ class EggGameClient {
     csloggerEggGame.info(this._socket);
     let instance = this;
 
+    getUserData().then((data) => {
+      instance._name = data.name;
+    });
+
     document.getElementById("leave-room").innerHTML =
       '<a class="nav-link nav-link-left" href="../rooms?game=EGG-GAME">Leave room</a>';
 
-    this._socket.on("updateStatus", (data) =>
-      instance.updateStatus(data.eggValue)
-    );
+    this._socket.on("updateStatus", (data) => instance.updateStatus(data));
     this._socket.on("gameHTML", (data) => {
       instance.updateHTML("game-area", data.gameHTML);
       instance.sendClientReady(instance);
@@ -26,11 +28,17 @@ class EggGameClient {
     instance._socket.emit("requestAction", { increment: true });
   }
   updateStatus(data) {
-    document.getElementById("value_par").innerHTML = data;
+    this._resultField.innerText = data.eggValue;
+    this._incrementButton.disabled =
+      !(data.running && data.allowed.includes(this._name));
+
   }
   startGame(instance) {
-    document.getElementById("incrementButton").onclick = () =>
+    this._incrementButton = document.getElementById("incrementButton");
+    this._resultField = document.getElementById("value_par");
+    this._incrementButton.onclick = () =>
       instance.incrementValue(this);
+    this._incrementButton.disabled = true;
   }
   sendClientReady(instance) {
     instance._socket.emit("clientReady", {});

@@ -63,8 +63,14 @@ class TickTackToe {
     this._fields[x] = this._turn;
     this._turn = (this._turn==CROSS)? CIRCLE: CROSS;
     this._won = this.cheackIfWon();
-    if(this._won) {
-      this._seats.gameEnded();
+    if(this._won != EMPTY) {
+      let winner = null;
+      if(this._won == CROSS) {
+        winner = 0;
+      } else if(this._won == CIRCLE) {
+        winner = 1;
+      }
+      this._seats.gameEnded(winner, "TIC-TAC-TOE");
     }
     this._observers.forEach((observer) => observer.sendStatus());
   }

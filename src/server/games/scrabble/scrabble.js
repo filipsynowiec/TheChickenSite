@@ -1,6 +1,6 @@
 const { logger } = require("../../../utils/logger");
 const { Deck } = require("./deck");
-const { DictionaryGenerator } = require("./dictionaryGenerator");
+const { CheckManager } = require("./checkManager");
 
 const BOARD_SIZE = 15;
 const NR_OF_PLAYERS = 2;
@@ -10,7 +10,7 @@ class Scrabble {
   constructor(seats) {
     this._seats = seats;
     this._observers = [];
-    this._allowedWords = DictionaryGenerator.getDictionary();
+    this._checkManager = new CheckManager(BOARD_SIZE);
     this.setStartingState();
   }
   registerObserver(observer) {
@@ -38,191 +38,6 @@ class Scrabble {
       this._scores[i] = 0;
     }
   }
-  checkWord(word) {
-    if (word.length < 2) {
-      return true;
-    }
-    return this._allowedWords.has(word.toUpperCase());
-  }
-  checkIfCorrect(changes) {
-    if (changes.length == 0) {
-      this._message = [
-        this._seats.seats[this._turn],
-        "Use letters to make word!",
-      ];
-      return false;
-    }
-
-    if (
-      this._board[Math.floor(BOARD_SIZE / 2)][Math.floor(BOARD_SIZE / 2)] ==
-      null
-    ) {
-      let illegal = true;
-      for (const change of changes) {
-        if (
-          change[1] == Math.floor(BOARD_SIZE / 2) &&
-          change[2] == Math.floor(BOARD_SIZE / 2)
-        ) {
-          illegal = false;
-        }
-      }
-      if (illegal) {
-        this._message = [
-          this._seats.seats[this._turn],
-          "First word must cover center!",
-        ];
-        return false;
-      }
-    } else {
-      let friend = false;
-      for (const change of changes) {
-        const x = change[1];
-        const y = change[2];
-        if (change[1] > 0 && this._board[x - 1][y] != null) {
-          friend = true;
-        } else if (change[2] > 0 && this._board[x][y - 1] != null) {
-          friend = true;
-        } else if (this._board[x + 1][y] != null) {
-          friend = true;
-        } else if (this._board[x][y + 1] != null) {
-          friend = true;
-        }
-      }
-      if (!friend) {
-        this._message = [
-          this._seats.seats[this._turn],
-          "Placed word must touch already placed ones!",
-        ];
-        return false;
-      }
-    }
-
-    let horizontal = true;
-    for (let i = 1; i < changes.length; ++i) {
-      if (changes[i][1] != changes[0][1]) {
-        horizontal = false;
-      }
-    }
-    if (!horizontal) {
-      for (let i = 1; i < changes.length; ++i) {
-        if (changes[i][2] != changes[0][2]) {
-          this._message = [
-            this._seats.seats[this._turn],
-            "Place your letters in 1 column or row!",
-          ];
-          return false;
-        }
-      }
-    }
-
-    if (horizontal) {
-      let start = false;
-      let end = false;
-      for (let i = 0; i < BOARD_SIZE; ++i) {
-        let isInChanges = false;
-        for (const change of changes) {
-          if (change[2] == i) {
-            isInChanges = true;
-          }
-        }
-        if (isInChanges) {
-          if (!start) {
-            start = true;
-            continue;
-          }
-          if (end) {
-            this._message = [
-              this._seats.seats[this._turn],
-              "Placed letters must make 1 word!",
-            ];
-            return false;
-          }
-        } else {
-          if (start && this._board[changes[0][1]][i] == null) {
-            end = true;
-          }
-        }
-      }
-    } else {
-      let start = false;
-      let end = false;
-      for (let i = 0; i < BOARD_SIZE; ++i) {
-        let isInChanges = false;
-        for (const change of changes) {
-          if (change[1] == i) {
-            isInChanges = true;
-          }
-        }
-        if (isInChanges) {
-          if (!start) {
-            start = true;
-            continue;
-          }
-          if (end) {
-            this._message = [
-              this._seats.seats[this._turn],
-              "Placed letters must make 1 base word!",
-            ];
-            return false;
-          }
-        } else {
-          if (start && this._board[i][changes[0][2]] == null) {
-            end = true;
-          }
-        }
-      }
-    }
-
-    for (const change of changes) {
-      if (this._board[change[1]][change[2]] != null) {
-        logger.error("Filling already filled tile!");
-        return false;
-      }
-      this._board[change[1]][change[2]] = change[0];
-    }
-    for (let i = 0; i < BOARD_SIZE; i++) {
-      let word = "";
-      for (let j = 0; j < BOARD_SIZE + 1; j++) {
-        if (this._board[i][j] != null) {
-          word += this._board[i][j].letter;
-        } else {
-          if (!this.checkWord(word)) {
-            this._message = [
-              this._seats.seats[this._turn],
-              'Word "' + word + '" does not seem legit',
-            ];
-            for (const change of changes) {
-              this._board[change[1]][change[2]] = null;
-            }
-            return false;
-          }
-          word = "";
-        }
-      }
-    }
-    for (let j = 0; j < BOARD_SIZE; j++) {
-      let word = "";
-      for (let i = 0; i < BOARD_SIZE + 1; i++) {
-        if (this._board[i][j] != null) {
-          word += this._board[i][j].letter;
-        } else {
-          if (!this.checkWord(word)) {
-            this._message = [
-              this._seats.seats[this._turn],
-              'Word "' + word + '" does not seem legit',
-            ];
-            for (const change of changes) {
-              this._board[change[1]][change[2]] = null;
-            }
-            return false;
-          }
-          word = "";
-        }
-      }
-    }
-
-    return true;
-  }
   getScore(changes) {
     let result = 0;
     for (const change of changes) {
@@ -233,18 +48,20 @@ class Scrabble {
   }
   endGame() {
     this._end = true;
-    this._seats.gameEnded();
     let won = 0;
     for (let i = 1; i < NR_OF_PLAYERS; ++i) {
       if (this._scores[i] > this._scores[won]) {
         won = i;
       }
     }
+    this._seats.gameEnded(won, "SCRABBLE");
     this._message = [null, `Game ended - ${this._seats.seats[won]} won`];
   }
   applyChanges(changes) {
     const handCopy = [...this._hands[this._turn]];
-    if (!this.checkIfCorrect(changes)) {
+    let error = this._checkManager.checkIfCorrect(changes, this._board);
+    if (error != "") {
+      this._message = [this._seats.seats[this._turn], error];
       return;
     }
     for (const change of changes) {
@@ -280,17 +97,17 @@ class Scrabble {
   }
   reroll(rerollTable) {
     for (const element of rerollTable) {
-      if (this._deck.length <= 0) {
-        this.endGame();
-        return;
-      }
+      this._deck.push(this._hands[this._turn][element]);
+    }
+    Deck.shuffleArray(this._deck);
+    for (const element of rerollTable) {
       this._hands[this._turn][element] = this._deck.pop();
     }
-    this._turn = (this._turn + 1) % NR_OF_PLAYERS;
   }
   updateGame(data) {
     if (data.reroll) {
       this.reroll(data.reroll);
+      this._turn = (this._turn + 1) % NR_OF_PLAYERS;
     } else {
       this.applyChanges(data.changes);
     }

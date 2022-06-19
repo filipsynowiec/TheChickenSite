@@ -119,7 +119,7 @@ class Room {
     this._gameName = data.game;
     switch (data.game) {
       case "EGG-GAME":
-        this._game = new EggGame();
+        this._game = new EggGame(this._seats);
         break;
       case "TIC-TAC-TOE":
         this._game = new TickTackToe(this._seats);

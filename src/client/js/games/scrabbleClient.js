@@ -1,5 +1,6 @@
 const NR_OF_PLAYERS = 2;
 
+let csloggerScrabble = new CSLogger("ScrabbleClient");
 const MIDDLE_OF_BOARD = Math.floor(BOARD_SIZE / 2);
 
 class ScrabbleClient {
@@ -181,7 +182,7 @@ class ScrabbleClient {
   }
   sendClientReady(instance) {
     instance._socket.emit("clientReady", {});
-    console.log(`Sending client ready`);
+    csloggerScrabble.info(`Sending client ready`);
   }
 }
 

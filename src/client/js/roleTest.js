@@ -1,3 +1,5 @@
+let csloggerRoleTest = new CSLogger("RoleTestClient");
+
 document.getElementById("logOutButton").onclick = function () {
   logOut();
 };
@@ -21,10 +23,10 @@ document.getElementById("adminButton").onclick = function () {
 document.getElementById("nameButton").onclick = function () {
   getUserData()
     .then((data) => {
-      console.log(`My name is ${data.name}, my id is ${data.userId}.`);
+      csloggerRoleTest.info(`My name is ${data.name}, my id is ${data.userId}.`);
     })
     .catch((err) => {
-      console.log(`I don't have a name.`);
+      csloggerRoleTest.info(`I don't have a name.`);
     });
 };
 
@@ -35,7 +37,7 @@ const getUrl = function (url) {
   xhr.setRequestHeader("x-access-token", "Bearer " + token);
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE) {
-      console.log(xhr.responseText);
+      csloggerRoleTest.info(xhr.responseText);
     }
   };
   xhr.send();

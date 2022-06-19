@@ -1,3 +1,5 @@
+let csloggerRoomChoice = new CSLogger("RoomChoiceClient");
+
 class RoomChoiceClient {
   constructor(socket) {
     this._socket = socket;
@@ -6,7 +8,7 @@ class RoomChoiceClient {
 
     const url = new URL(window.location.href);
     this._game = url.searchParams.get("game");
-    console.log(`Selected game: ${this._game}`);
+    csloggerRoomChoice.info(`Selected game: ${this._game}`);
 
     let instance = this;
     if (document.getElementById("create-room-button") != null);
@@ -37,12 +39,12 @@ class RoomChoiceClient {
   addOrUpdateRoom(data) {
     if (data.gameName != this._game) return;
 
-    console.log(
+    csloggerRoomChoice.info(
       `Received roomCreatedOrUpdated message with entries ${Object.entries(
         data
       )}`
     );
-    console.log(`Adding room ${data.roomId}`);
+    csloggerRoomChoice.info(`Adding room ${data.roomId}`);
     let list = document.getElementById("available-rooms-list");
     if (list == null || data.roomId == null) return;
     let room = new RoomElement(data);

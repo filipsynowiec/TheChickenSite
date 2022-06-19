@@ -1,3 +1,5 @@
+let csloggerRegister = new CSLogger("RegisterUserClient");
+
 let button = document.getElementById("registerButton");
 let signinLink = document.getElementById("signin-link");
 
@@ -19,10 +21,15 @@ function post(url, params) {
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE) {
-      console.log(xhr.responseText);
-    }
-    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-      window.location.href = "/signin";
+      csloggerRegister.info(xhr.responseText);
+      if (this.status === 200) {
+        window.location.href = "/signin";
+      } else {
+        let answer = JSON.parse(xhr.responseText);
+        if (!answer.succesful) {
+          Swal.fire("Register unsuccessfull", answer.message, "error");
+        }
+      }
     }
   };
   let data = JSON.stringify(params);
@@ -31,4 +38,3 @@ function post(url, params) {
 signinLink.onclick = function () {
   window.location.href = "/signin";
 };
- 

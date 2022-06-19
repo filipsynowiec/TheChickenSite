@@ -1,3 +1,5 @@
+const debug = true;
+
 class CSLogger {
   constructor(name) {
     this._name = name;
@@ -21,8 +23,10 @@ class CSLogger {
     return dateTime;
   }
   info(message) {
-    console.log(
-      `[ INFO ] - [ ${this._name} ] - [${this.getTimeStamp()}] : ${message}`
-    );
+    if (debug) {
+      console.log(
+        `[ INFO ] - [ ${this._name} ] - [${this.getTimeStamp()}] : ${message}`
+      );
+    }
   }
 }

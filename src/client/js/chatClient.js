@@ -1,10 +1,12 @@
+let csloggerChat = new CSLogger("ChatClient");
+
 class ChatClient {
   constructor(socket) {
     this._socket = socket;
     let instance = this;
     this._socket.on("updateChat", (data) => {
       instance.updateHTML("chat-history", data.chatHistory);
-      console.log("Received chat history");
+      csloggerChat.info("Received chat history");
     });
     getUserData().then((data) => {
       instance._name = data.name;

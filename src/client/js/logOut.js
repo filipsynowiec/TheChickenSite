@@ -1,4 +1,6 @@
+let csloggerLogOut = new CSLogger("LogOutClient");
+
 function logOut() {
-  console.log("Forgetting token.");
+  csloggerLogOut.info("Forgetting token.");
   localStorage.setItem("token", "");
 }

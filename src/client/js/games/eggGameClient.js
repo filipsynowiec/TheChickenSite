@@ -1,8 +1,10 @@
+let csloggerEggGame = new CSLogger("EggGameClient");
+
 class EggGameClient {
   constructor(socket) {
     this._socket = socket;
     this._rooms = [];
-    console.log(this._socket);
+    csloggerEggGame.info(this._socket);
     let instance = this;
 
     document.getElementById("leave-room").innerHTML =
@@ -32,7 +34,7 @@ class EggGameClient {
   }
   sendClientReady(instance) {
     instance._socket.emit("clientReady", {});
-    console.log(`Sending client ready`);
+    csloggerEggGame.info(`Sending client ready`);
   }
 }
 

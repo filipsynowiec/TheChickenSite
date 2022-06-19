@@ -88,7 +88,6 @@ class Scrabble {
       this.endGame();
       return;
     }
-    this._turn = (this._turn + 1) % NR_OF_PLAYERS;
   }
   restart() {
     this.setStartingState();
@@ -103,7 +102,6 @@ class Scrabble {
       }
       this._hands[this._turn][element] = this._deck.pop();
     }
-    this._turn = (this._turn + 1) % NR_OF_PLAYERS;
   }
   updateGame(data) {
     if (data.reroll) {
@@ -111,6 +109,7 @@ class Scrabble {
     } else {
       this.applyChanges(data.changes);
     }
+    this._turn = (this._turn + 1) % NR_OF_PLAYERS;
     this._observers.forEach((observer) => observer.sendStatus());
   }
   getStatus() {

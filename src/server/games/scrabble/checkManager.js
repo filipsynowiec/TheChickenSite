@@ -12,7 +12,7 @@ class CheckManager {
     if (word.length < 2) {
       return true;
     }
-    return this._dictionary.has(word.toUpperCase());
+    return this._dictionary.has(word);
   }
   checkIfCorrect(changes, board) {
     if (changes.length == 0) {

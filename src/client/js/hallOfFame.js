@@ -14,23 +14,17 @@ async function displayGameTabs() {
     }
   });
 }
-function setActiveTab(game) {
-  let tabs = document.getElementById("games").childNodes;
-  for (let i = 0; i < tabs.length; i++) {
-    let navlink = tabs[i].querySelector(".nav-link");
-    if (tabs[i].classList.contains(game)) {
-      navlink.classList.add("nav-link-active");
-    } else navlink.classList.remove("nav-link-active");
-  }
-}
 function displayScores(game) {
   let template = document.getElementById("score-template");
+  let headerTemplate = document.getElementById("header-template");
   let list = document.getElementById("player-scores");
   if (game == null) {
     game = "TIC-TAC-TOE";
   }
-  setActiveTab(game);
   getGameScores(game).then((data) => {
+    let htmlElement = headerTemplate.content.firstElementChild.cloneNode(true);
+    htmlElement.querySelector(".game-score").innerHTML = game;
+    list.appendChild(htmlElement);
     let scores = Object.entries(data.data).sort(([, a], [, b]) => b - a);
     let i = 1;
     for (const [name, score] of scores) {

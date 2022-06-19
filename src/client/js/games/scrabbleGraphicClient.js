@@ -1,4 +1,6 @@
 const BOARD_SIZE = 15;
+const BOARD_BUTTON_SIZE = "min(3vh, 3.5vw)";
+const BOARD_FONT_SIZE = "min(1.2vh, 1.2vw)";
 
 class ScrabbleGraphicClient {
   constructor() {
@@ -25,86 +27,90 @@ class ScrabbleGraphicClient {
   }
   setShowControlButtons(show) {
     let controlPane = document.getElementById("control-buttons-pane");
-    if(show) {
-        controlPane.style.display = "block";
+    if (show) {
+      controlPane.style.display = "block";
     } else {
-        controlPane.style.display = "none";
-    }   
+      controlPane.style.display = "none";
+    }
   }
   setSelectedHand(x, selected) {
-      if(selected) {
-        this._handButtons[x].style.background = "orange";
-      } else {
-        this._handButtons[x].style.background = "white";
-      }
+    if (selected) {
+      this._handButtons[x].style.background = "orange";
+    } else {
+      this._handButtons[x].style.background = "white";
+    }
   }
   setDisabledHand(x, disabled) {
-    this._handButtons[x].disabled = disabled
+    this._handButtons[x].disabled = disabled;
   }
   clearHandPane() {
     document.getElementById("hand-pane").innerHTML = "";
   }
+  createSingleHandButton() {
+    let button = document.createElement("button");
+    button.classList.add("col-1");
+    button.classList.add("md-col-1-small");
+    button.style.margin = "1px";
+    button.style.padding = "0";
+    return button;
+  }
   addHandButton(x, text, lambda) {
-    this._handButtons[x] = document.createElement("button");
+    this._handButtons[x] = this.createSingleHandButton();
     this._handButtons[x].innerText = text;
     this._handButtons[x].onclick = lambda;
-    this._handButtons[x].style.width = "50px";
-    this._handButtons[x].style.height = "50px";
-    this._handButtons[x].style.fontSize = "17px";
-    this._handButtons[x].style.margin = "5px";
-    this._handButtons[x].style.background = "white";
+
     document.getElementById("hand-pane").appendChild(this._handButtons[x]);
+  }
+  createBoardRow() {
+    let row = document.createElement("div");
+    row.style.height = BOARD_BUTTON_SIZE;
+    return row;
+  }
+  createSingleBoardButton() {
+    let button = document.createElement("button");
+    button.style.height = BOARD_BUTTON_SIZE;
+    button.style.width = BOARD_BUTTON_SIZE;
+    button.disabled = true;
+    button.style.fontSize = BOARD_FONT_SIZE;
+    button.style.lineHeight = BOARD_FONT_SIZE;
+    button.style.verticalAlign = "middle";
+    button.style.color = "black";
+    return button;
   }
   createBoardButtons(lambda) {
     for (let i = 0; i < BOARD_SIZE; ++i) {
       this._boardButtons[i] = [];
-      let div = document.createElement("div");
+      let row = this.createBoardRow();
       for (let j = 0; j < BOARD_SIZE; ++j) {
-        this._boardButtons[i][j] = document.createElement("button");
-
-        this._boardButtons[i][j].style.width = "35px";
-        this._boardButtons[i][j].style.height = "35px";
-        this._boardButtons[i][j].style.fontSize = "18px";
-        this._boardButtons[i][j].style.margin = "2px";
-        this._boardButtons[i][j].style.verticalAlign = "top";
-        this._boardButtons[i][j].disabled = true;
-
+        this._boardButtons[i][j] = this.createSingleBoardButton();
         this._boardButtons[i][j].onclick = () => lambda(i, j);
 
-        div.appendChild(this._boardButtons[i][j]);
+        row.appendChild(this._boardButtons[i][j]);
       }
-      document.getElementById("board-pane").appendChild(div);
+      document.getElementById("board-pane").appendChild(row);
     }
+  }
+  createSingleControlButton() {
+    let button = document.createElement("button");
+    button.classList.add("col-3");
+    button.classList.add("md-col-3");
+    button.style.margin = "2px";
+    return button;
   }
   createControlButtons(resetLambda, applyLambda, rerollLambda) {
     let div = document.getElementById("control-buttons-pane");
 
-    let resetButton = document.createElement("button");
-    resetButton.style.fontSize = "17px";
-    resetButton.style.height = "50px";
-    resetButton.style.marginLeft = "15px";
-    resetButton.style.marginTop = "15px";
-    resetButton.style.width = "150px";
+    let resetButton = this.createSingleControlButton();
     resetButton.innerText = "Reset";
     resetButton.onclick = resetLambda;
     div.appendChild(resetButton);
 
-    let applyButton = document.createElement("button");
-    applyButton.style.fontSize = "17px";
-    applyButton.style.height = "50px";
-    applyButton.style.marginLeft = "15px";
-    applyButton.style.marginTop = "15px";
-    applyButton.style.width = "150px";
+    let applyButton = this.createSingleControlButton();
     applyButton.innerText = "Apply";
     applyButton.onclick = applyLambda;
     div.appendChild(applyButton);
 
-    let rerollButton = document.createElement("button");
-    rerollButton.style.fontSize = "17px";
-    rerollButton.style.height = "50px";
-    rerollButton.style.marginLeft = "15px";
-    rerollButton.style.marginTop = "15px";
-    rerollButton.style.width = "150px";
+    let rerollButton = this.createSingleControlButton();
     rerollButton.innerText = "Reroll All";
     rerollButton.onclick = rerollLambda;
     div.appendChild(rerollButton);

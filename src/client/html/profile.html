@@ -12,10 +12,10 @@
   <body>
     <template id="score-template">
       <div class="row justify-content-around score-row py-2">
-        <div class="col-4">
+        <div class="col-4 s-col-4">
           <h3 class="game"></h3>
         </div>
-        <div class="col-4">
+        <div class="col-4 s-col-4">
           <h3 class="score"></h3>
         </div>
       </div>
@@ -26,48 +26,53 @@
         class="box container position-absolute top-50 start-50 translate-middle"
       >
         <nav class="navbar navbar-expand-lg row h-10">
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item active">
-                <a class="nav-link nav-link-left" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
-              </li>
-              <li class="nav-item" id="user-info"></li>
-            </ul>
+          <div class="container-fluid">
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="true"
+              aria-label="Toggle navigation"
+            >
+              <span>Menu</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item active">
+                  <a class="nav-link nav-link-left" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
+                </li>
+                <li class="nav-item" id="user-info"></li>
+              </ul>
+            </div>
           </div>
         </nav>
         <main class="container h-90">
           <div class="row h-10 align-items-center justify-content-center">
-            <h1 id="profile-header"></h1>
+            <h2 id="profile-header"></h2>
           </div>
           <div class="row h-80 align-items-center justify-content-center py-3">
             <div class="col-8 container h-100">
-              <div class="row score-box-top h-10 py-2">
+              <div
+                class="row score-box-top h-15 py-2 align-items-center justify-content-center"
+              >
                 <h2>Scores</h2>
               </div>
               <div
-                class="row score-box-bottom align-items-center justify-content-center h-50 pt-4"
+                class="row score-box-bottom align-items-center justify-content-center h-50 pt-4 overflow-scroll"
               >
                 <div
                   class="container mw-80 h-100 pt-4"
                   id="player-scores"
                 ></div>
               </div>
-              <div class="row h-10 justify-content-center px-0 py-5 ">
-                <div class="col-3 m-0">
+              <div class="row h-10 justify-content-center px-0 py-5">
+                <div class="col-3 m-0 s-col-3">
                   <button class="btn btn-primary" id="logOutButton">
                     Log out
                   </button>
@@ -82,5 +87,10 @@
     <script src="/client/js/logOut.js"></script>
     <script src="/client/js/accountInfo.js"></script>
     <script src="/client/js/profile.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

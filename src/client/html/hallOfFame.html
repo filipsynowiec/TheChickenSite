@@ -10,12 +10,17 @@
     <meta charset="UTF-8" />
   </head>
   <body>
+    <template id="header-template">
+      <div class="row justify-content-around py-2">
+        <h2 class="game-score"></h2>
+      </div>
+    </template>
     <template id="score-template">
       <div class="row justify-content-around score-row py-2">
-        <div class="col-1">
+        <div class="col-1 s-col-1">
           <h3 class="ranking-position"></h3>
         </div>
-        <div class="col-8">
+        <div class="col-8 s-col-8">
           <h3
             class="name overflow-hidden"
             data-bs-toggle="tooltip"
@@ -23,14 +28,14 @@
             title=""
           ></h3>
         </div>
-        <div class="col-3">
+        <div class="col-3 s-col-3">
           <h3 class="score"></h3>
         </div>
       </div>
     </template>
     <template id="game-template">
-      <li class="nav-item">
-        <a class="nav-link" href=""></a>
+      <li class="nav-item h-100">
+        <a class="nav-link h-100" href=""></a>
       </li>
     </template>
     <div class="main container">
@@ -39,59 +44,64 @@
         class="box container position-absolute top-50 start-50 translate-middle"
       >
         <nav class="navbar navbar-expand-lg row h-10">
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item active">
-                <a class="nav-link nav-link-left" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
-              </li>
-              <li class="nav-item" id="user-info"></li>
-            </ul>
+          <div class="container-fluid">
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="true"
+              aria-label="Toggle navigation"
+            >
+              <span>Menu</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item active">
+                  <a class="nav-link nav-link-left" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/hallOfFame">Hall of Fame</a>
+                </li>
+                <li class="nav-item" id="user-info"></li>
+              </ul>
+            </div>
           </div>
         </nav>
         <main class="container h-90">
           <div class="row h-10 align-items-center justify-content-center">
-            <h1 id="header">Hall of Fame</h1>
+            <h2 id="header">Hall of Fame</h2>
           </div>
           <div class="row h-80 align-items-center justify-content-center py-3">
             <div class="col-8 container h-100">
-              <div class="row score-box-top h-10 py-2">
+              <div class="row score-box-top h-15 py-2">
                 <div class="container h-100">
                   <nav
-                    class="navbar navbar-expand-lg row h-100 justify-content-center"
+                    class="navbar navbar-expand-lg row h-100 justify-content-center h-100"
                   >
-                    <button
-                      class="navbar-toggler"
-                      type="button"
-                      data-toggle="collapse"
-                      data-target="#navbarNav"
-                      aria-controls="navbarNav"
-                      aria-expanded="false"
-                      aria-label="Toggle navigation"
-                    >
-                      <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div
-                      class="collapse navbar-collapse justify-content-center"
-                      id="navbarNav"
-                    >
-                      <ul
-                        class="navbar-nav ms-auto justify-content-center w-100"
-                        id="games"
-                      ></ul>
+                    <div class="container-fluid">
+                      <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavGames"
+                        aria-controls="navbarNavGames"
+                        aria-expanded="true"
+                        aria-label="Toggle navigation"
+                      >
+                        <span>Games</span>
+                      </button>
+                      <div
+                        class="collapse navbar-collapse justify-content-center h-100"
+                        id="navbarNavGames"
+                      >
+                        <ul
+                          class="navbar-nav ms-auto justify-content-center w-100 h-100"
+                          id="games"
+                        ></ul>
+                      </div>
                     </div>
                   </nav>
                 </div>
@@ -112,5 +122,10 @@
     <script src="/client/js/serverRequests.js"></script>
     <script src="/client/js/accountInfo.js"></script>
     <script src="/client/js/hallOfFame.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

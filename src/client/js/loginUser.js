@@ -1,3 +1,5 @@
+let csloggerLogin = new CSLogger("UserLoginClient");
+
 let button = document.getElementById("loginButton");
 let signupLink = document.getElementById("signup-link");
 
@@ -17,7 +19,7 @@ function post(url, params) {
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE) {
-      console.log(xhr.responseText);
+      csloggerLogin.info(xhr.responseText);
       let JSONanswer = JSON.parse(xhr.responseText);
       if (JSONanswer.successful) {
         localStorage.setItem("token", JSONanswer.accessToken);

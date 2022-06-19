@@ -1,3 +1,5 @@
+let csloggerRegister = new CSLogger("RegisterUserClient");
+
 let button = document.getElementById("registerButton");
 let signinLink = document.getElementById("signin-link");
 
@@ -19,7 +21,7 @@ function post(url, params) {
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE) {
-      console.log(xhr.responseText);
+      csloggerRegister.info(xhr.responseText);
     }
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       window.location.href = "/signin";
@@ -31,4 +33,3 @@ function post(url, params) {
 signinLink.onclick = function () {
   window.location.href = "/signin";
 };
- 

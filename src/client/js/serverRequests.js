@@ -1,3 +1,5 @@
+let csloggerRequests = new CSLogger("ServerRequests");
+
 const serverRequest = function (url, params) {
   return new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
@@ -6,7 +8,7 @@ const serverRequest = function (url, params) {
     xhr.setRequestHeader("x-access-token", "Bearer " + token);
     xhr.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE) {
-        console.log(xhr.responseText);
+        csloggerRequests.info(xhr.responseText);
         let JSONanswer;
         try {
           JSONanswer = JSON.parse(xhr.responseText);

@@ -1,3 +1,5 @@
+let csloggerTicTacToe = new CSLogger("TicTacToeClient");
+
 const EMPTY = 0;
 const CROSS = 1;
 const CIRCLE = 2;
@@ -29,8 +31,8 @@ class TickTackToeClient {
     instance._socket.emit("requestAction", { field: index });
   }
   updateStatus(data) {
-    console.log(data.active);
-    console.log(this._name);
+    csloggerTicTacToe.info(data.active);
+    csloggerTicTacToe.info(this._name);
     if (data.active == this._name) {
       for (let i = 0; i < 9; ++i) {
         this._buttons[i].disabled = false;
@@ -111,7 +113,7 @@ class TickTackToeClient {
   }
   sendClientReady(instance) {
     instance._socket.emit("clientReady", {});
-    console.log(`Sending client ready`);
+    csloggerTicTacToe.info(`Sending client ready`);
   }
 }
 

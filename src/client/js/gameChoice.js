@@ -1,4 +1,4 @@
-let cslogger = new CSLogger("GameChoiceClient");
+let csloggerChoice = new CSLogger("GameChoiceClient");
 
 class GameChoiceClient {
   constructor(socket) {
@@ -21,12 +21,12 @@ class GameChoiceClient {
     if (game == null) {
       return;
     }
-    cslogger.info(`Game ${game.name} selected to play.`);
+    csloggerChoice.info(`Game ${game.name} selected to play.`);
     window.location.href = game.url;
   }
 
   addGamesList(data) {
-    cslogger.info(`addGamesList invoked with ${data}`);
+    csloggerChoice.info(`addGamesList invoked with ${data}`);
 
     let list = document.getElementById("games-list");
     if (list == null) return;
@@ -39,13 +39,15 @@ class GameChoiceClient {
         return game.name == name;
       });
       if (is_set != undefined) {
-        cslogger.info(`game dupplication: ${name}`)
+        csloggerChoice.info(`game dupplication: ${name}`);
         continue;
       }
       let title = value.title;
       let room_url = value.room_url;
       let game = new GameElement(name, title, room_url);
-      cslogger.info(`new game added ${game.name}, ${game.title}, ${game.url}`);
+      csloggerChoice.info(
+        `new game added ${game.name}, ${game.title}, ${game.url}`
+      );
 
       game.setOnClick(() => instance.selectGame(game));
       list.appendChild(game.htmlElement);
@@ -53,7 +55,7 @@ class GameChoiceClient {
     }
   }
   selectGame(game) {
-    cslogger.info(`selectGame invoked with ${game.name}`);
+    csloggerChoice.info(`selectGame invoked with ${game.name}`);
     this._selectedGame = game;
     for (let g of this._games) {
       g.deselect();

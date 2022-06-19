@@ -48,13 +48,13 @@ class Scrabble {
   }
   endGame() {
     this._end = true;
-    this._seats.gameEnded();
     let won = 0;
     for (let i = 1; i < NR_OF_PLAYERS; ++i) {
       if (this._scores[i] > this._scores[won]) {
         won = i;
       }
     }
+    this._seats.gameEnded(won, "SCRABBLE");
     this._message = [null, `Game ended - ${this._seats.seats[won]} won`];
   }
   applyChanges(changes) {

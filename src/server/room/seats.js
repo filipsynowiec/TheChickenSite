@@ -1,5 +1,7 @@
 const { logger } = require("../../utils/logger");
+const queries = require("../../database/dbQueries");
 const NR_OF_SEATS = 2;
+const ELO_GAIN = 10;
 
 class Seats {
   constructor() {
@@ -32,11 +34,25 @@ class Seats {
     this._observers.push(observer);
   }
 
-  gameEnded() {
+  gameEnded(winner, gameName) {
     if (!this._gameRunning) {
       logger.error(`Game not even started`);
       return;
     }
+    if(winner != null) {
+      let winnerId  = this._seatsIds[winner];
+      queries
+        .getScore(winnerId, gameName)
+        .then((oldScore) => {
+          logger.info(`Player's old score is ${oldScore}`);
+          return queries.updateScore(winnerId, gameName, oldScore + ELO_GAIN);
+        })
+        .then(() => logger.info("Score increased"))
+        .catch((err) => {
+          logger.error(err);
+        });
+    }
+    
     this._gameRunning = false;
     this._observers.forEach((obs) => obs.sendSeats());
   }

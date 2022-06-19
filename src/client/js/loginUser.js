@@ -24,6 +24,9 @@ function post(url, params) {
       if (JSONanswer.successful) {
         localStorage.setItem("token", JSONanswer.accessToken);
         window.location.href = "/";
+      } else {
+        let answer = JSON.parse(xhr.responseText);
+        Swal.fire("Login unsuccessfull", answer.message, "error");
       }
     }
   };

@@ -22,9 +22,14 @@ function post(url, params) {
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE) {
       csloggerRegister.info(xhr.responseText);
-    }
-    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-      window.location.href = "/signin";
+      if (this.status === 200) {
+        window.location.href = "/signin";
+      } else {
+        let answer = JSON.parse(xhr.responseText);
+        if (!answer.succesful) {
+          Swal.fire("Register unsuccessfull", answer.message, "error");
+        }
+      }
     }
   };
   let data = JSON.stringify(params);
